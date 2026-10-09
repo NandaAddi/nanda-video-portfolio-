@@ -110,7 +110,10 @@ const {
             <div class="experience-list">
               {experiences.map((exp) => (
                 <div class="experience-item">
-                  <div class="exp-period">{exp.period}</div>
+                  <div class="exp-period">
+                    <span class="period-line">{exp.startDate}</span>
+                    <span class="period-line">{exp.endDate}</span>
+                  </div>
                   <div class="exp-details">
                     <h3 class="exp-company">{exp.company}</h3>
                     <p class="exp-role-type">{exp.role} <span class="divider">|</span> {exp.type}</p>
@@ -423,15 +426,20 @@ const {
 
   .experience-item {
     display: grid;
-    grid-template-columns: 110px 1fr;
-    gap: 0.75rem;
+    grid-template-columns: 85px 1fr;
+    gap: 1.15rem;
     font-size: 0.9rem;
     line-height: 1.35;
   }
 
   .exp-period {
+    display: flex;
+    flex-direction: column;
     color: #1e293b;
     font-weight: 500;
+  }
+
+  .period-line {
     white-space: nowrap;
   }
 

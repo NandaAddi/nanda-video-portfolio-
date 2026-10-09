@@ -11,7 +11,8 @@ export interface LanguageItem {
 }
 
 export interface ExperienceItem {
-  period: string;
+  startDate: string;
+  endDate: string;
   company: string;
   role: string;
   type: string;
@@ -87,25 +88,29 @@ export const portfolioData: PortfolioData = {
   ],
   experiences: [
     {
-      period: "Aug 2024-Present",
+      startDate: "Aug 2024-",
+      endDate: "Present",
       company: "Indopride Roleplay",
       role: "Video Editor",
       type: "Fulltime"
     },
     {
-      period: "Apr 2025-Present",
+      startDate: "Apr 2025-",
+      endDate: "Present",
       company: "Kultus Visual",
       role: "Motion Graphic Designer",
       type: "Freelance"
     },
     {
-      period: "Mar 2024-Present",
+      startDate: "Mar 2024-",
+      endDate: "Present",
       company: "Aksara Picture",
       role: "Fotographer & Videographer",
       type: "Freelance"
     },
     {
-      period: "Jun 2023-Jun 2024",
+      startDate: "Jun 2023-",
+      endDate: "Jun 2024",
       company: "Bina Project Construction",
       role: "Social Media Specialist",
       type: "Fulltime"
