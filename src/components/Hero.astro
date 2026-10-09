@@ -1,0 +1,542 @@
+---
+import { portfolioData } from '../data/portfolio';
+
+const {
+  name,
+  title,
+  bio,
+  profileCardImage,
+  education,
+  languages,
+  experiences,
+  softwares,
+  contact
+} = portfolioData;
+---
+
+<section id="about" class="hero-section">
+  <div class="container">
+    <div class="hero-wrapper">
+      
+      <!-- TOP ROW: Profile Photo & Bio -->
+      <div class="hero-top-row">
+        <!-- Polaroid Card -->
+        <div class="polaroid-container">
+          <div class="polaroid-card">
+            <img 
+              src={profileCardImage} 
+              alt={name} 
+              class="polaroid-image" 
+              loading="eager"
+            />
+          </div>
+        </div>
+
+        <!-- Greeting & Bio -->
+        <div class="hero-bio-container">
+          <div class="hero-heading-group">
+            <h1 class="hero-title">
+              <span class="greeting-hi">Hi!</span> 
+              <span class="greeting-name">I'm {name}</span>
+            </h1>
+            <p class="hero-role">{title}</p>
+          </div>
+
+          <p class="hero-bio-text">
+            {bio.slice(0, bio.lastIndexOf("LinkedIn."))}
+            <a href={contact.linkedinUrl} target="_blank" rel="noopener noreferrer" class="bio-link">LinkedIn.</a>
+          </p>
+        </div>
+      </div>
+
+      <!-- BOTTOM ROW: 3-Column Info Grid -->
+      <div class="hero-bottom-grid">
+        
+        <!-- COLUMN 1: Education & Languages -->
+        <div class="info-column">
+          <!-- Education Section -->
+          <div class="section-block">
+            <h2 class="column-title">Education</h2>
+            <div class="education-card">
+              <div class="um-logo-wrapper">
+                <svg class="um-seal-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="50" cy="50" r="46" stroke="#475569" stroke-width="2.5" stroke-dasharray="3 2" />
+                  <circle cx="50" cy="50" r="39" stroke="#475569" stroke-width="1.8" />
+                  <circle cx="50" cy="50" r="33" stroke="#475569" stroke-width="1" />
+                  <path id="umTextCircle" d="M 18,50 A 32,32 0 1,1 82,50" fill="none" />
+                  <text font-size="7.5" font-family="'Inter', sans-serif" font-weight="700" fill="#334155" letter-spacing="1.2">
+                    <textPath href="#umTextCircle" startOffset="50%" text-anchor="middle">
+                      UNIVERSITAS NEGERI MALANG
+                    </textPath>
+                  </text>
+                  <!-- UM Torch & Wings Emblems in Center -->
+                  <path d="M50 25 L50 68 M47 30 L53 30 M45 42 Q50 35 55 42 Q50 55 45 42 Z" stroke="#334155" stroke-width="1.8" fill="#e2e8f0" />
+                  <path d="M38 52 C42 46 47 48 48 56 C42 56 39 54 38 52 Z" fill="#475569" />
+                  <path d="M62 52 C58 46 53 48 52 56 C58 56 61 54 62 52 Z" fill="#475569" />
+                  <path d="M40 68 L60 68 L50 78 Z" fill="#334155" />
+                </svg>
+              </div>
+              <div class="education-details">
+                <h3 class="institution-name">{education.institution}</h3>
+                <p class="education-major">{education.major}</p>
+                <p class="education-period">{education.period}</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Languages Section -->
+          <div class="section-block">
+            <h2 class="column-title">Languages</h2>
+            <div class="languages-list">
+              {languages.map((item) => (
+                <div class="language-row">
+                  <span class="language-name">{item.language}</span>
+                  <span class="language-proficiency">{item.proficiency}</span>
+                  <div class="dot-rating" aria-label={`${item.language} level ${item.level} of 5`}>
+                    {[1, 2, 3, 4, 5].map((dot) => (
+                      <span class={`dot ${dot <= item.level ? 'filled' : 'empty'}`} />
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <!-- COLUMN 2: Experience -->
+        <div class="info-column">
+          <div class="section-block">
+            <h2 class="column-title">Experience</h2>
+            <div class="experience-list">
+              {experiences.map((exp) => (
+                <div class="experience-item">
+                  <div class="exp-period">{exp.period}</div>
+                  <div class="exp-details">
+                    <h3 class="exp-company">{exp.company}</h3>
+                    <p class="exp-role-type">{exp.role} <span class="divider">|</span> {exp.type}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <!-- COLUMN 3: Softwares & Contact -->
+        <div class="info-column">
+          <!-- Softwares Section -->
+          <div class="section-block">
+            <h2 class="column-title">Softwares</h2>
+            <div class="softwares-grid">
+              {softwares.map((sw) => (
+                <div class="software-card" title={sw.name}>
+                  <div class="software-icon-wrapper">
+                    <img src={sw.icon} alt={sw.name} class="software-icon" width="48" height="48" loading="lazy" />
+                  </div>
+                  <span class="software-label">{sw.name}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <!-- Contact Section -->
+          <div class="section-block">
+            <h2 class="column-title">Contact</h2>
+            <div class="contact-compact-list">
+              <div class="contact-compact-row">
+                <span class="contact-label">Email</span>
+                <span class="colon">:</span>
+                <a href={`mailto:${contact.email}`} class="contact-value">{contact.email}</a>
+              </div>
+              <div class="contact-compact-row">
+                <span class="contact-label">Phone</span>
+                <span class="colon">:</span>
+                <a href={contact.whatsappUrl} target="_blank" rel="noopener noreferrer" class="contact-value">{contact.phone}</a>
+              </div>
+              <div class="contact-compact-row">
+                <span class="contact-label">Instagram</span>
+                <span class="colon">:</span>
+                <a href={contact.instagramUrl} target="_blank" rel="noopener noreferrer" class="contact-value">{contact.instagram}</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero-section {
+    padding-top: 5.5rem;
+    padding-bottom: 3.5rem;
+    position: relative;
+  }
+
+  .hero-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 3.25rem;
+  }
+
+  /* TOP ROW */
+  .hero-top-row {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 2.75rem;
+    align-items: center;
+  }
+
+  @media (max-width: 900px) {
+    .hero-top-row {
+      grid-template-columns: 1fr;
+      text-align: center;
+      gap: 2rem;
+    }
+  }
+
+  /* Polaroid Container & Card */
+  .polaroid-container {
+    display: flex;
+    justify-content: center;
+  }
+
+  .polaroid-card {
+    position: relative;
+    max-width: 280px;
+    width: 100%;
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
+    filter: drop-shadow(0 15px 25px rgba(2, 132, 199, 0.12)) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.06));
+  }
+
+  .polaroid-card:hover {
+    transform: translateY(-4px) rotate(-1deg);
+    filter: drop-shadow(0 20px 30px rgba(2, 132, 199, 0.2)) drop-shadow(0 6px 12px rgba(0, 0, 0, 0.08));
+  }
+
+  .polaroid-image {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+    display: block;
+  }
+
+  /* Bio & Greeting */
+  .hero-bio-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.15rem;
+  }
+
+  .hero-heading-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .hero-title {
+    font-size: 2.45rem;
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+  }
+
+  .greeting-hi {
+    color: #0284c7;
+    font-weight: 800;
+    font-size: 2.75rem;
+  }
+
+  .greeting-name {
+    color: #0284c7;
+    font-weight: 600;
+  }
+
+  .hero-role {
+    font-size: 1.1rem;
+    font-weight: 500;
+    font-style: italic;
+    color: #0284c7;
+    letter-spacing: -0.01em;
+  }
+
+  .hero-bio-text {
+    font-size: 0.985rem;
+    color: #334155;
+    line-height: 1.72;
+    text-align: justify;
+    font-weight: 400;
+  }
+
+  @media (max-width: 900px) {
+    .hero-bio-text {
+      text-align: left;
+    }
+    .hero-title {
+      justify-content: center;
+    }
+  }
+
+  .bio-link {
+    color: #0284c7;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .bio-link:hover {
+    color: #0369a1;
+  }
+
+  /* BOTTOM ROW: 3-COLUMN GRID */
+  .hero-bottom-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.5rem;
+    border-top: 1px solid rgba(2, 132, 199, 0.12);
+    padding-top: 2.5rem;
+  }
+
+  @media (max-width: 980px) {
+    .hero-bottom-grid {
+      grid-template-columns: 1fr;
+      gap: 2.25rem;
+    }
+  }
+
+  .info-column {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .section-block {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  .column-title {
+    font-size: 1.45rem;
+    font-weight: 700;
+    color: #0284c7;
+    letter-spacing: -0.01em;
+  }
+
+  /* Education */
+  .education-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .um-logo-wrapper {
+    flex-shrink: 0;
+    width: 58px;
+    height: 58px;
+  }
+
+  .um-seal-svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .education-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .institution-name {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #1e293b;
+    line-height: 1.3;
+  }
+
+  .education-major {
+    font-size: 0.88rem;
+    color: #475569;
+  }
+
+  .education-period {
+    font-size: 0.85rem;
+    color: #64748b;
+  }
+
+  /* Languages */
+  .languages-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .language-row {
+    display: grid;
+    grid-template-columns: 85px 115px auto;
+    align-items: center;
+    font-size: 0.925rem;
+  }
+
+  .language-name {
+    color: #1e293b;
+    font-weight: 600;
+  }
+
+  .language-proficiency {
+    color: #475569;
+  }
+
+  .dot-rating {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  .dot.filled {
+    background-color: #1e293b;
+  }
+
+  .dot.empty {
+    border: 1.5px solid #1e293b;
+    background-color: transparent;
+  }
+
+  /* Experience */
+  .experience-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.15rem;
+  }
+
+  .experience-item {
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    gap: 0.75rem;
+    font-size: 0.9rem;
+    line-height: 1.35;
+  }
+
+  .exp-period {
+    color: #1e293b;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .exp-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+  }
+
+  .exp-company {
+    font-size: 0.925rem;
+    font-weight: 600;
+    color: #1e293b;
+  }
+
+  .exp-role-type {
+    font-size: 0.85rem;
+    color: #475569;
+  }
+
+  .divider {
+    color: #94a3b8;
+    margin: 0 0.15rem;
+  }
+
+  /* Softwares */
+  .softwares-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.75rem;
+  }
+
+  .software-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
+    text-align: center;
+    transition: transform var(--transition-fast);
+  }
+
+  .software-card:hover {
+    transform: translateY(-3px);
+  }
+
+  .software-icon-wrapper {
+    width: 44px;
+    height: 44px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    background: #ffffff;
+    overflow: hidden;
+    transition: box-shadow var(--transition-fast);
+  }
+
+  .software-card:hover .software-icon-wrapper {
+    box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+  }
+
+  .software-icon {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .software-label {
+    font-size: 0.68rem;
+    color: #475569;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  /* Contact Compact */
+  .contact-compact-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    font-size: 0.9rem;
+  }
+
+  .contact-compact-row {
+    display: grid;
+    grid-template-columns: 80px 14px 1fr;
+    align-items: center;
+  }
+
+  .contact-label {
+    color: #1e293b;
+    font-weight: 500;
+  }
+
+  .colon {
+    color: #64748b;
+  }
+
+  .contact-value {
+    color: #334155;
+    font-weight: 500;
+    transition: color var(--transition-fast);
+  }
+
+  .contact-value:hover {
+    color: #0284c7;
+  }
+</style>
