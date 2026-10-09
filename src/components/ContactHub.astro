@@ -1,0 +1,516 @@
+---
+import { portfolioData } from '../data/portfolio';
+
+const { contact, name, title } = portfolioData;
+---
+
+<section id="contact" class="contact-section">
+  <div class="container">
+    
+    <!-- Collaboration Hero Banner -->
+    <div class="collab-banner">
+      <div class="collab-content">
+        <span class="banner-badge">✦ Let's Collaborate</span>
+        <h2 class="collab-title">Siap Mengembangkan Konten Visual Anda ke Level Berikutnya?</h2>
+        <p class="collab-desc">
+          Terbuka untuk kolaborasi proyek video editing, produksi komersial, motion design, maupun konsultasi kreatif untuk kreator, agensi, bisnis, dan startup.
+        </p>
+        <div class="collab-actions">
+          <a href={contact.whatsappUrl} target="_blank" rel="noopener noreferrer" class="btn-primary banner-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+            </svg>
+            <span>Mulai Diskusi di WhatsApp</span>
+          </a>
+          <button id="quickCopyEmailBtn" class="btn-secondary banner-btn" type="button">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            <span>Salin Email Saya</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Direct Action Cards Grid -->
+    <div class="contact-cards-grid">
+      
+      <!-- WhatsApp Card -->
+      <a href={contact.whatsappUrl} target="_blank" rel="noopener noreferrer" class="contact-card">
+        <div class="contact-card-icon wa-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+          </svg>
+        </div>
+        <div class="contact-card-body">
+          <span class="card-subtitle">Chat Langsung</span>
+          <h3 class="card-title">WhatsApp</h3>
+          <p class="card-value">{contact.phone}</p>
+        </div>
+        <div class="card-arrow">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </div>
+      </a>
+
+      <!-- Email Card -->
+      <div class="contact-card email-card">
+        <div class="contact-card-icon mail-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+            <polyline points="22,6 12,13 2,6"></polyline>
+          </svg>
+        </div>
+        <div class="contact-card-body">
+          <span class="card-subtitle">Kirim Surel</span>
+          <h3 class="card-title">Email Resmi</h3>
+          <p class="card-value">{contact.email}</p>
+          <div class="email-sub-actions">
+            <a href={`mailto:${contact.email}`} class="email-action-link">Kirim Email</a>
+            <span class="dot-separator">•</span>
+            <button id="copyEmailCardBtn" class="email-copy-link" type="button">Salin</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Instagram Card -->
+      <a href={contact.instagramUrl} target="_blank" rel="noopener noreferrer" class="contact-card">
+        <div class="contact-card-icon ig-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+          </svg>
+        </div>
+        <div class="contact-card-body">
+          <span class="card-subtitle">Galeri Visual</span>
+          <h3 class="card-title">Instagram</h3>
+          <p class="card-value">{contact.instagram}</p>
+        </div>
+        <div class="card-arrow">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </div>
+      </a>
+
+      <!-- LinkedIn Card -->
+      <a href={contact.linkedinUrl} target="_blank" rel="noopener noreferrer" class="contact-card">
+        <div class="contact-card-icon in-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+            <rect x="2" y="9" width="4" height="12"></rect>
+            <circle cx="4" cy="4" r="2"></circle>
+          </svg>
+        </div>
+        <div class="contact-card-body">
+          <span class="card-subtitle">Jejaring Profesional</span>
+          <h3 class="card-title">LinkedIn</h3>
+          <p class="card-value">{contact.linkedin}</p>
+        </div>
+        <div class="card-arrow">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <span class="footer-name">{name}</span>
+          <span class="footer-role">{title}</span>
+        </div>
+        <a href="#about" class="back-to-top" aria-label="Kembali ke atas">
+          <span>Kembali ke Atas</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="18 15 12 9 6 15"></polyline>
+          </svg>
+        </a>
+      </div>
+      <div class="footer-bottom">
+        <p class="copyright">© 2026 {name}. All rights reserved.</p>
+        <p class="footer-credit">Dibuat menggunakan Astro & Modern Vanilla CSS.</p>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="copyToast" class="toast-notification" role="status" aria-live="polite">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+      <polyline points="22 4 12 14.01 9 11.01"></polyline>
+    </svg>
+    <span>Alamat email berhasil disalin ke clipboard!</span>
+  </div>
+</section>
+
+<style>
+  .contact-section {
+    padding-top: 5rem;
+    padding-bottom: 3.5rem;
+    position: relative;
+  }
+
+  /* Collaboration Banner */
+  .collab-banner {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(224, 242, 254, 0.7) 100%);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(2, 132, 199, 0.2);
+    border-radius: var(--radius-xl);
+    padding: 3.5rem 3rem;
+    box-shadow: var(--shadow-xl);
+    margin-bottom: 3.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .collab-banner::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(56, 189, 248, 0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .collab-content {
+    max-width: 760px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .banner-badge {
+    display: inline-block;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--accent-blue);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 1rem;
+  }
+
+  .collab-title {
+    font-size: 2.25rem;
+    font-weight: 800;
+    line-height: 1.25;
+    color: var(--text-main);
+    letter-spacing: -0.02em;
+    margin-bottom: 1rem;
+  }
+
+  .collab-desc {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    line-height: 1.65;
+    margin-bottom: 2rem;
+  }
+
+  .collab-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .banner-btn {
+    padding: 0.85rem 1.75rem;
+    font-size: 0.95rem;
+  }
+
+  @media (max-width: 768px) {
+    .collab-banner {
+      padding: 2.25rem 1.5rem;
+    }
+    .collab-title {
+      font-size: 1.75rem;
+    }
+    .collab-desc {
+      font-size: 0.95rem;
+    }
+  }
+
+  /* Contact Cards Grid */
+  .contact-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 4.5rem;
+  }
+
+  @media (max-width: 1024px) {
+    .contact-cards-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 580px) {
+    .contact-cards-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .contact-card {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(2, 132, 199, 0.12);
+    border-radius: var(--radius-lg);
+    padding: 1.75rem 1.5rem;
+    box-shadow: var(--shadow-md);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    transition: transform var(--transition-normal), box-shadow var(--transition-normal), border-color var(--transition-normal);
+  }
+
+  .contact-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 16px 30px -4px rgba(2, 132, 199, 0.16);
+    border-color: rgba(2, 132, 199, 0.35);
+  }
+
+  .contact-card-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.25rem;
+    transition: transform var(--transition-fast);
+  }
+
+  .contact-card:hover .contact-card-icon {
+    transform: scale(1.08);
+  }
+
+  .wa-icon {
+    background: rgba(16, 185, 129, 0.12);
+    color: #059669;
+  }
+
+  .mail-icon {
+    background: rgba(2, 132, 199, 0.12);
+    color: #0284c7;
+  }
+
+  .ig-icon {
+    background: rgba(236, 72, 153, 0.12);
+    color: #db2777;
+  }
+
+  .in-icon {
+    background: rgba(14, 116, 144, 0.12);
+    color: #0e7490;
+  }
+
+  .card-subtitle {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    display: block;
+    margin-bottom: 0.2rem;
+  }
+
+  .card-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 0.35rem;
+  }
+
+  .card-value {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    word-break: break-all;
+  }
+
+  .card-arrow {
+    position: absolute;
+    top: 1.75rem;
+    right: 1.5rem;
+    color: var(--text-light);
+    transition: transform var(--transition-fast), color var(--transition-fast);
+  }
+
+  .contact-card:hover .card-arrow {
+    transform: translateX(4px);
+    color: var(--accent-blue);
+  }
+
+  .email-sub-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+    font-size: 0.825rem;
+    font-weight: 600;
+  }
+
+  .email-action-link {
+    color: var(--accent-blue);
+  }
+
+  .email-action-link:hover {
+    text-decoration: underline;
+  }
+
+  .email-copy-link {
+    color: var(--text-dim);
+  }
+
+  .email-copy-link:hover {
+    color: var(--accent-blue);
+    text-decoration: underline;
+  }
+
+  .dot-separator {
+    color: var(--text-light);
+  }
+
+  /* Site Footer */
+  .site-footer {
+    border-top: 1px solid rgba(2, 132, 199, 0.12);
+    padding-top: 2.5rem;
+  }
+
+  .footer-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+  }
+
+  .footer-brand {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .footer-name {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--text-main);
+  }
+
+  .footer-role {
+    font-size: 0.88rem;
+    color: var(--accent-blue);
+    font-style: italic;
+  }
+
+  .back-to-top {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--border-light);
+    background: #ffffff;
+    transition: all var(--transition-fast);
+  }
+
+  .back-to-top:hover {
+    border-color: var(--accent-blue);
+    color: var(--accent-blue);
+    transform: translateY(-2px);
+  }
+
+  .footer-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    font-size: 0.85rem;
+    color: var(--text-dim);
+  }
+
+  /* Toast Notification */
+  .toast-notification {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 1100;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: #ffffff;
+    color: var(--text-main);
+    padding: 0.85rem 1.4rem;
+    border-radius: var(--radius-full);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    font-size: 0.9rem;
+    font-weight: 600;
+    transform: translateY(100px);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
+  }
+
+  .toast-notification.show {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  @media (max-width: 640px) {
+    .toast-notification {
+      left: 1.5rem;
+      right: 1.5rem;
+      bottom: 1.5rem;
+      justify-content: center;
+    }
+  }
+</style>
+
+<script>
+  // Copy to clipboard & Toast logic
+  const quickCopyBtn = document.getElementById('quickCopyEmailBtn');
+  const cardCopyBtn = document.getElementById('copyEmailCardBtn');
+  const toast = document.getElementById('copyToast');
+
+  let toastTimeout: number | undefined;
+
+  function copyEmail() {
+    const emailToCopy = 'hello@nandaaddiwijaya.my.id';
+    navigator.clipboard.writeText(emailToCopy).then(() => {
+      if (toast) {
+        toast.classList.add('show');
+        if (toastTimeout) clearTimeout(toastTimeout);
+        toastTimeout = window.setTimeout(() => {
+          toast.classList.remove('show');
+        }, 2800);
+      }
+    }).catch(() => {
+      // Fallback
+    });
+  }
+
+  if (quickCopyBtn) {
+    quickCopyBtn.addEventListener('click', copyEmail);
+  }
+
+  if (cardCopyBtn) {
+    cardCopyBtn.addEventListener('click', copyEmail);
+  }
+</script>
