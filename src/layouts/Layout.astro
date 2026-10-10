@@ -55,28 +55,6 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://nandaadd
   <slot />
 
   <script>
-    import Lenis from 'lenis';
-
-    // Initialize Lenis Smooth Scrolling
-    const lenis = new Lenis({
-      duration: 1.25,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      orientation: 'vertical',
-      gestureOrientation: 'vertical',
-      smoothWheel: true,
-      wheelMultiplier: 1,
-      touchMultiplier: 1.5,
-    });
-
-    function raf(time: number) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-    requestAnimationFrame(raf);
-
-    // Make lenis globally accessible
-    (window as any).lenis = lenis;
-
     // Smooth scroll for internal anchor links with navbar offset
     document.addEventListener('click', (e) => {
       const target = (e.target as HTMLElement).closest('a[href^="#"]');
@@ -86,38 +64,14 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://nandaadd
           const section = document.querySelector(href);
           if (section) {
             e.preventDefault();
-            lenis.scrollTo(section as HTMLElement, { offset: -70 });
+            const yOffset = -72;
+            const y = section.getBoundingClientRect().top + window.pageYOffset + yOffset;
+            window.scrollTo({ top: y, behavior: 'smooth' });
+            history.pushState(null, '', href);
           }
         }
       }
     });
-
-    // Global Scroll Reveal Observer
-    const initScrollReveal = () => {
-      const revealElements = document.querySelectorAll('.reveal-fade-up');
-      if (!revealElements.length) return;
-
-      const observer = new IntersectionObserver((entries, obs) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('is-revealed');
-            obs.unobserve(entry.target);
-          }
-        });
-      }, {
-        rootMargin: '0px 0px -40px 0px',
-        threshold: 0.1,
-      });
-
-      revealElements.forEach((el) => observer.observe(el));
-    };
-
-    // Run on DOM ready
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initScrollReveal);
-    } else {
-      initScrollReveal();
-    }
   </script>
 </body>
 </html>

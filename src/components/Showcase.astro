@@ -29,7 +29,7 @@ const categories = showcase.categories;
   <div class="container">
     
     <!-- Section Header -->
-    <div class="section-header reveal-fade-up">
+    <div class="section-header">
       <span class="section-tag">{showcase.tag}</span>
       <h2 class="section-title">{showcase.title}</h2>
       <p class="section-description">
@@ -38,7 +38,7 @@ const categories = showcase.categories;
     </div>
 
     <!-- Category Filter Tabs -->
-    <div class="filter-tabs-container reveal-fade-up stagger-1">
+    <div class="filter-tabs-container">
       <div class="filter-tabs" role="tablist" aria-label="Filter kategori video">
         {categories.map((cat, idx) => (
           <button 
@@ -57,7 +57,7 @@ const categories = showcase.categories;
     <div class="projects-grid" id="projectsGrid">
       {projects.map((item, idx) => (
         <article 
-          class={`project-card reveal-fade-up stagger-${(idx % 6) + 1}`} 
+          class="project-card" 
           data-category={item.category}
           data-video-id={item.youtubeId}
           data-title={item.title}
