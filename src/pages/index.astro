@@ -2,19 +2,21 @@
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.astro';
 import Hero from '../components/Hero.astro';
-import StatsClients from '../components/StatsClients.astro';
 import Showcase from '../components/Showcase.astro';
 import VideoModal from '../components/VideoModal.astro';
 import ContactHub from '../components/ContactHub.astro';
+import { getDictionary } from '../data/locales';
+
+const dict = getDictionary('en');
 ---
 
-<Layout title="Nanda Addi Wijaya | Videographer & Video Editor">
-  <Navbar />
+<Layout title={dict.meta.title} description={dict.meta.description} lang="en">
+  <Navbar currentLocale="en" nav={dict.nav} />
   <main>
-    <Hero />
-    <StatsClients />
-    <Showcase />
-    <ContactHub />
+    <Hero hero={dict.hero} locale="en" />
+    <Showcase showcase={dict.showcase} projects={dict.projects} />
+    <ContactHub contactContent={dict.contact} locale="en" />
   </main>
-  <VideoModal />
+  <VideoModal modal={dict.modal} />
 </Layout>
+
