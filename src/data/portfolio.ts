@@ -2,6 +2,7 @@ export interface EducationItem {
   institution: string;
   major: string;
   period: string;
+  logo?: string;
 }
 
 export interface LanguageItem {
@@ -80,7 +81,8 @@ export const portfolioData: PortfolioData = {
   education: {
     institution: "State University of Malang",
     major: "Educational Technology",
-    period: "2023 - Present"
+    period: "2023 - Present",
+    logo: "/images/education.png"
   },
   languages: [
     { language: "Indonesia", proficiency: "Native", level: 5 },
