@@ -1,17 +1,64 @@
 ---
 import { portfolioData } from '../data/portfolio';
+import type { HeroTranslations, Locale } from '../data/locales/types';
+
+interface Props {
+  hero?: HeroTranslations;
+  locale?: Locale;
+}
 
 const {
   name,
-  title,
-  bio,
+  title: defaultTitle,
   profileCardImage,
-  education,
-  languages,
-  experiences,
+  education: defaultEducation,
   softwares,
   contact
 } = portfolioData;
+
+const { hero, locale = 'en' } = Astro.props;
+
+const currentHero = hero || {
+  tag: 'Creative Studio & Editorial Portfolio',
+  greetingTitle: `Hi! I'm ${name}`,
+  roles: ['Videographer & Video Editor'],
+  bio: portfolioData.bio,
+  primaryCta: 'Explore Selected Work',
+  secondaryCta: 'Start a Project',
+  stats: {
+    experience: { value: '4+', label: 'Years Experience' },
+    videos: { value: '500+', label: 'Videos Edited' },
+    websites: { value: '9', label: 'Web Projects Built' },
+  },
+  education: {
+    institution: defaultEducation.institution,
+    major: defaultEducation.major,
+    period: defaultEducation.period,
+  },
+  experienceHeading: 'Experience',
+  experiences: [
+    { period: 'Aug 2024 - Present', company: 'Indopride Roleplay', role: 'Video Editor', type: 'Fulltime' },
+    { period: 'Apr 2025 - Present', company: 'Kultus Visual', role: 'Motion Graphic Designer', type: 'Freelance' },
+    { period: 'Mar 2024 - Present', company: 'Aksara Picture', role: 'Photographer & Videographer', type: 'Freelance' },
+    { period: 'Jun 2023 - Jun 2024', company: 'Bina Project Construction', role: 'Social Media Specialist', type: 'Fulltime' }
+  ]
+};
+
+const languages = locale === 'id' 
+  ? [
+      { language: 'Indonesia', proficiency: 'Penutur Asli', level: 5 },
+      { language: 'Inggris', proficiency: 'Percakapan', level: 3 }
+    ]
+  : [
+      { language: 'Indonesian', proficiency: 'Native', level: 5 },
+      { language: 'English', proficiency: 'Conversational', level: 3 }
+    ];
+
+const educationTitle = locale === 'id' ? 'Pendidikan' : 'Education';
+const languagesTitle = locale === 'id' ? 'Bahasa' : 'Languages';
+const experienceTitle = currentHero.experienceHeading || (locale === 'id' ? 'Pengalaman' : 'Experience');
+const softwaresTitle = locale === 'id' ? 'Perangkat Lunak' : 'Softwares';
+const contactTitle = locale === 'id' ? 'Kontak' : 'Contact';
 ---
 
 <section id="about" class="hero-section">
@@ -36,15 +83,22 @@ const {
         <div class="hero-bio-container">
           <div class="hero-heading-group">
             <h1 class="hero-title">
-              <span class="greeting-hi">Hi!</span> 
-              <span class="greeting-name">I'm {name}</span>
+              <span class="greeting-hi">{locale === 'id' ? 'Halo!' : 'Hi!'}</span> 
+              <span class="greeting-name">{locale === 'id' ? `Saya ${name}` : `I'm ${name}`}</span>
             </h1>
-            <p class="hero-role">{title}</p>
+            <p class="hero-role">{locale === 'id' ? 'Videografer & Video Editor' : defaultTitle}</p>
           </div>
 
           <p class="hero-bio-text">
-            {bio.slice(0, bio.lastIndexOf("LinkedIn."))}
-            <a href={contact.linkedinUrl} target="_blank" rel="noopener noreferrer" class="bio-link">LinkedIn.</a>
+            {currentHero.bio.includes('LinkedIn.') 
+              ? (
+                <>
+                  {currentHero.bio.slice(0, currentHero.bio.lastIndexOf('LinkedIn.'))}
+                  <a href={contact.linkedinUrl} target="_blank" rel="noopener noreferrer" class="bio-link">LinkedIn.</a>
+                </>
+              ) 
+              : currentHero.bio
+            }
           </p>
         </div>
       </div>
@@ -56,37 +110,29 @@ const {
         <div class="info-column">
           <!-- Education Section -->
           <div class="section-block">
-            <h2 class="column-title">Education</h2>
+            <h2 class="column-title">{educationTitle}</h2>
             <div class="education-card">
               <div class="um-logo-wrapper">
-                <svg class="um-seal-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="50" cy="50" r="46" stroke="#475569" stroke-width="2.5" stroke-dasharray="3 2" />
-                  <circle cx="50" cy="50" r="39" stroke="#475569" stroke-width="1.8" />
-                  <circle cx="50" cy="50" r="33" stroke="#475569" stroke-width="1" />
-                  <path id="umTextCircle" d="M 18,50 A 32,32 0 1,1 82,50" fill="none" />
-                  <text font-size="7.5" font-family="'Inter', sans-serif" font-weight="700" fill="#334155" letter-spacing="1.2">
-                    <textPath href="#umTextCircle" startOffset="50%" text-anchor="middle">
-                      UNIVERSITAS NEGERI MALANG
-                    </textPath>
-                  </text>
-                  <!-- UM Torch & Wings Emblems in Center -->
-                  <path d="M50 25 L50 68 M47 30 L53 30 M45 42 Q50 35 55 42 Q50 55 45 42 Z" stroke="#334155" stroke-width="1.8" fill="#e2e8f0" />
-                  <path d="M38 52 C42 46 47 48 48 56 C42 56 39 54 38 52 Z" fill="#475569" />
-                  <path d="M62 52 C58 46 53 48 52 56 C58 56 61 54 62 52 Z" fill="#475569" />
-                  <path d="M40 68 L60 68 L50 78 Z" fill="#334155" />
-                </svg>
+                <img
+                  src={defaultEducation.logo || "/images/education.png"}
+                  alt={currentHero.education.institution}
+                  class="um-logo-img"
+                  width="58"
+                  height="58"
+                  loading="lazy"
+                />
               </div>
               <div class="education-details">
-                <h3 class="institution-name">{education.institution}</h3>
-                <p class="education-major">{education.major}</p>
-                <p class="education-period">{education.period}</p>
+                <h3 class="institution-name">{currentHero.education.institution}</h3>
+                <p class="education-major">{currentHero.education.major}</p>
+                <p class="education-period">{currentHero.education.period}</p>
               </div>
             </div>
           </div>
 
           <!-- Languages Section -->
           <div class="section-block">
-            <h2 class="column-title">Languages</h2>
+            <h2 class="column-title">{languagesTitle}</h2>
             <div class="languages-list">
               {languages.map((item) => (
                 <div class="language-row">
@@ -106,13 +152,12 @@ const {
         <!-- COLUMN 2: Experience -->
         <div class="info-column">
           <div class="section-block">
-            <h2 class="column-title">Experience</h2>
+            <h2 class="column-title">{experienceTitle}</h2>
             <div class="experience-list">
-              {experiences.map((exp) => (
+              {currentHero.experiences.map((exp) => (
                 <div class="experience-item">
                   <div class="exp-period">
-                    <span class="period-line">{exp.startDate}</span>
-                    <span class="period-line">{exp.endDate}</span>
+                    <span class="period-line">{exp.period}</span>
                   </div>
                   <div class="exp-details">
                     <h3 class="exp-company">{exp.company}</h3>
@@ -128,7 +173,7 @@ const {
         <div class="info-column">
           <!-- Softwares Section -->
           <div class="section-block">
-            <h2 class="column-title">Softwares</h2>
+            <h2 class="column-title">{softwaresTitle}</h2>
             <div class="softwares-grid">
               {softwares.map((sw) => (
                 <div class="software-card" title={sw.name}>
@@ -143,7 +188,7 @@ const {
 
           <!-- Contact Section -->
           <div class="section-block">
-            <h2 class="column-title">Contact</h2>
+            <h2 class="column-title">{contactTitle}</h2>
             <div class="contact-compact-list">
               <div class="contact-compact-row">
                 <span class="contact-label">Email</span>
@@ -199,10 +244,34 @@ const {
     }
   }
 
+  /* Hero Sequenced Entrance Animations */
+  @keyframes heroSlideFade {
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes heroPolaroidFade {
+    from {
+      opacity: 0;
+      transform: translateY(28px) rotate(2deg) scale(0.96);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) rotate(0deg) scale(1);
+    }
+  }
+
   /* Polaroid Container & Card */
   .polaroid-container {
     display: flex;
     justify-content: center;
+    animation: heroPolaroidFade 0.95s cubic-bezier(0.16, 1, 0.3, 1) both;
   }
 
   .polaroid-card {
@@ -210,18 +279,18 @@ const {
     max-width: 280px;
     width: 100%;
     transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
-    filter: drop-shadow(0 15px 25px rgba(2, 132, 199, 0.12)) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.06));
+    filter: drop-shadow(0 12px 24px rgba(15, 23, 42, 0.08)) drop-shadow(0 3px 6px rgba(15, 23, 42, 0.04));
   }
 
   .polaroid-card:hover {
     transform: translateY(-4px) rotate(-1deg);
-    filter: drop-shadow(0 20px 30px rgba(2, 132, 199, 0.2)) drop-shadow(0 6px 12px rgba(0, 0, 0, 0.08));
+    filter: drop-shadow(0 18px 28px rgba(15, 23, 42, 0.12)) drop-shadow(0 4px 8px rgba(15, 23, 42, 0.06));
   }
 
   .polaroid-image {
     width: 100%;
     height: auto;
-    border-radius: 4px;
+    border-radius: var(--radius-xs);
     display: block;
   }
 
@@ -230,6 +299,7 @@ const {
     display: flex;
     flex-direction: column;
     gap: 1.15rem;
+    animation: heroSlideFade 0.95s 0.12s cubic-bezier(0.16, 1, 0.3, 1) both;
   }
 
   .hero-heading-group {
@@ -240,7 +310,7 @@ const {
 
   .hero-title {
     font-size: 2.45rem;
-    font-weight: 700;
+    font-weight: 500;
     line-height: 1.15;
     letter-spacing: -0.02em;
     display: flex;
@@ -250,21 +320,21 @@ const {
   }
 
   .greeting-hi {
-    color: #0284c7;
-    font-weight: 800;
+    color: var(--text-main);
+    font-weight: 500;
     font-size: 2.75rem;
   }
 
   .greeting-name {
-    color: #0284c7;
-    font-weight: 600;
+    color: var(--text-main);
+    font-weight: 400;
   }
 
   .hero-role {
     font-size: 1.1rem;
     font-weight: 500;
     font-style: italic;
-    color: #0284c7;
+    color: var(--text-dim);
     letter-spacing: -0.01em;
   }
 
@@ -286,14 +356,14 @@ const {
   }
 
   .bio-link {
-    color: #0284c7;
-    font-weight: 600;
+    color: var(--text-main);
+    font-weight: 500;
     text-decoration: underline;
     text-underline-offset: 3px;
   }
 
   .bio-link:hover {
-    color: #0369a1;
+    color: #000000;
   }
 
   /* BOTTOM ROW: 3-COLUMN GRID */
@@ -301,8 +371,9 @@ const {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 2.5rem;
-    border-top: 1px solid rgba(2, 132, 199, 0.12);
+    border-top: 1px solid rgba(226, 232, 240, 0.9);
     padding-top: 2.5rem;
+    animation: heroSlideFade 0.95s 0.25s cubic-bezier(0.16, 1, 0.3, 1) both;
   }
 
   @media (max-width: 980px) {
@@ -326,8 +397,8 @@ const {
 
   .column-title {
     font-size: 1.45rem;
-    font-weight: 700;
-    color: #0284c7;
+    font-weight: 500;
+    color: var(--text-main);
     letter-spacing: -0.01em;
   }
 
@@ -344,9 +415,11 @@ const {
     height: 58px;
   }
 
-  .um-seal-svg {
+  .um-logo-img {
     width: 100%;
     height: 100%;
+    object-fit: contain;
+    display: block;
   }
 
   .education-details {
@@ -357,7 +430,7 @@ const {
 
   .institution-name {
     font-size: 0.95rem;
-    font-weight: 600;
+    font-weight: 500;
     color: #1e293b;
     line-height: 1.3;
   }
@@ -388,7 +461,7 @@ const {
 
   .language-name {
     color: #1e293b;
-    font-weight: 600;
+    font-weight: 500;
   }
 
   .language-proficiency {
@@ -451,7 +524,7 @@ const {
 
   .exp-company {
     font-size: 0.925rem;
-    font-weight: 600;
+    font-weight: 500;
     color: #1e293b;
   }
 
@@ -488,18 +561,19 @@ const {
   .software-icon-wrapper {
     width: 44px;
     height: 44px;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     display: flex;
     align-items: center;
     justify-content: center;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
     background: #ffffff;
     overflow: hidden;
-    transition: box-shadow var(--transition-fast);
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
   }
 
   .software-card:hover .software-icon-wrapper {
-    box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.12);
   }
 
   .software-icon {
@@ -545,6 +619,6 @@ const {
   }
 
   .contact-value:hover {
-    color: #0284c7;
+    color: #000000;
   }
 </style>

@@ -1,33 +1,63 @@
 ---
 import { portfolioData } from '../data/portfolio';
+import type { ContactTranslations, Locale } from '../data/locales/types';
 
-const { contact, name, title } = portfolioData;
+interface Props {
+  contactContent?: ContactTranslations;
+  locale?: Locale;
+}
+
+const { contact, name, title: defaultTitle } = portfolioData;
+
+const {
+  contactContent = {
+    collabTitle: "Have a Vision? Let's Bring It to Life.",
+    collabSubtitle: 'Open for commercial video productions, YouTube channel editing, motion design, and creative collaborations.',
+    collabCta: 'Start via WhatsApp',
+    whatsappLabel: 'WhatsApp Chat',
+    whatsappSub: 'Fast response for project inquiries & discussions',
+    whatsappAction: 'Chat on WhatsApp',
+    emailLabel: 'Direct Email',
+    emailSub: 'Official proposals, briefs, and collaborations',
+    instagramLabel: 'Instagram',
+    instagramSub: 'Behind-the-scenes, visual experiments, and stories',
+    linkedinLabel: 'LinkedIn Profile',
+    linkedinSub: 'Professional credentials and work experience history',
+    footerRights: 'All rights reserved. Designed with precision.',
+  },
+  locale = 'en',
+} = Astro.props;
+
+const copyEmailLabel = locale === 'id' ? 'Salin Email' : 'Copy Email';
+const sendEmailLabel = locale === 'id' ? 'Kirim Email' : 'Send Email';
+const backToTopLabel = locale === 'id' ? 'Kembali ke Atas' : 'Back to Top';
+const roleTitle = locale === 'id' ? 'Videografer & Video Editor' : defaultTitle;
 ---
 
 <section id="contact" class="contact-section">
   <div class="container">
     
     <!-- Collaboration Hero Banner -->
-    <div class="collab-banner">
+    <div class="collab-banner reveal-fade-up">
       <div class="collab-content">
         <span class="banner-badge">✦ Let's Collaborate</span>
-        <h2 class="collab-title">Siap Mengembangkan Konten Visual Anda ke Level Berikutnya?</h2>
+        <h2 class="collab-title">{contactContent.collabTitle}</h2>
         <p class="collab-desc">
-          Terbuka untuk kolaborasi proyek video editing, produksi komersial, motion design, maupun konsultasi kreatif untuk kreator, agensi, bisnis, dan startup.
+          {contactContent.collabSubtitle}
         </p>
         <div class="collab-actions">
           <a href={contact.whatsappUrl} target="_blank" rel="noopener noreferrer" class="btn-primary banner-btn">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
             </svg>
-            <span>Mulai Diskusi di WhatsApp</span>
+            <span>{contactContent.collabCta}</span>
           </a>
           <button id="quickCopyEmailBtn" class="btn-secondary banner-btn" type="button">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
               <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
               <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
             </svg>
-            <span>Salin Email Saya</span>
+            <span>{copyEmailLabel}</span>
           </button>
         </div>
       </div>
@@ -37,15 +67,15 @@ const { contact, name, title } = portfolioData;
     <div class="contact-cards-grid">
       
       <!-- WhatsApp Card -->
-      <a href={contact.whatsappUrl} target="_blank" rel="noopener noreferrer" class="contact-card">
+      <a href={contact.whatsappUrl} target="_blank" rel="noopener noreferrer" class="contact-card reveal-fade-up stagger-1">
         <div class="contact-card-icon wa-icon">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
           </svg>
         </div>
         <div class="contact-card-body">
-          <span class="card-subtitle">Chat Langsung</span>
-          <h3 class="card-title">WhatsApp</h3>
+          <span class="card-subtitle">{contactContent.whatsappSub}</span>
+          <h3 class="card-title">{contactContent.whatsappLabel}</h3>
           <p class="card-value">{contact.phone}</p>
         </div>
         <div class="card-arrow">
@@ -57,7 +87,7 @@ const { contact, name, title } = portfolioData;
       </a>
 
       <!-- Email Card -->
-      <div class="contact-card email-card">
+      <div class="contact-card email-card reveal-fade-up stagger-2">
         <div class="contact-card-icon mail-icon">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
@@ -65,19 +95,19 @@ const { contact, name, title } = portfolioData;
           </svg>
         </div>
         <div class="contact-card-body">
-          <span class="card-subtitle">Kirim Surel</span>
-          <h3 class="card-title">Email Resmi</h3>
+          <span class="card-subtitle">{contactContent.emailSub}</span>
+          <h3 class="card-title">{contactContent.emailLabel}</h3>
           <p class="card-value">{contact.email}</p>
           <div class="email-sub-actions">
-            <a href={`mailto:${contact.email}`} class="email-action-link">Kirim Email</a>
+            <a href={`mailto:${contact.email}`} class="email-action-link">{sendEmailLabel}</a>
             <span class="dot-separator">•</span>
-            <button id="copyEmailCardBtn" class="email-copy-link" type="button">Salin</button>
+            <button id="copyEmailCardBtn" class="email-copy-link" type="button">{copyEmailLabel}</button>
           </div>
         </div>
       </div>
 
       <!-- Instagram Card -->
-      <a href={contact.instagramUrl} target="_blank" rel="noopener noreferrer" class="contact-card">
+      <a href={contact.instagramUrl} target="_blank" rel="noopener noreferrer" class="contact-card reveal-fade-up stagger-3">
         <div class="contact-card-icon ig-icon">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
@@ -86,8 +116,8 @@ const { contact, name, title } = portfolioData;
           </svg>
         </div>
         <div class="contact-card-body">
-          <span class="card-subtitle">Galeri Visual</span>
-          <h3 class="card-title">Instagram</h3>
+          <span class="card-subtitle">{contactContent.instagramSub}</span>
+          <h3 class="card-title">{contactContent.instagramLabel}</h3>
           <p class="card-value">{contact.instagram}</p>
         </div>
         <div class="card-arrow">
@@ -99,7 +129,7 @@ const { contact, name, title } = portfolioData;
       </a>
 
       <!-- LinkedIn Card -->
-      <a href={contact.linkedinUrl} target="_blank" rel="noopener noreferrer" class="contact-card">
+      <a href={contact.linkedinUrl} target="_blank" rel="noopener noreferrer" class="contact-card reveal-fade-up stagger-4">
         <div class="contact-card-icon in-icon">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
@@ -108,8 +138,8 @@ const { contact, name, title } = portfolioData;
           </svg>
         </div>
         <div class="contact-card-body">
-          <span class="card-subtitle">Jejaring Profesional</span>
-          <h3 class="card-title">LinkedIn</h3>
+          <span class="card-subtitle">{contactContent.linkedinSub}</span>
+          <h3 class="card-title">{contactContent.linkedinLabel}</h3>
           <p class="card-value">{contact.linkedin}</p>
         </div>
         <div class="card-arrow">
@@ -123,22 +153,22 @@ const { contact, name, title } = portfolioData;
     </div>
 
     <!-- Footer -->
-    <footer class="site-footer">
+    <footer class="site-footer reveal-fade-up stagger-1">
       <div class="footer-top">
         <div class="footer-brand">
           <span class="footer-name">{name}</span>
-          <span class="footer-role">{title}</span>
+          <span class="footer-role">{roleTitle}</span>
         </div>
-        <a href="#about" class="back-to-top" aria-label="Kembali ke atas">
-          <span>Kembali ke Atas</span>
+        <a href="#about" class="back-to-top" aria-label={backToTopLabel}>
+          <span>{backToTopLabel}</span>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="18 15 12 9 6 15"></polyline>
           </svg>
         </a>
       </div>
       <div class="footer-bottom">
-        <p class="copyright">© 2026 {name}. All rights reserved.</p>
-        <p class="footer-credit">Dibuat menggunakan Astro & Modern Vanilla CSS.</p>
+        <p class="copyright">© 2026 {name}. {contactContent.footerRights}</p>
+        <p class="footer-credit">Astro & Modern Vanilla CSS.</p>
       </div>
     </footer>
 
@@ -163,26 +193,14 @@ const { contact, name, title } = portfolioData;
 
   /* Collaboration Banner */
   .collab-banner {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(224, 242, 254, 0.7) 100%);
-    backdrop-filter: blur(16px);
-    border: 1px solid rgba(2, 132, 199, 0.2);
+    background: #ffffff;
+    border: none;
     border-radius: var(--radius-xl);
     padding: 3.5rem 3rem;
-    box-shadow: var(--shadow-xl);
+    box-shadow: var(--shadow-lg);
     margin-bottom: 3.5rem;
     position: relative;
     overflow: hidden;
-  }
-
-  .collab-banner::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    right: -20%;
-    width: 400px;
-    height: 400px;
-    background: radial-gradient(circle, rgba(56, 189, 248, 0.15) 0%, transparent 70%);
-    pointer-events: none;
   }
 
   .collab-content {
@@ -194,8 +212,8 @@ const { contact, name, title } = portfolioData;
   .banner-badge {
     display: inline-block;
     font-size: 0.8rem;
-    font-weight: 700;
-    color: var(--accent-blue);
+    font-weight: 500;
+    color: var(--text-dim);
     text-transform: uppercase;
     letter-spacing: 0.08em;
     margin-bottom: 1rem;
@@ -203,7 +221,7 @@ const { contact, name, title } = portfolioData;
 
   .collab-title {
     font-size: 2.25rem;
-    font-weight: 800;
+    font-weight: 500;
     line-height: 1.25;
     color: var(--text-main);
     letter-spacing: -0.02em;
@@ -261,22 +279,20 @@ const { contact, name, title } = portfolioData;
   }
 
   .contact-card {
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(2, 132, 199, 0.12);
+    background: #ffffff;
+    border: none;
     border-radius: var(--radius-lg);
     padding: 1.75rem 1.5rem;
     box-shadow: var(--shadow-md);
     display: flex;
     flex-direction: column;
     position: relative;
-    transition: transform var(--transition-normal), box-shadow var(--transition-normal), border-color var(--transition-normal);
+    transition: transform var(--transition-normal), box-shadow var(--transition-normal);
   }
 
   .contact-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 16px 30px -4px rgba(2, 132, 199, 0.16);
-    border-color: rgba(2, 132, 199, 0.35);
+    box-shadow: 0 16px 30px -4px rgba(15, 23, 42, 0.1);
   }
 
   .contact-card-icon {
@@ -300,8 +316,8 @@ const { contact, name, title } = portfolioData;
   }
 
   .mail-icon {
-    background: rgba(2, 132, 199, 0.12);
-    color: #0284c7;
+    background: rgba(15, 23, 42, 0.07);
+    color: #0f172a;
   }
 
   .ig-icon {
@@ -310,13 +326,13 @@ const { contact, name, title } = portfolioData;
   }
 
   .in-icon {
-    background: rgba(14, 116, 144, 0.12);
-    color: #0e7490;
+    background: rgba(15, 23, 42, 0.07);
+    color: #0f172a;
   }
 
   .card-subtitle {
     font-size: 0.78rem;
-    font-weight: 600;
+    font-weight: 500;
     color: var(--text-dim);
     text-transform: uppercase;
     letter-spacing: 0.04em;
@@ -326,7 +342,7 @@ const { contact, name, title } = portfolioData;
 
   .card-title {
     font-size: 1.15rem;
-    font-weight: 700;
+    font-weight: 500;
     color: var(--text-main);
     margin-bottom: 0.35rem;
   }
@@ -348,7 +364,7 @@ const { contact, name, title } = portfolioData;
 
   .contact-card:hover .card-arrow {
     transform: translateX(4px);
-    color: var(--accent-blue);
+    color: var(--text-main);
   }
 
   .email-sub-actions {
@@ -357,11 +373,11 @@ const { contact, name, title } = portfolioData;
     gap: 0.5rem;
     margin-top: 0.75rem;
     font-size: 0.825rem;
-    font-weight: 600;
+    font-weight: 500;
   }
 
   .email-action-link {
-    color: var(--accent-blue);
+    color: var(--text-main);
   }
 
   .email-action-link:hover {
@@ -373,7 +389,7 @@ const { contact, name, title } = portfolioData;
   }
 
   .email-copy-link:hover {
-    color: var(--accent-blue);
+    color: var(--text-main);
     text-decoration: underline;
   }
 
@@ -383,7 +399,7 @@ const { contact, name, title } = portfolioData;
 
   /* Site Footer */
   .site-footer {
-    border-top: 1px solid rgba(2, 132, 199, 0.12);
+    border-top: 1px solid rgba(226, 232, 240, 0.9);
     padding-top: 2.5rem;
   }
 
@@ -404,13 +420,13 @@ const { contact, name, title } = portfolioData;
 
   .footer-name {
     font-size: 1.25rem;
-    font-weight: 800;
+    font-weight: 500;
     color: var(--text-main);
   }
 
   .footer-role {
     font-size: 0.88rem;
-    color: var(--accent-blue);
+    color: var(--text-dim);
     font-style: italic;
   }
 
@@ -419,19 +435,20 @@ const { contact, name, title } = portfolioData;
     align-items: center;
     gap: 0.4rem;
     font-size: 0.875rem;
-    font-weight: 600;
+    font-weight: 500;
     color: var(--text-muted);
     padding: 0.5rem 1rem;
-    border-radius: var(--radius-full);
-    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    border: none;
     background: #ffffff;
+    box-shadow: var(--shadow-sm);
     transition: all var(--transition-fast);
   }
 
   .back-to-top:hover {
-    border-color: var(--accent-blue);
-    color: var(--accent-blue);
+    color: var(--text-main);
     transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
   }
 
   .footer-bottom {
@@ -456,11 +473,11 @@ const { contact, name, title } = portfolioData;
     background: #ffffff;
     color: var(--text-main);
     padding: 0.85rem 1.4rem;
-    border-radius: var(--radius-full);
+    border-radius: var(--radius-md);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-    border: 1px solid rgba(16, 185, 129, 0.3);
+    border: none;
     font-size: 0.9rem;
-    font-weight: 600;
+    font-weight: 500;
     transform: translateY(100px);
     opacity: 0;
     pointer-events: none;
