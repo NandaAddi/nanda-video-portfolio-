@@ -5,19 +5,21 @@ interface Props {
   title?: string;
   description?: string;
   image?: string;
+  lang?: 'en' | 'id';
 }
 
 const {
   title = "Nanda Addi Wijaya | Videographer & Video Editor",
-  description = "Portofolio resmi Nanda Addi Wijaya - Videographer & Video Editor profesional dengan 4+ tahun pengalaman, 500+ video tersunting, dan 100K+ penayangan YouTube.",
-  image = "/images/profile.png"
+  description = "Official portfolio of Nanda Addi Wijaya - Videographer & Video Editor.",
+  image = "/images/profile.png",
+  lang = "en"
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://nandaaddiwijaya.my.id');
 ---
 
 <!DOCTYPE html>
-<html lang="id">
+<html lang={lang}>
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -44,12 +46,78 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://nandaadd
   <meta property="twitter:description" content={description} />
   <meta property="twitter:image" content={image} />
 
-  <!-- Google Fonts: Syne (Display) & Plus Jakarta Sans (Body) -->
+  <!-- Google Fonts Preconnect & Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
 </head>
 <body>
   <slot />
+
+  <script>
+    import Lenis from 'lenis';
+
+    // Initialize Lenis Smooth Scrolling
+    const lenis = new Lenis({
+      duration: 1.25,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      orientation: 'vertical',
+      gestureOrientation: 'vertical',
+      smoothWheel: true,
+      wheelMultiplier: 1,
+      touchMultiplier: 1.5,
+    });
+
+    function raf(time: number) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+
+    // Make lenis globally accessible
+    (window as any).lenis = lenis;
+
+    // Smooth scroll for internal anchor links with navbar offset
+    document.addEventListener('click', (e) => {
+      const target = (e.target as HTMLElement).closest('a[href^="#"]');
+      if (target) {
+        const href = target.getAttribute('href');
+        if (href && href !== '#' && href.startsWith('#')) {
+          const section = document.querySelector(href);
+          if (section) {
+            e.preventDefault();
+            lenis.scrollTo(section as HTMLElement, { offset: -70 });
+          }
+        }
+      }
+    });
+
+    // Global Scroll Reveal Observer
+    const initScrollReveal = () => {
+      const revealElements = document.querySelectorAll('.reveal-fade-up');
+      if (!revealElements.length) return;
+
+      const observer = new IntersectionObserver((entries, obs) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-revealed');
+            obs.unobserve(entry.target);
+          }
+        });
+      }, {
+        rootMargin: '0px 0px -40px 0px',
+        threshold: 0.1,
+      });
+
+      revealElements.forEach((el) => observer.observe(el));
+    };
+
+    // Run on DOM ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initScrollReveal);
+    } else {
+      initScrollReveal();
+    }
+  </script>
 </body>
 </html>

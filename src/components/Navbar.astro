@@ -1,7 +1,25 @@
 ---
 import { portfolioData } from '../data/portfolio';
+import type { Locale, NavTranslations } from '../data/locales/types';
+
+interface Props {
+  currentLocale?: Locale;
+  nav?: NavTranslations;
+}
 
 const { name, contact } = portfolioData;
+const {
+  currentLocale = 'en',
+  nav = {
+    about: 'About',
+    showcase: 'Selected Work',
+    contact: 'Contact',
+    ctaText: 'Get in Touch',
+  },
+} = Astro.props;
+
+const enHref = '/';
+const idHref = '/id';
 ---
 
 <header class="navbar-header" id="navbar">
@@ -10,27 +28,43 @@ const { name, contact } = portfolioData;
     <!-- Brand / Logo -->
     <a href="#about" class="nav-brand">
       <span class="brand-name">{name}</span>
-      <span class="status-badge">
-        <span class="status-dot"></span>
-        <span class="status-text">Available</span>
-      </span>
     </a>
 
     <!-- Desktop Navigation Links -->
     <nav class="nav-links-desktop">
-      <a href="#about" class="nav-link">Tentang</a>
-      <a href="#stats" class="nav-link">Pencapaian</a>
-      <a href="#showcase" class="nav-link">Karya Video</a>
-      <a href="#contact" class="nav-link">Kontak</a>
+      <a href="#about" class="nav-link">{nav.about}</a>
+      <a href="#showcase" class="nav-link">{nav.showcase}</a>
+      <a href="#contact" class="nav-link">{nav.contact}</a>
     </nav>
 
     <!-- Header Actions -->
     <div class="nav-actions">
+      <!-- Language Switcher Pill Toggle -->
+      <div class="lang-switcher" role="navigation" aria-label="Language selector">
+        <a 
+          href={enHref} 
+          class={`lang-btn ${currentLocale === 'en' ? 'active' : ''}`}
+          data-href-base={enHref}
+          aria-label="Switch to English"
+        >
+          EN
+        </a>
+        <span class="lang-divider">/</span>
+        <a 
+          href={idHref} 
+          class={`lang-btn ${currentLocale === 'id' ? 'active' : ''}`}
+          data-href-base={idHref}
+          aria-label="Ganti ke Bahasa Indonesia"
+        >
+          ID
+        </a>
+      </div>
+
       <a href={contact.whatsappUrl} target="_blank" rel="noopener noreferrer" class="btn-primary nav-cta">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
         </svg>
-        <span>Hubungi Saya</span>
+        <span>{nav.ctaText}</span>
       </a>
 
       <!-- Mobile Hamburger Button -->
@@ -46,12 +80,22 @@ const { name, contact } = portfolioData;
   <!-- Mobile Dropdown Menu -->
   <div class="mobile-menu" id="mobileMenu">
     <nav class="mobile-nav-links">
-      <a href="#about" class="mobile-link">Tentang</a>
-      <a href="#stats" class="mobile-link">Pencapaian</a>
-      <a href="#showcase" class="mobile-link">Karya Video</a>
-      <a href="#contact" class="mobile-link">Kontak</a>
+      <a href="#about" class="mobile-link">{nav.about}</a>
+      <a href="#showcase" class="mobile-link">{nav.showcase}</a>
+      <a href="#contact" class="mobile-link">{nav.contact}</a>
+
+      <!-- Mobile Language Switcher Row -->
+      <div class="mobile-lang-row">
+        <span class="mobile-lang-label">Language / Bahasa:</span>
+        <div class="lang-switcher">
+          <a href={enHref} class={`lang-btn ${currentLocale === 'en' ? 'active' : ''}`} data-href-base={enHref}>EN</a>
+          <span class="lang-divider">/</span>
+          <a href={idHref} class={`lang-btn ${currentLocale === 'id' ? 'active' : ''}`} data-href-base={idHref}>ID</a>
+        </div>
+      </div>
+
       <a href={contact.whatsappUrl} target="_blank" rel="noopener noreferrer" class="btn-primary mobile-cta">
-        Konsultasi via WhatsApp
+        {nav.ctaText}
       </a>
     </nav>
   </div>
@@ -64,10 +108,10 @@ const { name, contact } = portfolioData;
     left: 0;
     width: 100%;
     z-index: 100;
-    background: rgba(248, 251, 255, 0.88);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border-bottom: 1px solid rgba(2, 132, 199, 0.1);
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(226, 232, 240, 0.8);
     transition: all var(--transition-normal);
   }
 
@@ -86,36 +130,9 @@ const { name, contact } = portfolioData;
 
   .brand-name {
     font-size: 1.15rem;
-    font-weight: 700;
+    font-weight: 500;
     color: var(--text-main);
     letter-spacing: -0.02em;
-  }
-
-  .status-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    padding: 0.2rem 0.55rem;
-    background: rgba(16, 185, 129, 0.1);
-    border: 1px solid rgba(16, 185, 129, 0.25);
-    border-radius: var(--radius-full);
-    font-size: 0.72rem;
-    font-weight: 600;
-    color: #059669;
-  }
-
-  .status-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background-color: #10b981;
-    box-shadow: 0 0 6px #10b981;
-    animation: pulseDot 2s infinite ease-in-out;
-  }
-
-  @keyframes pulseDot {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.4; transform: scale(0.8); }
   }
 
   /* Desktop Nav */
@@ -133,7 +150,7 @@ const { name, contact } = portfolioData;
   }
 
   .nav-link:hover {
-    color: var(--accent-blue);
+    color: var(--text-main);
   }
 
   /* Header Actions */
@@ -141,6 +158,44 @@ const { name, contact } = portfolioData;
     display: flex;
     align-items: center;
     gap: 1rem;
+  }
+
+  /* Language Switcher Pill */
+  .lang-switcher {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.2rem 0.45rem;
+    background: #f1f5f9;
+    border-radius: var(--radius-sm);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    user-select: none;
+  }
+
+  .lang-btn {
+    color: var(--text-muted);
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    transition: all var(--transition-fast);
+    text-decoration: none;
+    line-height: 1.1;
+  }
+
+  .lang-btn:hover {
+    color: var(--text-main);
+  }
+
+  .lang-btn.active {
+    background: #ffffff;
+    color: var(--accent-primary);
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.1);
+  }
+
+  .lang-divider {
+    color: #cbd5e1;
+    font-size: 0.75rem;
   }
 
   .nav-cta {
@@ -196,6 +251,20 @@ const { name, contact } = portfolioData;
     border-bottom: 1px solid rgba(226, 232, 240, 0.6);
   }
 
+  .mobile-lang-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(226, 232, 240, 0.6);
+  }
+
+  .mobile-lang-label {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
   .mobile-cta {
     margin-top: 0.5rem;
     width: 100%;
@@ -231,4 +300,16 @@ const { name, contact } = portfolioData;
       });
     });
   }
+
+  // Smart Anchor Preservation for Language Switcher
+  const langLinks = document.querySelectorAll<HTMLAnchorElement>('.lang-btn');
+  langLinks.forEach((link) => {
+    link.addEventListener('click', () => {
+      const hash = window.location.hash;
+      if (hash) {
+        const baseHref = link.getAttribute('data-href-base') || link.getAttribute('href') || '/';
+        link.href = baseHref === '/' ? `/${hash}` : `${baseHref}${hash}`;
+      }
+    });
+  });
 </script>
