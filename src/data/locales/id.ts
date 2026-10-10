@@ -32,25 +32,29 @@ export const idDictionary: LocaleDictionary = {
     experienceHeading: 'Pengalaman',
     experiences: [
       {
-        period: 'Agu 2024 - Sekarang',
+        startDate: 'Agu 2024 -',
+        endDate: 'Sekarang',
         company: 'Indopride Roleplay',
         role: 'Video Editor',
         type: 'Fulltime',
       },
       {
-        period: 'Apr 2025 - Sekarang',
+        startDate: 'Apr 2025 -',
+        endDate: 'Sekarang',
         company: 'Kultus Visual',
         role: 'Motion Graphic Designer',
         type: 'Freelance',
       },
       {
-        period: 'Mar 2024 - Sekarang',
+        startDate: 'Mar 2024 -',
+        endDate: 'Sekarang',
         company: 'Aksara Picture',
         role: 'Fotografer & Videografer',
         type: 'Freelance',
       },
       {
-        period: 'Jun 2023 - Jun 2024',
+        startDate: 'Jun 2023 -',
+        endDate: 'Jun 2024',
         company: 'Bina Project Construction',
         role: 'Social Media Specialist',
         type: 'Fulltime',

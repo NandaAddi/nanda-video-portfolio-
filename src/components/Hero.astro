@@ -35,12 +35,11 @@ const currentHero = hero || {
     major: defaultEducation.major,
     period: defaultEducation.period,
   },
-  experienceHeading: 'Experience',
   experiences: [
-    { period: 'Aug 2024 - Present', company: 'Indopride Roleplay', role: 'Video Editor', type: 'Fulltime' },
-    { period: 'Apr 2025 - Present', company: 'Kultus Visual', role: 'Motion Graphic Designer', type: 'Freelance' },
-    { period: 'Mar 2024 - Present', company: 'Aksara Picture', role: 'Photographer & Videographer', type: 'Freelance' },
-    { period: 'Jun 2023 - Jun 2024', company: 'Bina Project Construction', role: 'Social Media Specialist', type: 'Fulltime' }
+    { startDate: 'Aug 2024 -', endDate: 'Present', company: 'Indopride Roleplay', role: 'Video Editor', type: 'Fulltime' },
+    { startDate: 'Apr 2025 -', endDate: 'Present', company: 'Kultus Visual', role: 'Motion Graphic Designer', type: 'Freelance' },
+    { startDate: 'Mar 2024 -', endDate: 'Present', company: 'Aksara Picture', role: 'Photographer & Videographer', type: 'Freelance' },
+    { startDate: 'Jun 2023 -', endDate: 'Jun 2024', company: 'Bina Project Construction', role: 'Social Media Specialist', type: 'Fulltime' }
   ]
 };
 
@@ -157,7 +156,8 @@ const contactTitle = locale === 'id' ? 'Kontak' : 'Contact';
               {currentHero.experiences.map((exp) => (
                 <div class="experience-item">
                   <div class="exp-period">
-                    <span class="period-line">{exp.period}</span>
+                    <span class="period-line">{exp.startDate}</span>
+                    <span class="period-line">{exp.endDate}</span>
                   </div>
                   <div class="exp-details">
                     <h3 class="exp-company">{exp.company}</h3>
@@ -499,8 +499,8 @@ const contactTitle = locale === 'id' ? 'Kontak' : 'Contact';
 
   .experience-item {
     display: grid;
-    grid-template-columns: 85px 1fr;
-    gap: 1.15rem;
+    grid-template-columns: 88px 1fr;
+    gap: 1.25rem;
     font-size: 0.9rem;
     line-height: 1.35;
   }
@@ -510,6 +510,7 @@ const contactTitle = locale === 'id' ? 'Kontak' : 'Contact';
     flex-direction: column;
     color: #1e293b;
     font-weight: 500;
+    font-size: 0.88rem;
   }
 
   .period-line {

@@ -31,7 +31,8 @@ export interface HeroTranslations {
   };
   experienceHeading: string;
   experiences: Array<{
-    period: string;
+    startDate: string;
+    endDate: string;
     company: string;
     role: string;
     type: string;
