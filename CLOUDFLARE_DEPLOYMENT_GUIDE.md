@@ -67,8 +67,8 @@ Sebelum klik deploy, buka bagian **Environment variables (advanced)** dan tambah
 
 1. Di dashboard proyek Pages Anda, buka tab **Custom domains**.
 2. Klik **Set up a custom domain**.
-3. Masukkan domain utama Anda (misal: `nandaaddiwijaya.my.id`).
-4. Ikuti panduan aktivasi DNS Cloudflare (otomatis jika domain dikelola di Cloudflare).
+3. Masukkan subdomain portofolio Anda: `hi.nandaaddiwijaya.my.id`.
+4. Ikuti panduan aktivasi DNS Cloudflare (otomatis langsung terkonfigurasi jika domain dikelola di Cloudflare).
 5. SSL/TLS otomatis aktif secara instan dan gratis seumur hidup.
 
 ---

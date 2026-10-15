@@ -4,7 +4,7 @@ import { loadEnv } from 'vite';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://nandaaddiwijaya.my.id',
+  site: 'https://hi.nandaaddiwijaya.my.id',
   output: 'static',
   i18n: {
     defaultLocale: 'en',
