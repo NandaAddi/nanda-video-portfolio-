@@ -1739,7 +1739,7 @@ import SettingsModal from '../../components/admin/SettingsModal.astro';
 
       const mode = videoModeInput ? videoModeInput.value : 'single';
       let finalYoutubeId = (formData.get('youtube_id') as string) || '';
-      let finalVideos: Array<{ title: string; youtube_id: string }> | null = null;
+      let finalVideos: Array<{ title: string; youtube_id: string }> = [];
 
       if (mode === 'multi') {
         const rows = multiVideoList ? multiVideoList.querySelectorAll('.video-row-item') : [];
@@ -1763,6 +1763,7 @@ import SettingsModal from '../../components/admin/SettingsModal.astro';
         }
       } else {
         finalYoutubeId = extractYouTubeId(finalYoutubeId);
+        finalVideos = [];
       }
 
       const payload: Partial<PortfolioProjectRecord> = {
@@ -1770,7 +1771,7 @@ import SettingsModal from '../../components/admin/SettingsModal.astro';
         category: formData.get('category') as any,
         duration: formData.get('duration') as string,
         youtube_id: finalYoutubeId,
-        videos: finalVideos as any,
+        videos: finalVideos || [],
         thumbnail_url: formData.get('thumbnail_url') as string,
         sort_order: parseInt((formData.get('sort_order') as string) || '1', 10),
         is_published: formData.get('is_published') === 'on',
