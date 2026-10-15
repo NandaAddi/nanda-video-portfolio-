@@ -68,6 +68,12 @@ export interface VideoModalTranslations {
   watchOnYoutube: string;
 }
 
+export interface SubVideoItem {
+  id?: string;
+  title: string;
+  youtubeId: string;
+}
+
 export interface ProjectItemTranslation {
   id: string;
   title: string;
@@ -78,6 +84,7 @@ export interface ProjectItemTranslation {
   description: string;
   fullDescription: string;
   youtubeId: string;
+  videos?: SubVideoItem[];
   thumbnail: string;
   role: string;
   tools: string[];

@@ -107,6 +107,11 @@ export const enDictionary: LocaleDictionary = {
       description: 'Intense narrative editing featuring punchy sound design, rapid-fire pacing, and cinematic color treatment driving high audience retention.',
       fullDescription: 'A flagship episode for the BANGSATRIO channel crossing over 100K organic views. Blends spontaneous situational humor with dynamic story progression, surgical sound effects, and animated kinetic subtitles to maximize YouTube viewer watch time.',
       youtubeId: 'kJQP7kiw5Fk',
+      videos: [
+        { title: 'Main Episode (Full Narrative Cut)', youtubeId: 'kJQP7kiw5Fk' },
+        { title: 'Cinematic Highlights Teaser', youtubeId: 'L_LUpnjgPso' },
+        { title: 'Sound Design & Pacing Breakdown', youtubeId: '9bZkp7q19f0' },
+      ],
       thumbnail: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1200&auto=format&fit=crop',
       role: 'Lead Video Editor & Sound Designer',
       tools: ['Premiere', 'Audition', 'Photoshop'],

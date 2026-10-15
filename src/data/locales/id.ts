@@ -107,6 +107,11 @@ export const idDictionary: LocaleDictionary = {
       description: 'Penyuntingan video naratif intens dengan audio mixing dramatis, efek sound fx cepat, dan color grading sinematik yang menghasilkan retensi penonton tinggi.',
       fullDescription: 'Salah satu episode unggulan kanal BANGSATRIO yang berhasil menembus lebih dari 100K penonton organik. Menggabungkan komedi spontan dengan storytelling dinamis, sound design presisi, serta motion tracking caption untuk memaksimalkan watch time penonton YouTube.',
       youtubeId: 'kJQP7kiw5Fk',
+      videos: [
+        { title: 'Episode Utama (Full Narrative Cut)', youtubeId: 'kJQP7kiw5Fk' },
+        { title: 'Teaser Sinematik & Sorotan', youtubeId: 'L_LUpnjgPso' },
+        { title: 'Bedah Sound Design & Pacing Editing', youtubeId: '9bZkp7q19f0' },
+      ],
       thumbnail: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1200&auto=format&fit=crop',
       role: 'Lead Video Editor & Sound Designer',
       tools: ['Premiere', 'Audition', 'Photoshop'],
