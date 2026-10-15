@@ -9,6 +9,15 @@ BEGIN
     IF EXISTS (SELECT FROM pg_tables WHERE schemaname = 'public' AND tablename = 'portfolio_projects') THEN
         ALTER TABLE public.portfolio_projects RENAME TO hello_portfolio_projects;
     END IF;
+    -- Add videos column if not exists
+    IF NOT EXISTS (
+        SELECT FROM information_schema.columns 
+        WHERE table_schema = 'public' 
+          AND table_name = 'hello_portfolio_projects' 
+          AND column_name = 'videos'
+    ) THEN
+        ALTER TABLE public.hello_portfolio_projects ADD COLUMN videos JSONB NOT NULL DEFAULT '[]'::jsonb;
+    END IF;
 END $$;
 
 -- 1. Create Projects Table
@@ -17,6 +26,7 @@ CREATE TABLE IF NOT EXISTS public.hello_portfolio_projects (
     category TEXT NOT NULL CHECK (category IN ('editing', 'commercial', 'motion')),
     duration TEXT NOT NULL,
     youtube_id TEXT NOT NULL,
+    videos JSONB NOT NULL DEFAULT '[]'::jsonb,
     thumbnail_url TEXT NOT NULL,
     tools TEXT[] NOT NULL DEFAULT '{}',
     sort_order INTEGER NOT NULL DEFAULT 0,

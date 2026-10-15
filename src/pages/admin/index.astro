@@ -1792,9 +1792,26 @@ import SettingsModal from '../../components/admin/SettingsModal.astro';
         updated_at: new Date().toISOString(),
       };
 
-      const { error } = await supabase
+      let { error } = await supabase
         .from(PROJECTS_TABLE)
         .upsert(payload);
+
+      // Graceful fallback if 'videos' column hasn't been added to Supabase table yet
+      if (error && error.message && error.message.includes("'videos'")) {
+        const { videos, ...payloadWithoutVideos } = payload;
+        const retryResult = await supabase
+          .from(PROJECTS_TABLE)
+          .upsert(payloadWithoutVideos);
+
+        if (!retryResult.error) {
+          alert('Data berhasil disimpan (mode Single Video)!\n\nCatatan: Kolom "videos" belum ada di tabel Supabase Anda. Untuk mengaktifkan fitur Multiple Videos, jalankan query berikut di Supabase SQL Editor:\n\nALTER TABLE public.hello_portfolio_projects ADD COLUMN IF NOT EXISTS videos JSONB NOT NULL DEFAULT \'[]\'::jsonb;');
+          showToast('Karya disimpan (jalankan SQL untuk aktifkan multi-video).');
+          closeProjectModal();
+          fetchProjects();
+          return;
+        }
+        error = retryResult.error;
+      }
 
       if (error) throw error;
 
