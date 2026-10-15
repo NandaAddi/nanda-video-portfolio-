@@ -16,7 +16,10 @@ BEGIN
           AND table_name = 'hello_portfolio_projects' 
           AND column_name = 'videos'
     ) THEN
-        ALTER TABLE public.hello_portfolio_projects ADD COLUMN videos JSONB NOT NULL DEFAULT '[]'::jsonb;
+        ALTER TABLE public.hello_portfolio_projects ADD COLUMN videos JSONB DEFAULT '[]'::jsonb;
+    ELSE
+        ALTER TABLE public.hello_portfolio_projects ALTER COLUMN videos DROP NOT NULL;
+        ALTER TABLE public.hello_portfolio_projects ALTER COLUMN videos SET DEFAULT '[]'::jsonb;
     END IF;
 END $$;
 
@@ -26,7 +29,7 @@ CREATE TABLE IF NOT EXISTS public.hello_portfolio_projects (
     category TEXT NOT NULL CHECK (category IN ('editing', 'commercial', 'motion')),
     duration TEXT NOT NULL,
     youtube_id TEXT NOT NULL,
-    videos JSONB NOT NULL DEFAULT '[]'::jsonb,
+    videos JSONB DEFAULT '[]'::jsonb,
     thumbnail_url TEXT NOT NULL,
     tools TEXT[] NOT NULL DEFAULT '{}',
     sort_order INTEGER NOT NULL DEFAULT 0,
