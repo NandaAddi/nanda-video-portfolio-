@@ -1,68 +1,64 @@
-# Full-Screen Cinema Overlay & Multi-Video Thumbnails Plan
+# YouTube-Style 2-Column Light Studio Layout Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Transform the portfolio project modal from a floating popup into an **immersive 100vw × 100vh Full-Screen Cinema Canvas** featuring a large 16:9 video theater, interactive multi-video thumbnail cards with real YouTube covers (`mqdefault.jpg`), dynamic play-state indicators, and responsive editorial metadata.
+**Goal:** Redesign the full-screen portfolio video modal into a **clean YouTube-style 2-column studio layout**, completely aligned with the website's light editorial glassmorphism design system (`#f8fafc` canvas, white frosted surfaces, crisp slate typography, and zero artificial neon/cyberpunk aesthetics).
 
-**Architecture:** Full-screen overlay component inside `src/components/VideoModal.astro` with dark cinema glassmorphism, responsive 16:9 iframe theater, dynamic playlist track rendering actual YouTube video thumbnail images, and smooth client-side video switcher.
+**Architecture:** Full-screen overlay inside `src/components/VideoModal.astro` with a 2-column desktop grid (left ~72% theater + details, right ~28% vertical playlist with 16:9 mini-thumbnails), single-video auto-centering, and stacked mobile responsiveness.
 
-**Tech Stack:** Astro 5, TypeScript, Vanilla CSS (Design Tokens), YouTube IFrame API.
+**Tech Stack:** Astro 5, TypeScript, Vanilla CSS (Design Tokens from `src/styles/global.css`), YouTube IFrame API.
 
 ---
 
 ## Global Constraints
-- Must remain 100% Vanilla CSS matching the portfolio design system.
-- Zero extra external client libraries.
-- YouTube thumbnails dynamically loaded via standard `https://img.youtube.com/vi/<id>/mqdefault.jpg`.
-- Must support bilingual labels (`/` English and `/id/` Indonesian).
-- `Escape` key and backdrop click must close modal cleanly and stop video audio.
+- Must 100% align with the website design tokens (`--bg-page: #f8fafc`, `--glass-surface`, `--text-main: #0f172a`, etc.).
+- ZERO artificial dark cyberpunk/neon glows or AI slop styling.
+- Responsive 2-column layout on desktop (>1024px), stacked on tablet/mobile (<1024px).
+- Auto-hide playlist column on single video projects and center the player.
+- Keyboard `Escape` and close button must halt video audio and cleanly close modal.
 
 ---
 
 ## Implementation Tasks
 
-### Task 1: Re-architect Full-Screen Cinema Layout in `VideoModal.astro`
+### Task 1: Rebuild HTML Structure & 2-Column Grid
 **Files:**
 - Modify: `src/components/VideoModal.astro`
 
-- [ ] **Step 1: Update Modal Container & Header HTML**
-  - Change `.video-modal-backdrop` and `.video-modal-container` to a true 100vw × 100vh cinema canvas.
-  - Add a sticky glass top bar with project breadcrumbs and close button with `"Tutup (Esc)"` / `"Close (Esc)"` text and icon.
-  - Add responsive layout wrapper with max-width 1280px.
+- [ ] **Step 1: Build Light Topbar & 2-Column Layout**
+  - Implement `.yt-modal-backdrop` and `.yt-topbar` with light frosted glass styling.
+  - Implement `.yt-grid-layout` with `.yt-main-column` (left) and `.yt-playlist-sidebar` (right).
+  - Add single-video auto-centering modifier (`.is-single-video`).
 
-- [ ] **Step 2: Update Playlist Track HTML to Cinema Cards**
-  - Add playlist header with title, video counter badge, and subtitle.
-  - Structure `.playlist-track` as a responsive grid/horizontal scrollable cinema strip.
+- [ ] **Step 2: Build YouTube-Style Playlist Sidebar Item Markup**
+  - Card with mini 16:9 YouTube thumbnail on the left (`128px`), title and status on the right.
 
 ---
 
-### Task 2: Implement 16:9 YouTube Thumbnail Cards & Switcher Logic
+### Task 2: Implement Light Studio Styling in Vanilla CSS
 **Files:**
 - Modify: `src/components/VideoModal.astro`
 
-- [ ] **Step 1: Implement Dynamic Thumbnail Card Generator**
-  - In `openModal(card)`, iterate through `videos`:
-    - Generate image URL: `https://img.youtube.com/vi/${vid.youtubeId}/mqdefault.jpg`.
-    - Render 16:9 thumbnail cover with dark gradient overlay, play icon, and index `#01`, `#02`.
-    - Render title and status badge (`Sedang Diputar` / `Now Playing` vs `Klik untuk putar` / `Click to play`).
-  - Set active border and glowing indicator on currently playing item.
+- [ ] **Step 1: Implement Light Glass Design Tokens**
+  - Light backdrop: `rgba(248, 250, 252, 0.95)` with `backdrop-filter: blur(20px)`.
+  - Cards: White glass with delicate borders `1px solid rgba(226, 232, 240, 0.85)` and subtle elevation shadows.
+  - Typography: Clean Inter font, slate `#0f172a`, muted `#334155`, subtitle `#64748b`.
+  - Active playlist item: Soft white card with crisp `#0f172a` accent border, soft shadow, and active status chip.
 
-- [ ] **Step 2: Wire Instant Video Switcher Interaction**
-  - Add click event listener to each card to switch `iframe.src` instantly.
-  - Update active states across all cards.
-  - Auto-scroll smoothly to top if needed.
+- [ ] **Step 2: Implement Responsive Breakpoints**
+  - Desktop (>1024px): 2 columns (72% / 28%).
+  - Mobile/Tablet (<1024px): 100% width stacked layout.
 
 ---
 
-### Task 3: Cinema Styling & Polish
+### Task 3: Update Controller Script & Switcher
 **Files:**
 - Modify: `src/components/VideoModal.astro`
 
-- [ ] **Step 1: Write Cinema CSS Styles**
-  - Dark cinema palette (`#090d16` background, cyan/emerald glowing active borders).
-  - 16:9 aspect ratio thumbnail containers with zoom hover effect.
-  - Custom scrollbar styling for playlist track and full-screen view.
-  - Mobile responsiveness: stack cleanly on mobile viewports (< 640px).
+- [ ] **Step 1: Populate YouTube Mini-Thumbnails & Handle Single Mode**
+  - Generate thumbnail image URLs (`https://img.youtube.com/vi/<id>/mqdefault.jpg`).
+  - Toggle `.is-single-video` class when `videos.length <= 1`.
+  - Wire instant video switching and active card highlighting.
 
-- [ ] **Step 2: Automated Build Verification**
-  - Run `npm run build` to confirm zero build or lint issues.
+- [ ] **Step 2: Build & Verify**
+  - Run `npm run build` to confirm zero compilation errors.

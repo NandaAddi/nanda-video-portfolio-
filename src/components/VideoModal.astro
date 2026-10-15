@@ -13,23 +13,20 @@ const {
 } = Astro.props;
 ---
 
-<div id="videoModal" class="cinema-overlay" style="display: none;" aria-hidden="true" role="dialog" aria-modal="true">
+<div id="videoModal" class="yt-modal-backdrop" style="display: none;" aria-hidden="true" role="dialog" aria-modal="true">
   
-  <!-- Ambient Cinematic Background Glow -->
-  <div class="cinema-ambient-bg"></div>
-
-  <!-- Sticky Cinema Top Navigation Bar -->
-  <header class="cinema-navbar">
-    <div class="cinema-nav-left">
-      <span class="cinema-badge-live font-mono">CINEMA REEL</span>
-      <span class="cinema-nav-divider">/</span>
-      <span id="modalClientBreadcrumb" class="cinema-breadcrumb font-mono">Project Showcase</span>
+  <!-- Light Editorial Frosted Top Navigation Bar -->
+  <header class="yt-topbar">
+    <div class="yt-topbar-left">
+      <span class="yt-studio-badge font-mono">STUDIO</span>
+      <span class="yt-topbar-divider">/</span>
+      <span id="modalClientBreadcrumb" class="yt-client-breadcrumb font-mono">Project Showcase</span>
     </div>
 
-    <button id="modalCloseBtn" class="cinema-close-pill" aria-label={modal.closeAria} type="button">
-      <span class="cinema-close-text font-mono" id="modalCloseLabel">Tutup (Esc)</span>
-      <div class="cinema-close-icon">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <button id="modalCloseBtn" class="yt-close-btn" aria-label={modal.closeAria} type="button">
+      <span class="yt-close-label font-mono" id="modalCloseLabel">Tutup (Esc)</span>
+      <div class="yt-close-icon-wrap">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <line x1="18" y1="6" x2="6" y2="18"></line>
           <line x1="6" y1="6" x2="18" y2="18"></line>
         </svg>
@@ -37,262 +34,305 @@ const {
     </button>
   </header>
 
-  <!-- Full-Screen Scrollable Canvas -->
-  <div class="cinema-scroll-canvas" id="cinemaScrollCanvas">
-    <div class="cinema-container">
+  <!-- Full-Screen Scrollable Canvas Area -->
+  <div class="yt-modal-scroll" id="ytModalScroll">
+    <div class="yt-stage-container">
+      
+      <!-- 2-Column YouTube Layout Grid -->
+      <div class="yt-layout-grid" id="ytLayoutGrid">
 
-      <!-- Main Video Theater Frame (16:9 Cinematic Aspect) -->
-      <div class="cinema-theater-frame">
-        <div class="cinema-player-aspect">
-          <iframe 
-            id="modalVideoIframe"
-            src="" 
-            title="Video Player"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-            allowfullscreen
-          ></iframe>
-        </div>
+        <!-- LEFT COLUMN: Primary Theater Player + Narrative Project Details (~72%) -->
+        <main class="yt-main-column">
+          
+          <!-- 16:9 Widescreen Video Theater -->
+          <div class="yt-player-frame">
+            <div class="yt-player-aspect">
+              <iframe 
+                id="modalVideoIframe"
+                src="" 
+                title="Video Player"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                allowfullscreen
+              ></iframe>
+            </div>
+          </div>
+
+          <!-- Video Details Card (Editorial Frosted Glass) -->
+          <article class="yt-details-box">
+            <div class="yt-details-header">
+              <div class="yt-title-group">
+                <span id="modalClientTag" class="yt-client-tag font-mono">KLIEN / KATEGORI</span>
+                <h1 id="modalProjectTitle" class="yt-project-title">Judul Karya Portofolio</h1>
+              </div>
+              <div id="modalToolsTags" class="yt-tools-list">
+                <!-- Software tags dynamically injected here -->
+              </div>
+            </div>
+
+            <div class="yt-divider"></div>
+
+            <div class="yt-details-body">
+              <p id="modalProjectDesc" class="yt-project-desc">Deskripsi proyek video...</p>
+            </div>
+          </article>
+
+        </main>
+
+        <!-- RIGHT COLUMN: YouTube-Style Vertical Playlist Sidebar (~28% / Seperempat Layar) -->
+        <aside id="modalPlaylistWrapper" class="yt-playlist-sidebar" style="display: none;">
+          <div class="yt-sidebar-card">
+            
+            <!-- Sidebar Header -->
+            <div class="yt-sidebar-header">
+              <div class="yt-header-title-box">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" class="yt-header-icon">
+                  <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                  <polyline points="2 17 12 22 22 17"></polyline>
+                  <polyline points="2 12 12 17 22 12"></polyline>
+                </svg>
+                <h3 id="modalPlaylistTitle" class="yt-playlist-title font-mono">Koleksi Video</h3>
+              </div>
+              <span id="modalPlaylistCount" class="yt-playlist-count-pill font-mono">3 Video</span>
+            </div>
+            
+            <p id="modalPlaylistSubtitle" class="yt-sidebar-subtitle">Pilih video di bawah untuk memutar</p>
+
+            <!-- Video Rows List -->
+            <div id="modalPlaylistTrack" class="yt-playlist-list">
+              <!-- Dynamic YouTube-style video cards injected by JS -->
+            </div>
+
+          </div>
+        </aside>
+
       </div>
-
-      <!-- Multiple Videos Cinema Strip Section -->
-      <section id="modalPlaylistWrapper" class="cinema-playlist-section" style="display: none;">
-        <div class="cinema-playlist-header">
-          <div class="playlist-heading-group">
-            <div class="playlist-badge-icon">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-                <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
-                <polyline points="2 17 12 22 22 17"></polyline>
-                <polyline points="2 12 12 17 22 12"></polyline>
-              </svg>
-            </div>
-            <div>
-              <h3 id="modalPlaylistTitle" class="cinema-playlist-title font-mono">Koleksi Video Proyek</h3>
-              <p id="modalPlaylistSubtitle" class="cinema-playlist-subtitle">Pilih thumbnail video di bawah untuk memutar</p>
-            </div>
-          </div>
-          <span id="modalPlaylistCount" class="cinema-playlist-pill font-mono">3 Videos</span>
-        </div>
-
-        <!-- Cinema Cards Track -->
-        <div id="modalPlaylistTrack" class="cinema-cards-track">
-          <!-- Dynamic 16:9 Thumbnail Cards injected dynamically by JS -->
-        </div>
-      </section>
-
-      <!-- Video Details & Narrative Panel -->
-      <article class="cinema-details-card">
-        <div class="cinema-details-top">
-          <div class="cinema-title-wrap">
-            <span id="modalClientTag" class="cinema-client-meta font-mono">KLIEN / KATEGORI</span>
-            <h1 id="modalProjectTitle" class="cinema-project-heading">Judul Karya Portofolio</h1>
-          </div>
-          <div id="modalToolsTags" class="cinema-tools-list">
-            <!-- Software badges injected dynamically -->
-          </div>
-        </div>
-
-        <div class="cinema-details-desc-box">
-          <p id="modalProjectDesc" class="cinema-project-paragraph">Deskripsi proyek video...</p>
-        </div>
-      </article>
 
     </div>
   </div>
+
 </div>
 
 <style is:global>
-  /* 1. Full-Screen Cinema Overlay Container */
-  .cinema-overlay {
+  /* 1. Modal Overlay & Light Frosted Canvas */
+  .yt-modal-backdrop {
     position: fixed;
     inset: 0;
     z-index: 99999;
     width: 100vw;
     height: 100vh;
-    background: #080c14;
+    background: rgba(248, 250, 252, 0.94);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
     display: flex;
     flex-direction: column;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     overflow: hidden;
   }
 
-  .cinema-overlay.open {
+  .yt-modal-backdrop.open {
     display: flex;
     opacity: 1;
     pointer-events: auto;
   }
 
-  /* Ambient Glow Background */
-  .cinema-ambient-bg {
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle at 50% 20%, rgba(56, 189, 248, 0.08) 0%, rgba(8, 12, 20, 0) 70%),
-                radial-gradient(circle at 80% 80%, rgba(16, 185, 129, 0.05) 0%, rgba(8, 12, 20, 0) 60%);
-    pointer-events: none;
-    z-index: 1;
-  }
-
-  /* 2. Sticky Cinema Top Navigation Bar */
-  .cinema-navbar {
+  /* 2. Light Editorial Top Navigation Bar */
+  .yt-topbar {
     position: sticky;
     top: 0;
     z-index: 50;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 1rem 2rem;
-    background: rgba(8, 12, 20, 0.85);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 0.9rem 2.25rem;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(20px) saturate(190%);
+    -webkit-backdrop-filter: blur(20px) saturate(190%);
+    border-bottom: 1px solid rgba(226, 232, 240, 0.85);
     flex-shrink: 0;
   }
 
   @media (max-width: 640px) {
-    .cinema-navbar {
-      padding: 0.85rem 1.25rem;
+    .yt-topbar {
+      padding: 0.8rem 1.25rem;
     }
   }
 
-  .cinema-nav-left {
+  .yt-topbar-left {
     display: flex;
     align-items: center;
     gap: 0.75rem;
     min-width: 0;
   }
 
-  .cinema-badge-live {
+  .yt-studio-badge {
     font-size: 0.72rem;
     font-weight: 700;
-    letter-spacing: 0.1em;
-    color: #38bdf8;
-    background: rgba(56, 189, 248, 0.12);
-    border: 1px solid rgba(56, 189, 248, 0.3);
+    letter-spacing: 0.08em;
+    color: #ffffff;
+    background: #0f172a;
     padding: 0.25rem 0.65rem;
-    border-radius: 9999px;
+    border-radius: 6px;
     flex-shrink: 0;
   }
 
-  .cinema-nav-divider {
-    color: rgba(255, 255, 255, 0.2);
+  .yt-topbar-divider {
+    color: #cbd5e1;
     font-size: 0.85rem;
   }
 
-  .cinema-breadcrumb {
+  .yt-client-breadcrumb {
     font-size: 0.85rem;
-    color: #94a3b8;
-    letter-spacing: 0.04em;
+    font-weight: 500;
+    color: #475569;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
 
   /* Close Pill Button */
-  .cinema-close-pill {
+  .yt-close-btn {
     display: inline-flex;
     align-items: center;
     gap: 0.65rem;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.16);
-    color: #f8fafc;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(203, 213, 225, 0.85);
+    color: #0f172a;
     padding: 0.4rem 0.5rem 0.4rem 1rem;
     border-radius: 9999px;
     cursor: pointer;
-    backdrop-filter: blur(12px);
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
     transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     flex-shrink: 0;
   }
 
-  .cinema-close-pill:hover {
-    background: rgba(255, 255, 255, 0.18);
-    border-color: rgba(255, 255, 255, 0.35);
-    color: #ffffff;
+  .yt-close-btn:hover {
+    background: #ffffff;
+    border-color: #0f172a;
     transform: translateY(-1px);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.08);
   }
 
-  .cinema-close-text {
+  .yt-close-label {
     font-size: 0.78rem;
     font-weight: 600;
-    letter-spacing: 0.03em;
+    color: #0f172a;
+    letter-spacing: 0.02em;
   }
 
   @media (max-width: 480px) {
-    .cinema-close-text {
+    .yt-close-label {
       display: none;
     }
-    .cinema-close-pill {
+    .yt-close-btn {
       padding: 0.45rem;
     }
   }
 
-  .cinema-close-icon {
-    width: 28px;
-    height: 28px;
-    background: rgba(255, 255, 255, 0.12);
+  .yt-close-icon-wrap {
+    width: 26px;
+    height: 26px;
+    background: rgba(15, 23, 42, 0.06);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: transform 0.2s ease;
+    color: #0f172a;
+    transition: transform 0.2s ease, background 0.2s ease;
   }
 
-  .cinema-close-pill:hover .cinema-close-icon {
+  .yt-close-btn:hover .yt-close-icon-wrap {
     transform: rotate(90deg);
-    background: rgba(255, 255, 255, 0.25);
+    background: rgba(15, 23, 42, 0.12);
   }
 
   /* 3. Scrollable Canvas Area */
-  .cinema-scroll-canvas {
+  .yt-modal-scroll {
     flex: 1;
     overflow-y: auto;
     overflow-x: hidden;
     position: relative;
     z-index: 10;
     scroll-behavior: smooth;
-    padding: 2rem 1.5rem 5rem 1.5rem;
+    padding: 2rem 2.25rem 5rem 2.25rem;
     scrollbar-width: thin;
-    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+    scrollbar-color: rgba(15, 23, 42, 0.2) transparent;
   }
 
-  .cinema-scroll-canvas::-webkit-scrollbar {
+  @media (max-width: 640px) {
+    .yt-modal-scroll {
+      padding: 1.25rem 1rem 4rem 1rem;
+    }
+  }
+
+  .yt-modal-scroll::-webkit-scrollbar {
     width: 6px;
   }
 
-  .cinema-scroll-canvas::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.22);
+  .yt-modal-scroll::-webkit-scrollbar-thumb {
+    background: rgba(15, 23, 42, 0.2);
     border-radius: 6px;
   }
 
-  .cinema-container {
-    max-width: 1240px;
+  .yt-stage-container {
+    max-width: 1460px;
     margin: 0 auto;
+    width: 100%;
+  }
+
+  /* 4. YouTube-Style 2-Column Grid */
+  .yt-layout-grid {
+    display: grid;
+    grid-template-columns: 1fr 370px;
+    gap: 2rem;
+    align-items: start;
+    width: 100%;
+    transition: all 0.3s ease;
+  }
+
+  /* Auto-centering modifier when single video project */
+  .yt-layout-grid.is-single-video {
+    grid-template-columns: 1fr;
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+
+  @media (max-width: 1024px) {
+    .yt-layout-grid {
+      grid-template-columns: 1fr;
+      gap: 1.75rem;
+    }
+  }
+
+  /* 5. Left Main Column */
+  .yt-main-column {
     display: flex;
     flex-direction: column;
-    gap: 2.25rem;
+    gap: 1.5rem;
+    min-width: 0;
   }
 
-  /* 4. Theater Player Frame (16:9 Aspect) */
-  .cinema-theater-frame {
+  /* Video Player Aspect Frame */
+  .yt-player-frame {
     position: relative;
     width: 100%;
-    border-radius: 18px;
+    border-radius: 16px;
     overflow: hidden;
     background: #000000;
-    box-shadow: 0 30px 90px -20px rgba(0, 0, 0, 0.95), 
-                0 0 50px rgba(56, 189, 248, 0.12),
-                inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(15, 23, 42, 0.1);
+    box-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.15),
+                0 6px 16px -4px rgba(15, 23, 42, 0.06);
   }
 
-  .cinema-player-aspect {
+  .yt-player-aspect {
     position: relative;
     width: 100%;
-    padding-top: 56.25%; /* 16:9 widescreen ratio */
+    padding-top: 56.25%; /* 16:9 widescreen aspect */
     background: #000000;
   }
 
-  .cinema-player-aspect iframe {
+  .yt-player-aspect iframe {
     position: absolute;
     inset: 0;
     width: 100%;
@@ -301,161 +341,271 @@ const {
     display: block;
   }
 
-  /* 5. Multiple Videos Cinema Strip Section */
-  .cinema-playlist-section {
-    background: rgba(15, 23, 42, 0.7);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+  /* Details Card (Light Editorial Glassmorphism) */
+  .yt-details-box {
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid rgba(226, 232, 240, 0.85);
     border-radius: 18px;
-    padding: 1.5rem 1.75rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
+    padding: 1.75rem 2rem;
+    box-shadow: 0 8px 24px -4px rgba(15, 23, 42, 0.04),
+                inset 0 1px 1px rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
   }
 
   @media (max-width: 640px) {
-    .cinema-playlist-section {
-      padding: 1.25rem;
+    .yt-details-box {
+      padding: 1.25rem 1.25rem;
     }
   }
 
-  .cinema-playlist-header {
+  .yt-details-header {
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    gap: 1rem;
+    align-items: flex-start;
+    gap: 1.5rem;
     flex-wrap: wrap;
   }
 
-  .playlist-heading-group {
+  .yt-title-group {
     display: flex;
-    align-items: center;
-    gap: 0.85rem;
+    flex-direction: column;
+    gap: 0.35rem;
+    max-width: 780px;
   }
 
-  .playlist-badge-icon {
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
-    background: rgba(56, 189, 248, 0.15);
-    border: 1px solid rgba(56, 189, 248, 0.3);
-    color: #38bdf8;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
-
-  .cinema-playlist-title {
-    font-size: 0.92rem;
+  .yt-client-tag {
+    font-size: 0.76rem;
     font-weight: 700;
-    color: #f1f5f9;
-    letter-spacing: 0.04em;
+    color: #64748b;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .yt-project-title {
+    font-size: 1.55rem;
+    font-weight: 600;
+    color: #0f172a;
+    line-height: 1.25;
     margin: 0;
   }
 
-  .cinema-playlist-subtitle {
-    font-size: 0.78rem;
-    color: #94a3b8;
-    margin: 0.15rem 0 0 0;
-  }
-
-  .cinema-playlist-pill {
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: #38bdf8;
-    background: rgba(56, 189, 248, 0.12);
-    border: 1px solid rgba(56, 189, 248, 0.25);
-    padding: 0.3rem 0.85rem;
-    border-radius: 9999px;
-  }
-
-  /* Cinema Cards Track (Horizontal scrollable & responsive wrap) */
-  .cinema-cards-track {
-    display: flex;
-    gap: 1.15rem;
-    overflow-x: auto;
-    padding-bottom: 0.65rem;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
-  }
-
-  .cinema-cards-track::-webkit-scrollbar {
-    height: 6px;
-  }
-
-  .cinema-cards-track::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 6px;
-  }
-
-  /* Individual 16:9 Cinema Card Item */
-  :global(.cinema-card-item) {
-    flex: 0 0 250px;
-    max-width: 250px;
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    background: rgba(30, 41, 59, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 14px;
-    padding: 0.65rem;
-    cursor: pointer;
-    text-align: left;
-    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-    position: relative;
-    user-select: none;
-  }
-
   @media (max-width: 640px) {
-    :global(.cinema-card-item) {
-      flex: 0 0 220px;
-      max-width: 220px;
+    .yt-project-title {
+      font-size: 1.25rem;
     }
   }
 
-  :global(.cinema-card-item:hover) {
-    background: rgba(30, 41, 59, 0.9);
-    border-color: rgba(255, 255, 255, 0.25);
-    transform: translateY(-3px);
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6);
+  .yt-tools-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    align-items: center;
   }
 
-  /* Active Card Highlight */
-  :global(.cinema-card-item.active) {
-    background: rgba(15, 23, 42, 0.95);
-    border-color: #38bdf8;
-    box-shadow: 0 0 28px rgba(56, 189, 248, 0.35), 0 10px 25px -5px rgba(0, 0, 0, 0.8);
+  :global(.yt-tool-chip) {
+    font-size: 0.74rem;
+    font-weight: 500;
+    color: #334155;
+    background: rgba(15, 23, 42, 0.04);
+    border: 1px solid rgba(203, 213, 225, 0.8);
+    padding: 0.25rem 0.65rem;
+    border-radius: 6px;
   }
 
-  /* 16:9 Thumbnail Cover Wrapper */
-  :global(.cinema-card-thumb-wrap) {
-    position: relative;
+  .yt-divider {
+    height: 1px;
+    background: rgba(226, 232, 240, 0.85);
+    margin: 1.25rem 0;
+  }
+
+  .yt-details-body {
+    color: #334155;
+  }
+
+  .yt-project-desc {
+    font-size: 0.96rem;
+    color: #334155;
+    line-height: 1.75;
+    margin: 0;
+    white-space: pre-line;
+  }
+
+  /* 6. Right Playlist Sidebar (Seperempat Layar YouTube Style) */
+  .yt-playlist-sidebar {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .yt-sidebar-card {
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(226, 232, 240, 0.85);
+    border-radius: 18px;
+    padding: 1.25rem;
+    box-shadow: 0 8px 24px -4px rgba(15, 23, 42, 0.04);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    position: sticky;
+    top: 5rem;
+  }
+
+  .yt-sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+  }
+
+  .yt-header-title-box {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .yt-header-icon {
+    color: #0f172a;
+  }
+
+  .yt-playlist-title {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #0f172a;
+    letter-spacing: 0.02em;
+    margin: 0;
+  }
+
+  .yt-playlist-count-pill {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #0f172a;
+    background: rgba(15, 23, 42, 0.06);
+    border: 1px solid rgba(15, 23, 42, 0.1);
+    padding: 0.2rem 0.55rem;
+    border-radius: 9999px;
+  }
+
+  .yt-sidebar-subtitle {
+    font-size: 0.76rem;
+    color: #64748b;
+    margin: 0;
+    border-bottom: 1px solid rgba(226, 232, 240, 0.75);
+    padding-bottom: 0.75rem;
+  }
+
+  /* Scrollable Video List */
+  .yt-playlist-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    max-height: calc(100vh - 240px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 0.25rem;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(15, 23, 42, 0.15) transparent;
+  }
+
+  @media (max-width: 1024px) {
+    .yt-playlist-list {
+      max-height: none;
+    }
+    .yt-sidebar-card {
+      position: static;
+    }
+  }
+
+  .yt-playlist-list::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .yt-playlist-list::-webkit-scrollbar-thumb {
+    background: rgba(15, 23, 42, 0.15);
+    border-radius: 4px;
+  }
+
+  /* Individual YouTube-Style Video Card */
+  :global(.yt-video-row) {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.6rem;
+    border-radius: 12px;
+    background: transparent;
+    border: 1px solid transparent;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    user-select: none;
     width: 100%;
-    aspect-ratio: 16 / 9;
-    border-radius: 10px;
-    overflow: hidden;
-    background: #000000;
   }
 
-  :global(.cinema-card-img) {
+  :global(.yt-video-row:hover) {
+    background: rgba(255, 255, 255, 0.95);
+    border-color: rgba(203, 213, 225, 0.8);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+  }
+
+  /* Active Row (Now Playing) */
+  :global(.yt-video-row.active) {
+    background: #ffffff;
+    border-color: #0f172a;
+    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.08);
+  }
+
+  /* 16:9 Mini Thumbnail on the Left */
+  :global(.yt-row-thumb-box) {
+    position: relative;
+    width: 124px;
+    aspect-ratio: 16 / 9;
+    border-radius: 8px;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: #0f172a;
+    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08);
+  }
+
+  @media (max-width: 480px) {
+    :global(.yt-row-thumb-box) {
+      width: 108px;
+    }
+  }
+
+  :global(.yt-row-thumb-img) {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
-    transition: transform 0.35s ease;
+    transition: transform 0.25s ease;
   }
 
-  :global(.cinema-card-item:hover .cinema-card-img) {
-    transform: scale(1.06);
+  :global(.yt-video-row:hover .yt-row-thumb-img) {
+    transform: scale(1.05);
+  }
+
+  /* Mini Index Badge on Thumbnail */
+  :global(.yt-row-index-pill) {
+    position: absolute;
+    bottom: 0.35rem;
+    right: 0.35rem;
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: #ffffff;
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(4px);
+    padding: 0.1rem 0.35rem;
+    border-radius: 4px;
   }
 
   /* Play Hover Overlay */
-  :global(.cinema-card-play-overlay) {
+  :global(.yt-row-play-overlay) {
     position: absolute;
     inset: 0;
-    background: rgba(8, 12, 20, 0.4);
+    background: rgba(15, 23, 42, 0.35);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -463,92 +613,35 @@ const {
     transition: opacity 0.2s ease;
   }
 
-  :global(.cinema-card-item:hover .cinema-card-play-overlay) {
+  :global(.yt-video-row:hover .yt-row-play-overlay) {
     opacity: 1;
   }
 
-  :global(.cinema-play-badge) {
-    width: 38px;
-    height: 38px;
+  :global(.yt-row-play-icon) {
+    width: 26px;
+    height: 26px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.92);
+    background: rgba(255, 255, 255, 0.95);
     color: #0f172a;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-    transform: scale(0.85);
-    transition: transform 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   }
 
-  :global(.cinema-card-item:hover .cinema-play-badge) {
-    transform: scale(1);
-  }
-
-  /* Index Badge on thumbnail top-left */
-  :global(.cinema-card-index) {
-    position: absolute;
-    top: 0.45rem;
-    left: 0.45rem;
-    font-size: 0.68rem;
-    font-weight: 700;
-    color: #f8fafc;
-    background: rgba(15, 23, 42, 0.85);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    padding: 0.15rem 0.45rem;
-    border-radius: 5px;
-  }
-
-  /* Live Pulsating Indicator Badge on Active Thumbnail */
-  :global(.cinema-card-now-playing-badge) {
-    position: absolute;
-    bottom: 0.45rem;
-    left: 0.45rem;
-    display: none;
-    align-items: center;
-    gap: 0.4rem;
-    font-size: 0.68rem;
-    font-weight: 700;
-    color: #ffffff;
-    background: rgba(16, 185, 129, 0.92);
-    backdrop-filter: blur(8px);
-    padding: 0.2rem 0.55rem;
-    border-radius: 6px;
-    letter-spacing: 0.03em;
-    box-shadow: 0 2px 10px rgba(16, 185, 129, 0.4);
-  }
-
-  :global(.cinema-card-item.active .cinema-card-now-playing-badge) {
-    display: inline-flex;
-  }
-
-  :global(.cinema-live-pulse) {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: #ffffff;
-    animation: livePulse 1.4s infinite;
-  }
-
-  @keyframes livePulse {
-    0% { transform: scale(0.9); opacity: 1; }
-    50% { transform: scale(1.4); opacity: 0.5; }
-    100% { transform: scale(0.9); opacity: 1; }
-  }
-
-  /* Meta Info below thumbnail */
-  :global(.cinema-card-meta) {
+  /* Row Meta on the Right */
+  :global(.yt-row-info) {
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
     min-width: 0;
+    flex: 1;
   }
 
-  :global(.cinema-card-title) {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: #e2e8f0;
+  :global(.yt-row-title) {
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: #0f172a;
     line-height: 1.35;
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -557,111 +650,41 @@ const {
     text-overflow: ellipsis;
   }
 
-  :global(.cinema-card-item.active .cinema-card-title) {
-    color: #38bdf8;
-  }
-
-  :global(.cinema-card-action) {
-    font-size: 0.72rem;
-    color: #64748b;
-    letter-spacing: 0.02em;
-  }
-
-  :global(.cinema-card-item.active .cinema-card-action) {
-    color: #10b981;
-    font-weight: 600;
-  }
-
-  /* 6. Video Details & Narrative Panel */
-  .cinema-details-card {
-    background: rgba(15, 23, 42, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 18px;
-    padding: 2rem 2.25rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-  }
-
-  @media (max-width: 640px) {
-    .cinema-details-card {
-      padding: 1.5rem 1.25rem;
-    }
-  }
-
-  .cinema-details-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 1.5rem;
-    flex-wrap: wrap;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    padding-bottom: 1.25rem;
-  }
-
-  .cinema-title-wrap {
-    display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
-    max-width: 800px;
-  }
-
-  .cinema-client-meta {
-    font-size: 0.78rem;
+  :global(.yt-video-row.active .yt-row-title) {
     font-weight: 700;
-    color: #38bdf8;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+    color: #0f172a;
   }
 
-  .cinema-project-heading {
-    font-size: 1.65rem;
-    font-weight: 600;
-    color: #f8fafc;
-    line-height: 1.25;
-    margin: 0;
-  }
-
-  @media (max-width: 640px) {
-    .cinema-project-heading {
-      font-size: 1.35rem;
-    }
-  }
-
-  .cinema-tools-list {
+  /* Status Chip */
+  :global(.yt-row-status-box) {
     display: flex;
-    flex-wrap: wrap;
-    gap: 0.45rem;
     align-items: center;
+    gap: 0.35rem;
+    font-size: 0.7rem;
+    color: #64748b;
   }
 
-  :global(.cinema-tool-tag) {
-    font-size: 0.75rem;
-    font-weight: 500;
-    color: #cbd5e1;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    padding: 0.3rem 0.75rem;
-    border-radius: 8px;
+  :global(.yt-video-row.active .yt-row-status-box) {
+    color: #047857;
+    font-weight: 600;
   }
 
-  .cinema-details-desc-box {
-    color: #94a3b8;
+  :global(.yt-row-dot) {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #cbd5e1;
+    display: inline-block;
   }
 
-  .cinema-project-paragraph {
-    font-size: 1rem;
-    color: #cbd5e1;
-    line-height: 1.75;
-    margin: 0;
-    white-space: pre-line;
+  :global(.yt-video-row.active .yt-row-dot) {
+    background: #10b981;
+    box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
   }
 </style>
 
 <script>
-  // Full-Screen Cinema Modal Controller
+  // Controller for YouTube-Style Studio Video Modal
   const modal = document.getElementById('videoModal');
   const closeBtn = document.getElementById('modalCloseBtn');
   const closeLabel = document.getElementById('modalCloseLabel');
@@ -671,12 +694,13 @@ const {
   const clientEl = document.getElementById('modalClientTag');
   const descEl = document.getElementById('modalProjectDesc');
   const toolsEl = document.getElementById('modalToolsTags');
+  const layoutGrid = document.getElementById('ytLayoutGrid');
   const playlistWrapper = document.getElementById('modalPlaylistWrapper');
   const playlistTitle = document.getElementById('modalPlaylistTitle');
   const playlistSubtitle = document.getElementById('modalPlaylistSubtitle');
   const playlistCount = document.getElementById('modalPlaylistCount');
   const playlistTrack = document.getElementById('modalPlaylistTrack');
-  const scrollCanvas = document.getElementById('cinemaScrollCanvas');
+  const scrollCanvas = document.getElementById('ytModalScroll');
   const projectCards = document.querySelectorAll<HTMLElement>('.project-card');
 
   function openModal(card: HTMLElement) {
@@ -706,7 +730,7 @@ const {
         const tools: string[] = JSON.parse(toolsJson);
         tools.forEach((tool) => {
           const badge = document.createElement('span');
-          badge.className = 'cinema-tool-tag font-mono';
+          badge.className = 'yt-tool-chip font-mono';
           badge.textContent = tool;
           toolsEl.appendChild(badge);
         });
@@ -716,9 +740,9 @@ const {
     // Localization
     const isIdLocale = window.location.pathname.startsWith('/id');
     const playingLabel = isIdLocale ? 'Sedang Diputar' : 'Now Playing';
-    const clickToPlayLabel = isIdLocale ? 'Klik untuk memutar' : 'Click to play';
-    const playlistHeading = isIdLocale ? 'Koleksi Video Proyek' : 'Project Video Collection';
-    const playlistSub = isIdLocale ? 'Pilih thumbnail video di bawah untuk memutar' : 'Select a video thumbnail below to play';
+    const clickToPlayLabel = isIdLocale ? 'Klik untuk putar' : 'Click to play';
+    const playlistHeading = isIdLocale ? 'Koleksi Video' : 'Video Collection';
+    const playlistSub = isIdLocale ? 'Pilih video di bawah untuk memutar' : 'Select a video below to play';
     const videoSuffix = isIdLocale ? 'Video' : 'Videos';
     const closeText = isIdLocale ? 'Tutup (Esc)' : 'Close (Esc)';
 
@@ -726,8 +750,9 @@ const {
     if (playlistTitle) playlistTitle.textContent = playlistHeading;
     if (playlistSubtitle) playlistSubtitle.textContent = playlistSub;
 
-    // Multi-video playlist rendering
-    if (videos && videos.length > 1 && playlistWrapper && playlistTrack && playlistCount) {
+    // Multi-video playlist rendering (YouTube 2-column sidebar mode)
+    if (videos && videos.length > 1 && playlistWrapper && playlistTrack && playlistCount && layoutGrid) {
+      layoutGrid.classList.remove('is-single-video');
       playlistWrapper.style.display = 'flex';
       playlistCount.textContent = `${videos.length} ${videoSuffix}`;
       playlistTrack.innerHTML = '';
@@ -735,30 +760,30 @@ const {
       videos.forEach((vid, index) => {
         const itemBtn = document.createElement('button');
         itemBtn.type = 'button';
-        itemBtn.className = `cinema-card-item ${index === 0 ? 'active' : ''}`;
+        itemBtn.className = `yt-video-row ${index === 0 ? 'active' : ''}`;
         itemBtn.setAttribute('data-video-id', vid.youtubeId);
 
         const indexFormatted = `#${String(index + 1).padStart(2, '0')}`;
         const thumbUrl = `https://img.youtube.com/vi/${vid.youtubeId}/mqdefault.jpg`;
 
         itemBtn.innerHTML = `
-          <div class="cinema-card-thumb-wrap">
-            <img src="${thumbUrl}" alt="${vid.title || 'Video'}" class="cinema-card-img" loading="lazy" />
-            <div class="cinema-card-play-overlay">
-              <div class="cinema-play-badge">
-                <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+          <div class="yt-row-thumb-box">
+            <img src="${thumbUrl}" alt="${vid.title || 'Video'}" class="yt-row-thumb-img" loading="lazy" />
+            <div class="yt-row-play-overlay">
+              <div class="yt-row-play-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="13" height="13">
                   <path d="M8 5v14l11-7z"/>
                 </svg>
               </div>
             </div>
-            <span class="cinema-card-index font-mono">${indexFormatted}</span>
-            <span class="cinema-card-now-playing-badge font-mono">
-              <span class="cinema-live-pulse"></span> ${playingLabel}
-            </span>
+            <span class="yt-row-index-pill font-mono">${indexFormatted}</span>
           </div>
-          <div class="cinema-card-meta">
-            <span class="cinema-card-title">${vid.title || `Video ${index + 1}`}</span>
-            <span class="cinema-card-action font-mono">${index === 0 ? playingLabel : clickToPlayLabel}</span>
+          <div class="yt-row-info">
+            <span class="yt-row-title">${vid.title || `Video ${index + 1}`}</span>
+            <div class="yt-row-status-box font-mono">
+              <span class="yt-row-dot"></span>
+              <span class="yt-status-text">${index === 0 ? playingLabel : clickToPlayLabel}</span>
+            </div>
           </div>
         `;
 
@@ -766,14 +791,14 @@ const {
           if (iframe && vid.youtubeId) {
             iframe.src = `https://www.youtube.com/embed/${vid.youtubeId}?autoplay=1&rel=0`;
           }
-          playlistTrack.querySelectorAll('.cinema-card-item').forEach((el) => {
+          playlistTrack.querySelectorAll('.yt-video-row').forEach((el) => {
             el.classList.remove('active');
-            const actionEl = el.querySelector('.cinema-card-action');
-            if (actionEl) actionEl.textContent = clickToPlayLabel;
+            const statusEl = el.querySelector('.yt-status-text');
+            if (statusEl) statusEl.textContent = clickToPlayLabel;
           });
           itemBtn.classList.add('active');
-          const activeAction = itemBtn.querySelector('.cinema-card-action');
-          if (activeAction) activeAction.textContent = playingLabel;
+          const activeStatus = itemBtn.querySelector('.yt-status-text');
+          if (activeStatus) activeStatus.textContent = playingLabel;
 
           // Smoothly scroll back up to the player frame
           if (scrollCanvas) {
@@ -790,7 +815,8 @@ const {
         iframe.src = `https://www.youtube.com/embed/${firstVideoId}?autoplay=1&rel=0`;
       }
     } else {
-      // Single video mode
+      // Single video mode: center player and hide right sidebar
+      if (layoutGrid) layoutGrid.classList.add('is-single-video');
       if (playlistWrapper) playlistWrapper.style.display = 'none';
       if (iframe && videoId) {
         iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
@@ -817,7 +843,7 @@ const {
         if (!modal.classList.contains('open')) {
           modal.style.display = 'none';
         }
-      }, 350);
+      }, 300);
     }
     if (iframe) {
       // Empty src immediately halts video playback & audio
