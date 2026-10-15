@@ -6,15 +6,17 @@ import Showcase from '../components/Showcase.astro';
 import VideoModal from '../components/VideoModal.astro';
 import ContactHub from '../components/ContactHub.astro';
 import { getDictionary } from '../data/locales';
+import { getProjectsForLocale } from '../lib/portfolio-service';
 
 const dict = getDictionary('en');
+const projects = await getProjectsForLocale('en');
 ---
 
 <Layout title={dict.meta.title} description={dict.meta.description} lang="en">
-  <Navbar currentLocale="en" nav={dict.nav} />
+  <Navbar currentLocale="en" currentPage="home" nav={dict.nav} />
   <main>
-    <Hero hero={dict.hero} locale="en" />
-    <Showcase showcase={dict.showcase} projects={dict.projects} />
+    <Hero hero={dict.hero} locale="en" variant="compact" />
+    <Showcase showcase={dict.showcase} projects={projects} />
     <ContactHub contactContent={dict.contact} locale="en" />
   </main>
   <VideoModal modal={dict.modal} />
