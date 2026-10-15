@@ -1,5 +1,26 @@
 import { createClient } from '@supabase/supabase-js';
 
+// Polyfill global WebSocket for Node environments < 22 during SSG build
+if (typeof globalThis !== 'undefined' && typeof (globalThis as any).WebSocket === 'undefined') {
+  class NodeBuildWebSocket {
+    static readonly CONNECTING = 0;
+    static readonly OPEN = 1;
+    static readonly CLOSING = 2;
+    static readonly CLOSED = 3;
+    readonly CONNECTING = 0;
+    readonly OPEN = 1;
+    readonly CLOSING = 2;
+    readonly CLOSED = 3;
+    readyState = 3;
+    constructor() {}
+    send() {}
+    close() {}
+    addEventListener() {}
+    removeEventListener() {}
+  }
+  (globalThis as any).WebSocket = NodeBuildWebSocket;
+}
+
 export interface PortfolioProjectRecord {
   id: string;
   category: 'editing' | 'commercial' | 'motion';
