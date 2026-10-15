@@ -53,40 +53,42 @@ export async function uploadFileToGitHub(
       return { url: data.url, path: data.path };
     }
 
-    // If local returned 500 error, read the message from .env error
-    if (localRes.status === 500) {
-      const errJson = await localRes.json().catch(() => ({}));
-      if (errJson.error) {
-        throw new Error(errJson.error);
-      }
+    // If server returned an explicit error JSON, display that error
+    const errJson = await localRes.json().catch(() => ({}));
+    if (errJson && errJson.error) {
+      throw new Error(errJson.error);
     }
   } catch (err: any) {
-    if (err.message && err.message.includes('GITHUB_ACCESS_TOKEN')) {
+    if (err.message && (err.message.includes('GITHUB_ACCESS_TOKEN') || !err.message.includes('fetch'))) {
       throw err;
     }
-    // If /api/upload is not reachable (e.g. running on production static host), fall through to Cloudflare Worker
+    // If /api/upload is not reachable (e.g. running on production static host without Functions), fall through to Worker
   }
 
-  // 2. Try Cloudflare Worker CDN Proxy upload endpoint
-  const workerEndpoint = `https://${CDN_DOMAIN}/upload`;
-  const remoteRes = await fetch(workerEndpoint, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload),
-  });
+  // 2. Try Cloudflare Worker CDN Proxy upload endpoint if custom worker domain is configured
+  if (CDN_DOMAIN && CDN_DOMAIN !== 'hello.nandaaddiwijaya.my.id' && CDN_DOMAIN !== 'hi.nandaaddiwijaya.my.id') {
+    const workerEndpoint = `https://${CDN_DOMAIN}/upload`;
+    const remoteRes = await fetch(workerEndpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
 
-  if (!remoteRes.ok) {
-    const errData = await remoteRes.json().catch(() => ({}));
-    throw new Error(
-      errData.error || `Gagal mengupload via server CDN (Status ${remoteRes.status}). Pastikan GITHUB_ACCESS_TOKEN diset di .env.`
-    );
+    if (!remoteRes.ok) {
+      const errData = await remoteRes.json().catch(() => ({}));
+      throw new Error(
+        errData.error || `Gagal mengupload via server CDN (Status ${remoteRes.status}).`
+      );
+    }
+
+    const result = await remoteRes.json();
+    return {
+      url: result.url,
+      path: result.path,
+    };
   }
 
-  const result = await remoteRes.json();
-  return {
-    url: result.url,
-    path: result.path,
-  };
+  throw new Error('Upload gagal: Endpoint /api/upload belum tersedia di server. Pastikan Cloudflare Pages deployment terbaru sudah selesai.');
 }
 
 /**

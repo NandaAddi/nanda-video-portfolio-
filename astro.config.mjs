@@ -74,7 +74,9 @@ export default defineConfig({
                   return;
                 }
 
-                const proxiedUrl = `https://${domain}/${filePath}`;
+                const proxiedUrl = (domain && domain !== 'hello.nandaaddiwijaya.my.id' && domain !== 'hi.nandaaddiwijaya.my.id')
+                  ? `https://${domain}/${filePath}`
+                  : `https://cdn.jsdelivr.net/gh/${owner}/${repo}@${branch}/${filePath}`;
                 res.statusCode = 200;
                 res.setHeader('Content-Type', 'application/json');
                 res.end(JSON.stringify({ success: true, url: proxiedUrl, path: filePath }));
