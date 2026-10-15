@@ -72,6 +72,7 @@ export interface SubVideoItem {
   id?: string;
   title: string;
   youtubeId: string;
+  isVertical?: boolean;
 }
 
 export interface ProjectItemTranslation {
@@ -88,6 +89,7 @@ export interface ProjectItemTranslation {
   thumbnail: string;
   role: string;
   tools: string[];
+  isVertical?: boolean;
 }
 
 export interface LocaleDictionary {

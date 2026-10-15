@@ -26,11 +26,12 @@ export interface PortfolioProjectRecord {
   category: 'editing' | 'commercial' | 'motion';
   duration: string;
   youtube_id: string;
-  videos?: Array<{ title: string; youtube_id: string }>;
+  videos?: Array<{ title: string; youtube_id: string; is_vertical?: boolean }>;
   thumbnail_url: string;
   tools: string[];
   sort_order: number;
   is_published: boolean;
+  is_vertical?: boolean;
   // English (en)
   title_en: string;
   client_en: string;

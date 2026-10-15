@@ -1528,8 +1528,11 @@ import SettingsModal from '../../components/admin/SettingsModal.astro';
   const addVideoRowBtn = document.getElementById('addVideoRowBtn');
 
   function extractYouTubeId(urlOrId: string): string {
-    const match = urlOrId.trim().match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
-    return match ? match[1] : urlOrId.trim();
+    if (!urlOrId) return '';
+    const trimmed = urlOrId.trim();
+    if (/^[\w-]{11}$/.test(trimmed)) return trimmed;
+    const match = trimmed.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|shorts\/|live\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
+    return match ? match[1] : trimmed;
   }
 
   function setVideoMode(mode: 'single' | 'multi') {
@@ -1577,6 +1580,14 @@ import SettingsModal from '../../components/admin/SettingsModal.astro';
 
   addVideoRowBtn?.addEventListener('click', () => addMultiVideoRow());
 
+  const ytSingleInput = document.getElementById('projectYoutubeId') as HTMLInputElement | null;
+  ytSingleInput?.addEventListener('input', () => {
+    if (/(?:youtube\.com\/shorts\/|\/shorts\/)/i.test(ytSingleInput.value)) {
+      const isVertInput = document.getElementById('projectIsVertical') as HTMLInputElement | null;
+      if (isVertInput) isVertInput.checked = true;
+    }
+  });
+
   // Open & Close Drawer
   function openNewProjectModal() {
     projectForm.reset();
@@ -1584,6 +1595,8 @@ import SettingsModal from '../../components/admin/SettingsModal.astro';
     modalTitle.textContent = 'Tambah Portofolio Baru';
     document.getElementById('thumbnailPreviewContainer')!.style.display = 'none';
     if (multiVideoList) multiVideoList.innerHTML = '';
+    const isVertInput = document.getElementById('projectIsVertical') as HTMLInputElement | null;
+    if (isVertInput) isVertInput.checked = false;
     setVideoMode('single');
     (formTabs[0] as HTMLElement).click();
     projectModal.style.display = 'flex';
@@ -1600,6 +1613,13 @@ import SettingsModal from '../../components/admin/SettingsModal.astro';
     (document.getElementById('projectSortOrder') as HTMLInputElement).value = String(p.sort_order || 1);
     (document.getElementById('projectThumbnailUrl') as HTMLInputElement).value = p.thumbnail_url;
     (document.getElementById('projectPublished') as HTMLInputElement).checked = p.is_published;
+
+    const isVert = p.is_vertical === true ||
+      p.videos?.[0]?.is_vertical === true ||
+      (p.id === 'project-1792097113305' || p.id === 'project-1792097690040') ||
+      /(?:youtube\.com\/shorts\/|\/shorts\/)/i.test(p.youtube_id || '');
+    const isVertInput = document.getElementById('projectIsVertical') as HTMLInputElement | null;
+    if (isVertInput) isVertInput.checked = isVert;
 
     if (multiVideoList) multiVideoList.innerHTML = '';
     if (p.videos && Array.isArray(p.videos) && p.videos.length > 1) {
@@ -1737,13 +1757,14 @@ import SettingsModal from '../../components/admin/SettingsModal.astro';
         selectedTools.push((cb as HTMLInputElement).value);
       });
 
+      const isVertical = (document.getElementById('projectIsVertical') as HTMLInputElement)?.checked || false;
       const mode = videoModeInput ? videoModeInput.value : 'single';
       let finalYoutubeId = (formData.get('youtube_id') as string) || '';
-      let finalVideos: Array<{ title: string; youtube_id: string }> = [];
+      let finalVideos: Array<{ title: string; youtube_id: string; is_vertical?: boolean }> = [];
 
       if (mode === 'multi') {
         const rows = multiVideoList ? multiVideoList.querySelectorAll('.video-row-item') : [];
-        const videoList: Array<{ title: string; youtube_id: string }> = [];
+        const videoList: Array<{ title: string; youtube_id: string; is_vertical?: boolean }> = [];
         rows.forEach(r => {
           const tInput = r.querySelector('.multi-title-input') as HTMLInputElement;
           const yInput = r.querySelector('.multi-yt-input') as HTMLInputElement;
@@ -1752,7 +1773,8 @@ import SettingsModal from '../../components/admin/SettingsModal.astro';
           if (yVal) {
             videoList.push({
               title: tVal || 'Video',
-              youtube_id: yVal
+              youtube_id: yVal,
+              is_vertical: isVertical
             });
           }
         });
@@ -1763,7 +1785,11 @@ import SettingsModal from '../../components/admin/SettingsModal.astro';
         }
       } else {
         finalYoutubeId = extractYouTubeId(finalYoutubeId);
-        finalVideos = [];
+        finalVideos = [{
+          title: (formData.get('title_id') as string) || (formData.get('title_en') as string) || 'Video',
+          youtube_id: finalYoutubeId,
+          is_vertical: isVertical
+        }];
       }
 
       const payload: Partial<PortfolioProjectRecord> = {

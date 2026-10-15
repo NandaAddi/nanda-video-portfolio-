@@ -41,42 +41,37 @@ const {
       <!-- 2-Column YouTube Layout Grid -->
       <div class="yt-layout-grid" id="ytLayoutGrid">
 
-        <!-- LEFT COLUMN: Primary Theater Player + Narrative Project Details (~72%) -->
-        <main class="yt-main-column">
-          
-          <!-- 16:9 Widescreen Video Theater -->
-          <div class="yt-player-frame">
-            <div class="yt-player-aspect">
-              <iframe 
-                id="modalVideoIframe"
-                src="" 
-                title="Video Player"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                allowfullscreen
-              ></iframe>
+        <!-- Video Player Frame -->
+        <div class="yt-player-frame" id="modalPlayerFrame">
+          <div class="yt-player-aspect" id="modalPlayerAspect">
+            <iframe 
+              id="modalVideoIframe"
+              src="" 
+              title="Video Player"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+              allowfullscreen
+            ></iframe>
+          </div>
+        </div>
+
+        <!-- Video Details Card (Editorial Frosted Glass) -->
+        <article class="yt-details-box" id="modalDetailsBox">
+          <div class="yt-details-header">
+            <div class="yt-title-group">
+              <span id="modalClientTag" class="yt-client-tag font-mono">KLIEN / KATEGORI</span>
+              <h1 id="modalProjectTitle" class="yt-project-title">Judul Karya Portofolio</h1>
+            </div>
+            <div id="modalToolsTags" class="yt-tools-list">
+              <!-- Software tags dynamically injected here -->
             </div>
           </div>
 
-          <!-- Video Details Card (Editorial Frosted Glass) -->
-          <article class="yt-details-box">
-            <div class="yt-details-header">
-              <div class="yt-title-group">
-                <span id="modalClientTag" class="yt-client-tag font-mono">KLIEN / KATEGORI</span>
-                <h1 id="modalProjectTitle" class="yt-project-title">Judul Karya Portofolio</h1>
-              </div>
-              <div id="modalToolsTags" class="yt-tools-list">
-                <!-- Software tags dynamically injected here -->
-              </div>
-            </div>
+          <div class="yt-divider"></div>
 
-            <div class="yt-divider"></div>
-
-            <div class="yt-details-body">
-              <p id="modalProjectDesc" class="yt-project-desc">Deskripsi proyek video...</p>
-            </div>
-          </article>
-
-        </main>
+          <div class="yt-details-body">
+            <p id="modalProjectDesc" class="yt-project-desc">Deskripsi proyek video...</p>
+          </div>
+        </article>
 
         <!-- RIGHT COLUMN: YouTube-Style Vertical Playlist Sidebar (~28% / Seperempat Layar) -->
         <aside id="modalPlaylistWrapper" class="yt-playlist-sidebar" style="display: none;">
@@ -285,32 +280,57 @@ const {
   .yt-layout-grid {
     display: grid;
     grid-template-columns: 1fr 370px;
+    grid-template-areas:
+      "player sidebar"
+      "details sidebar";
     gap: 2rem;
     align-items: start;
     width: 100%;
     transition: all 0.3s ease;
   }
 
-  /* Auto-centering modifier when single video project */
+  .yt-player-frame {
+    grid-area: player;
+  }
+
+  .yt-details-box {
+    grid-area: details;
+  }
+
+  .yt-playlist-sidebar {
+    grid-area: sidebar;
+  }
+
+  /* Auto-centering modifier when single video project (Landscape) */
   .yt-layout-grid.is-single-video {
     grid-template-columns: 1fr;
+    grid-template-areas:
+      "player"
+      "details";
     max-width: 1080px;
     margin: 0 auto;
   }
 
-  @media (max-width: 1024px) {
-    .yt-layout-grid {
-      grid-template-columns: 1fr;
-      gap: 1.75rem;
-    }
+  /* VERTICAL / SHORTS (9:16) MODE: 2-Column with Player on Left and Details on Right */
+  .yt-layout-grid.is-vertical-video {
+    grid-template-columns: minmax(320px, 420px) minmax(360px, 580px);
+    grid-template-areas:
+      "player details"
+      "player sidebar";
+    max-width: 1040px;
+    margin: 0 auto;
+    gap: 2.25rem;
+    align-items: start;
+    justify-content: center;
   }
 
-  /* 5. Left Main Column */
-  .yt-main-column {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    min-width: 0;
+  .yt-layout-grid.is-vertical-video.is-single-video {
+    grid-template-columns: minmax(320px, 420px) minmax(360px, 580px);
+    grid-template-areas:
+      "player details";
+    max-width: 1040px;
+    margin: 0 auto;
+    justify-content: center;
   }
 
   /* Video Player Aspect Frame */
@@ -323,6 +343,7 @@ const {
     border: 1px solid rgba(15, 23, 42, 0.1);
     box-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.15),
                 0 6px 16px -4px rgba(15, 23, 42, 0.06);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .yt-player-aspect {
@@ -341,6 +362,27 @@ const {
     display: block;
   }
 
+  /* Vertical / Shorts 9:16 Frame Modifiers */
+  .yt-layout-grid.is-vertical-video .yt-player-frame {
+    width: 100%;
+    max-width: 420px;
+    height: 74vh;
+    max-height: 740px;
+    min-height: 480px;
+    aspect-ratio: 9 / 16;
+    margin: 0 auto;
+    border-radius: 20px;
+    box-shadow: 0 24px 48px -12px rgba(15, 23, 42, 0.2), 0 8px 20px -4px rgba(15, 23, 42, 0.08);
+    grid-row: 1 / span 2;
+  }
+
+  .yt-layout-grid.is-vertical-video .yt-player-aspect {
+    width: 100%;
+    height: 100%;
+    padding-top: 0;
+    aspect-ratio: 9 / 16;
+  }
+
   /* Details Card (Light Editorial Glassmorphism) */
   .yt-details-box {
     background: rgba(255, 255, 255, 0.92);
@@ -351,6 +393,44 @@ const {
                 inset 0 1px 1px rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
+    transition: all 0.3s ease;
+  }
+
+  .yt-layout-grid.is-vertical-video .yt-details-box {
+    padding: 2rem 2.25rem;
+    border-radius: 20px;
+    box-shadow: 0 12px 32px -6px rgba(15, 23, 42, 0.06),
+                inset 0 1px 1.5px rgba(255, 255, 255, 0.98);
+  }
+
+  @media (max-width: 1024px) {
+    .yt-layout-grid {
+      grid-template-columns: 1fr;
+      grid-template-areas:
+        "player"
+        "details"
+        "sidebar";
+      gap: 1.75rem;
+    }
+
+    .yt-layout-grid.is-vertical-video,
+    .yt-layout-grid.is-vertical-video.is-single-video {
+      grid-template-columns: 1fr;
+      grid-template-areas:
+        "player"
+        "details"
+        "sidebar";
+      max-width: 480px;
+      gap: 1.5rem;
+    }
+
+    .yt-layout-grid.is-vertical-video .yt-player-frame {
+      grid-row: auto;
+      max-width: 100%;
+      height: 68vh;
+      max-height: 580px;
+      min-height: 400px;
+    }
   }
 
   @media (max-width: 640px) {
@@ -703,8 +783,17 @@ const {
   const scrollCanvas = document.getElementById('ytModalScroll');
   const projectCards = document.querySelectorAll<HTMLElement>('.project-card');
 
+  function extractYouTubeId(urlOrId: string): string {
+    if (!urlOrId) return '';
+    const trimmed = urlOrId.trim();
+    if (/^[\w-]{11}$/.test(trimmed)) return trimmed;
+    const match = trimmed.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|shorts\/|live\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
+    return match ? match[1] : trimmed;
+  }
+
   function openModal(card: HTMLElement) {
-    const videoId = card.getAttribute('data-video-id') || '';
+    const rawVideoId = card.getAttribute('data-video-id') || '';
+    const videoId = extractYouTubeId(rawVideoId);
     const title = card.getAttribute('data-title') || '';
     const client = card.getAttribute('data-client') || '';
     const desc = card.getAttribute('data-desc') || '';
@@ -750,6 +839,20 @@ const {
     if (playlistTitle) playlistTitle.textContent = playlistHeading;
     if (playlistSubtitle) playlistSubtitle.textContent = playlistSub;
 
+    const isVerticalAttr = card.getAttribute('data-is-vertical');
+    let isVertical = isVerticalAttr === 'true';
+    if (!isVertical) {
+      isVertical = (videoId === 'J8ACXUcnFqc' || videoId === 'a0J5Vug7lrQ');
+    }
+
+    function setPlayerOrientation(vertical: boolean) {
+      if (layoutGrid) {
+        layoutGrid.classList.toggle('is-vertical-video', vertical);
+      }
+    }
+
+    setPlayerOrientation(isVertical);
+
     // Multi-video playlist rendering (YouTube 2-column sidebar mode)
     if (videos && videos.length > 1 && playlistWrapper && playlistTrack && playlistCount && layoutGrid) {
       layoutGrid.classList.remove('is-single-video');
@@ -758,13 +861,15 @@ const {
       playlistTrack.innerHTML = '';
 
       videos.forEach((vid, index) => {
+        const cleanVidId = extractYouTubeId(vid.youtubeId);
+        const itemIsVertical = (vid as any).isVertical === true || isVertical;
         const itemBtn = document.createElement('button');
         itemBtn.type = 'button';
         itemBtn.className = `yt-video-row ${index === 0 ? 'active' : ''}`;
-        itemBtn.setAttribute('data-video-id', vid.youtubeId);
+        itemBtn.setAttribute('data-video-id', cleanVidId);
 
         const indexFormatted = `#${String(index + 1).padStart(2, '0')}`;
-        const thumbUrl = `https://img.youtube.com/vi/${vid.youtubeId}/mqdefault.jpg`;
+        const thumbUrl = `https://img.youtube.com/vi/${cleanVidId}/mqdefault.jpg`;
 
         itemBtn.innerHTML = `
           <div class="yt-row-thumb-box">
@@ -788,8 +893,9 @@ const {
         `;
 
         itemBtn.addEventListener('click', () => {
-          if (iframe && vid.youtubeId) {
-            iframe.src = `https://www.youtube.com/embed/${vid.youtubeId}?autoplay=1&rel=0`;
+          setPlayerOrientation(itemIsVertical);
+          if (iframe && cleanVidId) {
+            iframe.src = `https://www.youtube.com/embed/${cleanVidId}?autoplay=1&rel=0`;
           }
           playlistTrack.querySelectorAll('.yt-video-row').forEach((el) => {
             el.classList.remove('active');
@@ -810,7 +916,7 @@ const {
       });
 
       // Play first video automatically
-      const firstVideoId = videos[0]?.youtubeId || videoId;
+      const firstVideoId = extractYouTubeId(videos[0]?.youtubeId || videoId);
       if (iframe && firstVideoId) {
         iframe.src = `https://www.youtube.com/embed/${firstVideoId}?autoplay=1&rel=0`;
       }
@@ -842,6 +948,9 @@ const {
       setTimeout(() => {
         if (!modal.classList.contains('open')) {
           modal.style.display = 'none';
+          if (layoutGrid) {
+            layoutGrid.classList.remove('is-vertical-video');
+          }
         }
       }, 300);
     }

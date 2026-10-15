@@ -103,6 +103,16 @@
           </div>
         </div>
 
+        <!-- Vertical / Shorts (9:16) Toggle -->
+        <div class="form-field">
+          <label class="toggle-switch-label">
+            <input type="checkbox" id="projectIsVertical" name="is_vertical" class="toggle-switch-checkbox" />
+            <span class="toggle-switch-slider"></span>
+            <span class="toggle-switch-text">Format Video Vertikal / Shorts (9:16)</span>
+          </label>
+          <span class="field-help">Otomatis aktif jika link adalah YouTube Shorts. Menampilkan video dalam rasio 9:16 portrait dengan deskripsi di samping.</span>
+        </div>
+
         <div class="form-row-grid">
           <div class="form-field">
             <label for="projectSortOrder" class="field-label">Urutan Tampil (Sort)</label>
@@ -793,6 +803,55 @@
     border-top-color: #ffffff;
     border-radius: 50%;
     animation: spin 0.6s linear infinite;
+  }
+
+  /* Toggle Switch */
+  .toggle-switch-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    user-select: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-primary, #0f172a);
+  }
+
+  .toggle-switch-checkbox {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .toggle-switch-slider {
+    position: relative;
+    width: 38px;
+    height: 22px;
+    background: #e2e8f0;
+    border-radius: 9999px;
+    transition: background 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  .toggle-switch-slider::before {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 18px;
+    height: 18px;
+    background: #ffffff;
+    border-radius: 50%;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .toggle-switch-checkbox:checked + .toggle-switch-slider {
+    background: #0f172a;
+  }
+
+  .toggle-switch-checkbox:checked + .toggle-switch-slider::before {
+    transform: translateX(16px);
   }
 
   @keyframes spin {
