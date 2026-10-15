@@ -11,7 +11,7 @@ interface Props {
 const {
   title = "Nanda Addi Wijaya | Videographer & Video Editor",
   description = "Official portfolio of Nanda Addi Wijaya - Videographer & Video Editor.",
-  image = "/images/og-image.png",
+  image = "/og-image.png",
   lang = "en"
 } = Astro.props;
 
@@ -29,7 +29,21 @@ const enUrl = new URL(currentPath, siteUrl);
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Favicon & Touch Icons (Google Search & iOS Compliant) -->
+  <link rel="icon" href="/favicon.ico" sizes="any" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+
+  <!-- Web App Manifest (PWA) -->
+  <link rel="manifest" href="/site.webmanifest" />
+
+  <!-- Theme Color for Mobile Browsers -->
+  <meta name="theme-color" content="#0a0a0c" />
+  <meta name="msapplication-TileColor" content="#0a0a0c" />
+
   <link rel="canonical" href={canonicalURL.href} />
   <link rel="sitemap" href="/sitemap-index.xml" />
 
