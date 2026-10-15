@@ -1,0 +1,1920 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ProjectModal from '../../components/admin/ProjectModal.astro';
+import SettingsModal from '../../components/admin/SettingsModal.astro';
+---
+
+<Layout title="Studio Admin | Nanda Addi Wijaya" description="Panel Manajemen Portofolio Nanda Addi Wijaya">
+  <div class="editorial-admin-root">
+    
+    <!-- AUTHENTICATION VIEW -->
+    <div id="authView" class="auth-screen">
+      <div class="auth-box">
+        <div class="auth-brand">
+          <div class="brand-avatar">NA</div>
+          <span class="auth-sub">STUDIO ADMIN</span>
+          <h1 class="auth-title">Nanda Addi Wijaya</h1>
+          <p class="auth-desc">Panel manajemen portofolio visual, video showcase, dan proxy CDN.</p>
+        </div>
+
+        <form id="loginForm" class="auth-form-editorial">
+          <div class="auth-field">
+            <label for="loginEmail" class="auth-label">Email Admin</label>
+            <input type="email" id="loginEmail" placeholder="admin@domain.com" required class="auth-input font-mono" autocomplete="username" />
+          </div>
+
+          <div class="auth-field">
+            <label for="loginPassword" class="auth-label">Kata Sandi</label>
+            <input type="password" id="loginPassword" placeholder="••••••••" required class="auth-input font-mono" autocomplete="current-password" />
+          </div>
+
+          <div id="authAlert" class="auth-alert" style="display: none;"></div>
+
+          <button type="submit" id="loginSubmitBtn" class="btn-auth-submit">
+            <span class="btn-text">Masuk ke Studio</span>
+            <div class="spinner-editorial-light" style="display: none;"></div>
+          </button>
+        </form>
+
+        <div class="auth-footer">
+          <div class="status-indicator-pill" id="supabaseStatusIndicator">
+            <span class="dot-status"></span>
+            <span id="supabaseStatusText" class="font-mono text-xs">Memeriksa Supabase...</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN DASHBOARD VIEW -->
+    <div id="dashboardView" class="dashboard-layout" style="display: none;">
+      
+      <!-- STICKY SIDEBAR -->
+      <aside class="sidebar-editorial">
+        <div class="sidebar-brand-card">
+          <div class="avatar-mark">NA</div>
+          <div class="brand-info">
+            <span class="brand-title">Nanda Addi</span>
+            <span class="brand-role font-mono">Editorial Studio</span>
+          </div>
+        </div>
+
+        <div class="sidebar-section">
+          <span class="sidebar-heading font-mono">NAVIGASI</span>
+          <nav class="sidebar-menu">
+            <button type="button" class="nav-item active" data-filter="all">
+              <span class="nav-label">Semua Portofolio</span>
+              <span class="nav-count font-mono" id="navCountAll">0</span>
+            </button>
+            <button type="button" class="nav-item" data-filter="editing">
+              <span class="nav-label">Video Editing</span>
+              <span class="nav-count font-mono" id="navCountEditing">0</span>
+            </button>
+            <button type="button" class="nav-item" data-filter="commercial">
+              <span class="nav-label">Commercial Video</span>
+              <span class="nav-count font-mono" id="navCountCommercial">0</span>
+            </button>
+            <button type="button" class="nav-item" data-filter="motion">
+              <span class="nav-label">Motion Graphics</span>
+              <span class="nav-count font-mono" id="navCountMotion">0</span>
+            </button>
+          </nav>
+        </div>
+
+        <div class="sidebar-section">
+          <span class="sidebar-heading font-mono">SISTEM & SERVER</span>
+          <nav class="sidebar-menu">
+            <button type="button" id="openSettingsBtn" class="nav-item">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="3"></circle>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+              </svg>
+              <span class="nav-label">Status Server (.env)</span>
+            </button>
+            <button type="button" id="triggerDeployBtn" class="nav-item">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="23 4 23 10 17 10"></polyline>
+                <polyline points="1 20 1 14 7 14"></polyline>
+                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+              </svg>
+              <span class="nav-label">Picu Rebuild Site</span>
+            </button>
+            <a href="/" target="_blank" class="nav-item">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                <polyline points="15 3 21 3 21 9"></polyline>
+                <line x1="10" y1="14" x2="21" y2="3"></line>
+              </svg>
+              <span class="nav-label">Buka Website Utama</span>
+            </a>
+          </nav>
+        </div>
+
+        <div class="sidebar-footer">
+          <div class="db-status-badge">
+            <span class="status-indicator-dot"></span>
+            <span class="font-mono text-xs">Supabase Cloud Active</span>
+          </div>
+          <button type="button" id="logoutBtn" class="btn-sidebar-logout font-mono">
+            <span>Logout</span>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+              <polyline points="16 17 21 12 16 7"></polyline>
+              <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
+          </button>
+        </div>
+      </aside>
+
+      <!-- MAIN CONTENT AREA -->
+      <main class="main-canvas">
+        
+        <!-- Top Navbar -->
+        <header class="canvas-header">
+          <div class="header-breadcrumb font-mono">
+            <span>STUDIO</span>
+            <span class="separator">/</span>
+            <span class="current-crumb">PORTOFOLIO</span>
+          </div>
+
+          <div class="header-actions">
+            <!-- Search Bar -->
+            <div class="search-input-box">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input type="text" id="projectSearchInput" placeholder="Cari karya, klien, tools..." class="search-field" />
+            </div>
+
+            <!-- View Switcher -->
+            <div class="view-switcher-group">
+              <button type="button" class="view-btn active" id="viewBtnGrid" title="Tampilan Galeri Kartu">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="3" width="7" height="7"></rect>
+                  <rect x="14" y="3" width="7" height="7"></rect>
+                  <rect x="14" y="14" width="7" height="7"></rect>
+                  <rect x="3" y="14" width="7" height="7"></rect>
+                </svg>
+                <span>Galeri</span>
+              </button>
+              <button type="button" class="view-btn" id="viewBtnTable" title="Tampilan Tabel Ringkas">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="8" y1="6" x2="21" y2="6"></line>
+                  <line x1="8" y1="12" x2="21" y2="12"></line>
+                  <line x1="8" y1="18" x2="21" y2="18"></line>
+                  <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                  <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                  <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                </svg>
+                <span>Tabel</span>
+              </button>
+            </div>
+
+            <!-- New Project Button -->
+            <button type="button" id="addNewProjectBtn" class="btn-create-project">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+              <span>+ Karya Baru</span>
+            </button>
+          </div>
+        </header>
+
+        <!-- Canvas Body -->
+        <div class="canvas-content">
+          
+          <!-- Editorial Metric Cards -->
+          <div class="metrics-row">
+            <div class="metric-block">
+              <span class="metric-caption font-mono">TOTAL KARYA</span>
+              <span class="metric-value font-mono" id="statTotalProjects">0</span>
+            </div>
+            <div class="metric-block">
+              <span class="metric-caption font-mono">VIDEO EDITING</span>
+              <span class="metric-value font-mono" id="statEditingProjects">0</span>
+            </div>
+            <div class="metric-block">
+              <span class="metric-caption font-mono">COMMERCIAL</span>
+              <span class="metric-value font-mono" id="statCommercialProjects">0</span>
+            </div>
+            <div class="metric-block">
+              <span class="metric-caption font-mono">MOTION GRAPHICS</span>
+              <span class="metric-value font-mono" id="statMotionProjects">0</span>
+            </div>
+          </div>
+
+          <!-- Active Filter Pill Indicator -->
+          <div class="filter-header-bar">
+            <div class="filter-headline">
+              <h2 id="currentCategoryHeading" class="view-category-title">Semua Portofolio</h2>
+              <span id="filteredResultsCount" class="results-badge font-mono">0 item</span>
+            </div>
+          </div>
+
+          <!-- Projects Container -->
+          <div id="projectsContainer" class="projects-wrapper view-mode-grid">
+            <div class="loading-editorial">
+              <div class="spinner-editorial"></div>
+              <p class="font-mono text-sm">Menghubungkan ke Supabase & memuat portofolio...</p>
+            </div>
+          </div>
+
+        </div>
+
+      </main>
+
+    </div>
+
+    <!-- Slide-Over Drawer & Settings Modal -->
+    <ProjectModal />
+    <SettingsModal />
+
+    <!-- Editorial Toast Notification -->
+    <div id="adminToast" class="toast-editorial" role="status" aria-live="polite">
+      <div class="toast-indicator-dot"></div>
+      <span id="adminToastMessage">Notifikasi</span>
+    </div>
+
+  </div>
+</Layout>
+
+<style is:global>
+  /* ===================================================================
+     Ultra-Clean Editorial Swiss Design System Tokens
+     =================================================================== */
+  :root {
+    --bg-canvas: #f8f8f7;
+    --bg-surface: #ffffff;
+    --bg-subtle: #f5f5f4;
+    --border-light: #e7e5e4;
+    --border-strong: #d6d3d1;
+    --text-primary: #1c1917;
+    --text-secondary: #57534e;
+    --text-muted: #a8a29e;
+    --accent-dark: #1c1917;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+
+  .font-mono {
+    font-family: var(--font-mono);
+  }
+
+  .text-xs { font-size: 0.72rem; }
+  .text-sm { font-size: 0.8rem; }
+
+  .editorial-admin-root {
+    min-height: 100vh;
+    background: var(--bg-canvas);
+    color: var(--text-primary);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ===================================================================
+     1. Authentication Screen
+     =================================================================== */
+  .auth-screen {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    background: var(--bg-canvas);
+  }
+
+  .auth-box {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-light);
+    border-radius: 14px;
+    padding: 3rem 2.5rem;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+  }
+
+  .auth-brand {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .brand-avatar, .avatar-mark {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background: var(--text-primary);
+    color: #ffffff;
+    font-size: 0.95rem;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    letter-spacing: -0.02em;
+    margin-bottom: 1rem;
+  }
+
+  .auth-sub {
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+  }
+
+  .auth-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.03em;
+    margin-top: 0.2rem;
+  }
+
+  .auth-desc {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-top: 0.4rem;
+    line-height: 1.45;
+  }
+
+  .auth-form-editorial {
+    display: flex;
+    flex-direction: column;
+    gap: 1.15rem;
+  }
+
+  .auth-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .auth-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+
+  .auth-input {
+    width: 100%;
+    padding: 0.7rem 0.9rem;
+    font-size: 0.875rem;
+    border: 1px solid var(--border-strong);
+    border-radius: 8px;
+    background: #ffffff;
+    color: var(--text-primary);
+    transition: all 0.15s ease;
+  }
+
+  .auth-input:focus {
+    outline: none;
+    border-color: var(--text-primary);
+    box-shadow: 0 0 0 3px rgba(28, 25, 23, 0.08);
+  }
+
+  .auth-alert {
+    padding: 0.65rem 0.85rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #f87171;
+  }
+
+  .btn-auth-submit {
+    background: var(--text-primary);
+    color: #ffffff;
+    border: none;
+    padding: 0.75rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border-radius: 8px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+    margin-top: 0.5rem;
+  }
+
+  .btn-auth-submit:hover {
+    background: #292524;
+    transform: translateY(-1px);
+  }
+
+  .auth-footer {
+    margin-top: 2rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--border-light);
+    display: flex;
+    justify-content: center;
+  }
+
+  .status-indicator-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    background: var(--bg-subtle);
+    padding: 0.3rem 0.65rem;
+    border-radius: 20px;
+    color: var(--text-secondary);
+  }
+
+  .dot-status {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #10b981;
+  }
+
+  /* ===================================================================
+     2. Dashboard Workspace Layout
+     =================================================================== */
+  .dashboard-layout {
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* Sidebar */
+  .sidebar-editorial {
+    width: 250px;
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-right: 1px solid rgba(255, 255, 255, 0.88);
+    box-shadow: 4px 0 24px -2px rgba(15, 23, 42, 0.025);
+    padding: 1.5rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    z-index: 40;
+  }
+
+  .sidebar-brand-card {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-light);
+    margin-bottom: 1.5rem;
+  }
+
+  .avatar-mark {
+    width: 36px;
+    height: 36px;
+    font-size: 0.85rem;
+    margin-bottom: 0;
+    border-radius: 8px;
+  }
+
+  .brand-info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .brand-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+  }
+
+  .brand-role {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+  }
+
+  .sidebar-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1.75rem;
+  }
+
+  .sidebar-heading {
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+    padding: 0 0.5rem;
+  }
+
+  .sidebar-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.55rem 0.65rem;
+    border-radius: 7px;
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: 0.825rem;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.12s ease;
+    text-align: left;
+    width: 100%;
+  }
+
+  .nav-item svg {
+    color: var(--text-muted);
+  }
+
+  .nav-item:hover {
+    background: var(--bg-subtle);
+    color: var(--text-primary);
+  }
+
+  .nav-item.active {
+    background: var(--bg-subtle);
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  .nav-count {
+    font-size: 0.72rem;
+    background: #ffffff;
+    border: 1px solid var(--border-light);
+    padding: 0.1rem 0.4rem;
+    border-radius: 10px;
+    color: var(--text-secondary);
+  }
+
+  .sidebar-footer {
+    margin-top: auto;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-light);
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .db-status-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: #059669;
+    font-size: 0.72rem;
+  }
+
+  .status-indicator-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #10b981;
+  }
+
+  .btn-sidebar-logout {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.45rem 0.65rem;
+    border-radius: 6px;
+    border: 1px solid var(--border-light);
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .btn-sidebar-logout:hover {
+    background: #fee2e2;
+    border-color: #fca5a5;
+    color: #b91c1c;
+  }
+
+  /* Main Canvas */
+  .main-canvas {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .canvas-header {
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.88);
+    box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.03);
+    padding: 1rem 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    position: sticky;
+    top: 0;
+    z-index: 30;
+  }
+
+  .header-breadcrumb {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+  }
+
+  .header-breadcrumb .separator {
+    margin: 0 0.35rem;
+    color: var(--border-strong);
+  }
+
+  .header-breadcrumb .current-crumb {
+    color: var(--text-primary);
+    font-weight: 700;
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .search-input-box {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    background: var(--bg-canvas);
+    border: 1px solid var(--border-light);
+    border-radius: 7px;
+    padding: 0.4rem 0.75rem;
+    width: 240px;
+    transition: all 0.15s ease;
+  }
+
+  .search-input-box:focus-within {
+    background: #ffffff;
+    border-color: var(--text-primary);
+    width: 280px;
+  }
+
+  .search-field {
+    border: none;
+    background: transparent;
+    outline: none;
+    font-size: 0.825rem;
+    color: var(--text-primary);
+    width: 100%;
+  }
+
+  .view-switcher-group {
+    display: flex;
+    background: var(--bg-canvas);
+    padding: 2px;
+    border-radius: 7px;
+    border: 1px solid var(--border-light);
+  }
+
+  .view-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.35rem 0.65rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    border-radius: 5px;
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.12s ease;
+  }
+
+  .view-btn.active {
+    background: #ffffff;
+    color: var(--text-primary);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    font-weight: 600;
+  }
+
+  .btn-create-project {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: var(--text-primary);
+    color: #ffffff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 7px;
+    font-size: 0.825rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .btn-create-project:hover {
+    background: #292524;
+    transform: translateY(-1px);
+  }
+
+  /* Canvas Content */
+  .canvas-content {
+    padding: 2.25rem 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+  }
+
+  /* Metrics Row */
+  .metrics-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+  }
+
+  @media (max-width: 900px) {
+    .metrics-row {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .metric-block {
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    border-radius: var(--radius-md);
+    box-shadow: 0 6px 20px -4px rgba(15, 23, 42, 0.035), inset 0 1px 1px rgba(255, 255, 255, 0.95);
+    padding: 1.15rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .metric-caption {
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    letter-spacing: 0.06em;
+  }
+
+  .metric-value {
+    font-size: 1.65rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.03em;
+  }
+
+  .filter-header-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .filter-headline {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+  }
+
+  .view-category-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+  }
+
+  .results-badge {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+
+  /* ===================================================================
+     3. Portfolio View Modes: Grid & Table
+     =================================================================== */
+  .projects-wrapper {
+    min-height: 300px;
+  }
+
+  /* Gallery Grid Mode */
+  .view-mode-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .gallery-card {
+    background: rgba(255, 255, 255, 0.74);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 8px 24px -4px rgba(15, 23, 42, 0.04), inset 0 1px 1px rgba(255, 255, 255, 0.95);
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, background 0.25s ease;
+  }
+
+  .gallery-card:hover {
+    background: rgba(255, 255, 255, 0.94);
+    transform: translateY(-4px);
+    box-shadow: 0 16px 36px -6px rgba(15, 23, 42, 0.08), inset 0 1px 1.5px rgba(255, 255, 255, 0.98);
+  }
+
+  .gallery-media {
+    aspect-ratio: 16 / 9;
+    position: relative;
+    background: #0f172a;
+    overflow: hidden;
+  }
+
+  .gallery-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .gallery-overlay-badges {
+    position: absolute;
+    top: 0.65rem;
+    left: 0.65rem;
+    right: 0.65rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .pill-category {
+    font-size: 0.68rem;
+    font-weight: 600;
+    padding: 0.2rem 0.55rem;
+    border-radius: 4px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .pill-editing {
+    background: rgba(24, 24, 27, 0.85);
+    color: #ffffff;
+  }
+
+  .pill-commercial {
+    background: rgba(245, 158, 11, 0.9);
+    color: #ffffff;
+  }
+
+  .pill-motion {
+    background: rgba(124, 58, 237, 0.9);
+    color: #ffffff;
+  }
+
+  .pill-duration {
+    background: rgba(0, 0, 0, 0.75);
+    color: #ffffff;
+    font-size: 0.68rem;
+    padding: 0.2rem 0.45rem;
+    border-radius: 4px;
+  }
+
+  .gallery-body {
+    padding: 1.15rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    flex: 1;
+  }
+
+  .gallery-client {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .gallery-title {
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.35;
+    color: var(--text-primary);
+  }
+
+  .gallery-desc {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    line-height: 1.45;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .gallery-tools-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-top: 0.4rem;
+  }
+
+  .tag-tool {
+    font-size: 0.68rem;
+    padding: 0.15rem 0.45rem;
+    border-radius: 4px;
+    background: var(--bg-canvas);
+    border: 1px solid var(--border-light);
+    color: var(--text-secondary);
+  }
+
+  .gallery-footer {
+    padding: 0.75rem 1.15rem;
+    background: #fafaf9;
+    border-top: 1px solid var(--border-light);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .publish-status-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.72rem;
+    cursor: pointer;
+  }
+
+  .action-btns {
+    display: flex;
+    gap: 0.35rem;
+  }
+
+  .btn-edit-action, .btn-del-action {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.75rem;
+    border-radius: 5px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: all 0.12s ease;
+  }
+
+  .btn-edit-action {
+    background: #ffffff;
+    border-color: var(--border-light);
+    color: var(--text-primary);
+  }
+
+  .btn-edit-action:hover {
+    background: var(--bg-subtle);
+  }
+
+  .btn-del-action {
+    background: #fff1f2;
+    color: #e11d48;
+  }
+
+  .btn-del-action:hover {
+    background: #ffe4e6;
+  }
+
+  /* Compact Table View Mode */
+  .view-mode-table {
+    display: block;
+    background: rgba(255, 255, 255, 0.74);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    border-radius: var(--radius-xl);
+    box-shadow: 0 8px 24px -4px rgba(15, 23, 42, 0.04), inset 0 1px 1px rgba(255, 255, 255, 0.95);
+    overflow-x: auto;
+  }
+
+  .editorial-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.825rem;
+    text-align: left;
+  }
+
+  .editorial-table th {
+    padding: 0.85rem 1rem;
+    background: #fafaf9;
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 0.72rem;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid var(--border-light);
+    white-space: nowrap;
+  }
+
+  .editorial-table td {
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid var(--border-light);
+    vertical-align: middle;
+  }
+
+  .editorial-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .editorial-table tr:hover td {
+    background: #fafaf9;
+  }
+
+  .table-thumb-col {
+    width: 80px;
+  }
+
+  .table-thumb-img {
+    width: 72px;
+    aspect-ratio: 16 / 9;
+    border-radius: 5px;
+    object-fit: cover;
+    background: #000;
+    display: block;
+  }
+
+  .table-title-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .table-item-title {
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .table-item-client {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+  }
+
+  /* Empty & Loading */
+  .loading-editorial, .empty-editorial {
+    grid-column: 1 / -1;
+    background: var(--bg-surface);
+    border: 1px dashed var(--border-strong);
+    border-radius: 12px;
+    padding: 4rem 2rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--text-muted);
+  }
+
+  .spinner-editorial {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--border-light);
+    border-top-color: var(--text-primary);
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+  }
+
+  .spinner-editorial-light {
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+  }
+
+  /* Toast Notification */
+  .toast-editorial {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 2000;
+    background: var(--text-primary);
+    color: #ffffff;
+    padding: 0.75rem 1.25rem;
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+    font-size: 0.825rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    opacity: 0;
+    transform: translateY(15px);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none;
+  }
+
+  .toast-editorial.show {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .toast-indicator-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #10b981;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  @media (max-width: 768px) {
+    .dashboard-layout {
+      flex-direction: column;
+    }
+    .sidebar-editorial {
+      width: 100%;
+      height: auto;
+      position: static;
+      border-right: none;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .canvas-header {
+      padding: 1rem 1.5rem;
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .canvas-content {
+      padding: 1.5rem;
+    }
+  }
+</style>
+
+<script>
+  import { supabase, isSupabaseConfigured, PROJECTS_TABLE, type PortfolioProjectRecord } from '../../lib/supabase';
+  import { uploadFileToGitHub, triggerDeployWebhook } from '../../lib/github-uploader';
+
+  // State
+  let projectsList: PortfolioProjectRecord[] = [];
+  let currentFilter = 'all';
+  let searchQuery = '';
+  let viewMode: 'grid' | 'table' = (localStorage.getItem('nanda_admin_view_mode') as 'grid' | 'table') || 'grid';
+
+  // DOM Elements
+  const authView = document.getElementById('authView')!;
+  const dashboardView = document.getElementById('dashboardView')!;
+  const loginForm = document.getElementById('loginForm') as HTMLFormElement;
+  const loginEmail = document.getElementById('loginEmail') as HTMLInputElement;
+  const loginPassword = document.getElementById('loginPassword') as HTMLInputElement;
+  const loginSubmitBtn = document.getElementById('loginSubmitBtn') as HTMLButtonElement;
+  const authAlert = document.getElementById('authAlert')!;
+  const logoutBtn = document.getElementById('logoutBtn')!;
+  const supabaseStatusIndicator = document.getElementById('supabaseStatusIndicator')!;
+  const supabaseStatusText = document.getElementById('supabaseStatusText')!;
+
+  // Modals & Forms
+  const projectModal = document.getElementById('projectModal')!;
+  const projectForm = document.getElementById('projectForm') as HTMLFormElement;
+  const closeModalBtn = document.getElementById('closeModalBtn')!;
+  const cancelModalBtn = document.getElementById('cancelModalBtn')!;
+  const addNewProjectBtn = document.getElementById('addNewProjectBtn')!;
+  const modalTitle = document.getElementById('modalTitle')!;
+  const saveProjectBtn = document.getElementById('saveProjectBtn') as HTMLButtonElement;
+
+  // Settings Modal
+  const settingsModal = document.getElementById('settingsModal')!;
+  const openSettingsBtn = document.getElementById('openSettingsBtn')!;
+  const closeSettingsModalBtn = document.getElementById('closeSettingsModalBtn')!;
+  const triggerDeployBtn = document.getElementById('triggerDeployBtn')!;
+
+  // View Switcher Buttons
+  const viewBtnGrid = document.getElementById('viewBtnGrid')!;
+  const viewBtnTable = document.getElementById('viewBtnTable')!;
+  const projectsContainer = document.getElementById('projectsContainer')!;
+
+  // Toast
+  const adminToast = document.getElementById('adminToast')!;
+  const adminToastMessage = document.getElementById('adminToastMessage')!;
+  let toastTimer: number | undefined;
+
+  function showToast(message: string, duration = 3000) {
+    if (!adminToast || !adminToastMessage) return;
+    adminToastMessage.textContent = message;
+    adminToast.classList.add('show');
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = window.setTimeout(() => {
+      adminToast.classList.remove('show');
+    }, duration);
+  }
+
+  // 1. Initial Supabase Check
+  function checkSupabaseEnv() {
+    const dot = supabaseStatusIndicator.querySelector('.dot-status') as HTMLElement;
+    if (isSupabaseConfigured) {
+      if (dot) dot.style.background = '#10b981';
+      supabaseStatusText.textContent = 'Supabase Cloud Terhubung';
+    } else {
+      if (dot) dot.style.background = '#f59e0b';
+      supabaseStatusText.textContent = 'Menunggu URL & Anon Key di .env';
+      authAlert.className = 'auth-alert';
+      authAlert.innerHTML = 'Supabase environment variable belum diset di file <code>.env</code>.';
+      authAlert.style.display = 'block';
+    }
+  }
+
+  // 2. Auth Flow
+  async function checkSession() {
+    if (!isSupabaseConfigured) {
+      authView.style.display = 'flex';
+      dashboardView.style.display = 'none';
+      return;
+    }
+
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        showDashboard();
+      } else {
+        showAuth();
+      }
+    } catch {
+      showAuth();
+    }
+  }
+
+  function showDashboard() {
+    authView.style.display = 'none';
+    dashboardView.style.display = 'flex';
+    fetchProjects();
+  }
+
+  function showAuth() {
+    authView.style.display = 'flex';
+    dashboardView.style.display = 'none';
+  }
+
+  loginForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!isSupabaseConfigured) {
+      alert('Silakan tambahkan PUBLIC_SUPABASE_URL dan PUBLIC_SUPABASE_ANON_KEY di file .env terlebih dahulu.');
+      return;
+    }
+
+    const email = loginEmail.value.trim();
+    const password = loginPassword.value;
+    const btnText = loginSubmitBtn.querySelector('.btn-text') as HTMLElement;
+    const spinner = loginSubmitBtn.querySelector('.spinner-editorial-light') as HTMLElement;
+
+    btnText.style.display = 'none';
+    spinner.style.display = 'block';
+    loginSubmitBtn.disabled = true;
+    authAlert.style.display = 'none';
+
+    try {
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) throw error;
+      showToast('Selamat datang di Studio Admin.');
+      showDashboard();
+    } catch (err: any) {
+      authAlert.textContent = err.message || 'Login gagal. Periksa kembali email dan kata sandi Anda.';
+      authAlert.style.display = 'block';
+    } finally {
+      btnText.style.display = 'inline';
+      spinner.style.display = 'none';
+      loginSubmitBtn.disabled = false;
+    }
+  });
+
+  logoutBtn?.addEventListener('click', async () => {
+    await supabase.auth.signOut();
+    showToast('Berhasil keluar dari admin.');
+    showAuth();
+  });
+
+  // 3. Projects CRUD
+  async function fetchProjects() {
+    projectsContainer.innerHTML = `
+      <div class="loading-editorial">
+        <div class="spinner-editorial"></div>
+        <p class="font-mono text-sm">Menghubungkan ke database Supabase...</p>
+      </div>
+    `;
+
+    try {
+      const { data, error } = await supabase
+        .from(PROJECTS_TABLE)
+        .select('*')
+        .order('sort_order', { ascending: true });
+
+      if (error) throw error;
+
+      projectsList = (data as PortfolioProjectRecord[]) || [];
+      renderProjects();
+      updateStats();
+    } catch (err: any) {
+      projectsContainer.innerHTML = `
+        <div class="empty-editorial">
+          <p style="color: #b91c1c;">Gagal memuat data: ${err.message}</p>
+          <button type="button" class="btn-create-project" onclick="location.reload()">Muat Ulang</button>
+        </div>
+      `;
+    }
+  }
+
+  function updateStats() {
+    const total = projectsList.length;
+    const editing = projectsList.filter(p => p.category === 'editing').length;
+    const commercial = projectsList.filter(p => p.category === 'commercial').length;
+    const motion = projectsList.filter(p => p.category === 'motion').length;
+
+    document.getElementById('statTotalProjects')!.textContent = String(total);
+    document.getElementById('statEditingProjects')!.textContent = String(editing);
+    document.getElementById('statCommercialProjects')!.textContent = String(commercial);
+    document.getElementById('statMotionProjects')!.textContent = String(motion);
+
+    document.getElementById('navCountAll')!.textContent = String(total);
+    document.getElementById('navCountEditing')!.textContent = String(editing);
+    document.getElementById('navCountCommercial')!.textContent = String(commercial);
+    document.getElementById('navCountMotion')!.textContent = String(motion);
+  }
+
+  function getCategoryLabel(cat: string) {
+    if (cat === 'editing') return 'Video Editing';
+    if (cat === 'commercial') return 'Commercial Video';
+    if (cat === 'motion') return 'Motion Graphics';
+    return cat;
+  }
+
+  function renderProjects() {
+    let filtered = projectsList;
+
+    if (currentFilter !== 'all') {
+      filtered = filtered.filter(p => p.category === currentFilter);
+    }
+
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      filtered = filtered.filter(p => 
+        (p.title_id && p.title_id.toLowerCase().includes(q)) ||
+        (p.title_en && p.title_en.toLowerCase().includes(q)) ||
+        (p.client_id && p.client_id.toLowerCase().includes(q)) ||
+        (p.tools && p.tools.some(t => t.toLowerCase().includes(q)))
+      );
+    }
+
+    // Update headline
+    const headingEl = document.getElementById('currentCategoryHeading')!;
+    if (currentFilter === 'all') headingEl.textContent = 'Semua Portofolio';
+    else headingEl.textContent = getCategoryLabel(currentFilter);
+
+    document.getElementById('filteredResultsCount')!.textContent = `${filtered.length} karya`;
+
+    if (filtered.length === 0) {
+      projectsContainer.className = 'projects-wrapper';
+      projectsContainer.innerHTML = `
+        <div class="empty-editorial">
+          <p class="font-mono">Belum ada karya yang sesuai dengan filter ini.</p>
+        </div>
+      `;
+      return;
+    }
+
+    if (viewMode === 'grid') {
+      projectsContainer.className = 'projects-wrapper view-mode-grid';
+      projectsContainer.innerHTML = filtered.map(p => `
+        <div class="gallery-card" data-id="${p.id}">
+          <div class="gallery-media">
+            <img src="${p.thumbnail_url}" alt="${p.title_id || p.title_en}" loading="lazy" />
+            <div class="gallery-overlay-badges">
+              <span class="pill-category pill-${p.category}">${p.category}</span>
+              <span class="pill-duration font-mono">${p.duration}</span>
+            </div>
+          </div>
+          <div class="gallery-body">
+            <span class="gallery-client font-mono">${p.client_id || p.client_en}</span>
+            <h3 class="gallery-title">${p.title_id || p.title_en}</h3>
+            <p class="gallery-desc">${p.description_id || p.description_en}</p>
+            <div class="gallery-tools-row">
+              ${(p.tools || []).map(t => `<span class="tag-tool font-mono">${t}</span>`).join('')}
+            </div>
+          </div>
+          <div class="gallery-footer">
+            <label class="publish-status-tag font-mono">
+              <input type="checkbox" class="toggle-publish-btn" data-id="${p.id}" ${p.is_published ? 'checked' : ''} />
+              <span>${p.is_published ? 'Published' : 'Draft'}</span>
+            </label>
+            <div class="action-btns">
+              <button type="button" class="btn-edit-action" data-id="${p.id}">Edit</button>
+              <button type="button" class="btn-del-action" data-id="${p.id}">Hapus</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    } else {
+      // Table Mode
+      projectsContainer.className = 'projects-wrapper view-mode-table';
+      projectsContainer.innerHTML = `
+        <table class="editorial-table">
+          <thead>
+            <tr>
+              <th class="table-thumb-col">MEDIA</th>
+              <th>JUDUL & KLIEN</th>
+              <th>KATEGORI</th>
+              <th>DURASI</th>
+              <th>TOOLS</th>
+              <th>STATUS</th>
+              <th style="text-align: right;">AKSI</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${filtered.map(p => `
+              <tr data-id="${p.id}">
+                <td class="table-thumb-col">
+                  <img src="${p.thumbnail_url}" alt="${p.title_id}" class="table-thumb-img" loading="lazy" />
+                </td>
+                <td>
+                  <div class="table-title-cell">
+                    <span class="table-item-title">${p.title_id || p.title_en}</span>
+                    <span class="table-item-client font-mono">${p.client_id || p.client_en}</span>
+                  </div>
+                </td>
+                <td>
+                  <span class="pill-category pill-${p.category}">${p.category}</span>
+                </td>
+                <td class="font-mono text-sm">${p.duration}</td>
+                <td>
+                  <div class="gallery-tools-row">
+                    ${(p.tools || []).slice(0, 2).map(t => `<span class="tag-tool font-mono">${t}</span>`).join('')}
+                    ${(p.tools && p.tools.length > 2) ? `<span class="tag-tool font-mono">+${p.tools.length - 2}</span>` : ''}
+                  </div>
+                </td>
+                <td>
+                  <label class="publish-status-tag font-mono">
+                    <input type="checkbox" class="toggle-publish-btn" data-id="${p.id}" ${p.is_published ? 'checked' : ''} />
+                    <span>${p.is_published ? 'Live' : 'Draft'}</span>
+                  </label>
+                </td>
+                <td style="text-align: right;">
+                  <div class="action-btns" style="justify-content: flex-end;">
+                    <button type="button" class="btn-edit-action" data-id="${p.id}">Edit</button>
+                    <button type="button" class="btn-del-action" data-id="${p.id}">Hapus</button>
+                  </div>
+                </td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      `;
+    }
+
+    // Attach Action Listeners
+    projectsContainer.querySelectorAll('.btn-edit-action').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = (btn as HTMLElement).dataset.id;
+        const project = projectsList.find(p => p.id === id);
+        if (project) openEditProjectModal(project);
+      });
+    });
+
+    projectsContainer.querySelectorAll('.btn-del-action').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const id = (btn as HTMLElement).dataset.id;
+        if (!confirm('Hapus karya portofolio ini secara permanen dari Supabase?')) return;
+        await deleteProject(id!);
+      });
+    });
+
+    projectsContainer.querySelectorAll('.toggle-publish-btn').forEach(box => {
+      box.addEventListener('change', async (e) => {
+        const target = e.target as HTMLInputElement;
+        const id = target.dataset.id;
+        const is_published = target.checked;
+        await togglePublishProject(id!, is_published);
+      });
+    });
+  }
+
+  // 4. View Switcher Interaction
+  function setViewMode(mode: 'grid' | 'table') {
+    viewMode = mode;
+    localStorage.setItem('nanda_admin_view_mode', mode);
+    if (mode === 'grid') {
+      viewBtnGrid.classList.add('active');
+      viewBtnTable.classList.remove('active');
+    } else {
+      viewBtnTable.classList.add('active');
+      viewBtnGrid.classList.remove('active');
+    }
+    renderProjects();
+  }
+
+  viewBtnGrid?.addEventListener('click', () => setViewMode('grid'));
+  viewBtnTable?.addEventListener('click', () => setViewMode('table'));
+
+  // 5. Drawer Tab Switcher
+  const formTabs = document.querySelectorAll('.form-tabs .tab-btn');
+  formTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      formTabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const targetId = `tab-${(tab as HTMLElement).dataset.tab}`;
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.getElementById(targetId)?.classList.add('active');
+    });
+  });
+
+  // Video Mode Switching (Single vs Multiple)
+  const modeSingleBtn = document.getElementById('modeSingleBtn');
+  const modeMultiBtn = document.getElementById('modeMultiBtn');
+  const videoModeInput = document.getElementById('videoModeInput') as HTMLInputElement | null;
+  const singleVideoSection = document.getElementById('singleVideoSection');
+  const multiVideoSection = document.getElementById('multiVideoSection');
+  const multiVideoList = document.getElementById('multiVideoList');
+  const addVideoRowBtn = document.getElementById('addVideoRowBtn');
+
+  function extractYouTubeId(urlOrId: string): string {
+    const match = urlOrId.trim().match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
+    return match ? match[1] : urlOrId.trim();
+  }
+
+  function setVideoMode(mode: 'single' | 'multi') {
+    if (videoModeInput) videoModeInput.value = mode;
+    if (mode === 'single') {
+      modeSingleBtn?.classList.add('active');
+      modeMultiBtn?.classList.remove('active');
+      if (singleVideoSection) singleVideoSection.style.display = 'block';
+      if (multiVideoSection) multiVideoSection.style.display = 'none';
+    } else {
+      modeMultiBtn?.classList.add('active');
+      modeSingleBtn?.classList.remove('active');
+      if (singleVideoSection) singleVideoSection.style.display = 'none';
+      if (multiVideoSection) multiVideoSection.style.display = 'block';
+      if (multiVideoList && multiVideoList.children.length === 0) {
+        addMultiVideoRow();
+      }
+    }
+  }
+
+  modeSingleBtn?.addEventListener('click', () => setVideoMode('single'));
+  modeMultiBtn?.addEventListener('click', () => setVideoMode('multi'));
+
+  function addMultiVideoRow(title = '', ytId = '') {
+    if (!multiVideoList) return;
+    const row = document.createElement('div');
+    row.className = 'video-row-item';
+    row.innerHTML = `
+      <input type="text" class="field-input field-input-sm multi-title-input" placeholder="Judul Video (cth: Main Cut / Teaser)" value="${title}" />
+      <input type="text" class="field-input field-input-sm font-mono multi-yt-input" placeholder="YouTube ID / URL" value="${ytId}" />
+      <button type="button" class="btn-remove-row" title="Hapus video ini">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="3 6 5 6 21 6"></polyline>
+          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+        </svg>
+      </button>
+    `;
+
+    row.querySelector('.btn-remove-row')?.addEventListener('click', () => {
+      row.remove();
+    });
+
+    multiVideoList.appendChild(row);
+  }
+
+  addVideoRowBtn?.addEventListener('click', () => addMultiVideoRow());
+
+  // Open & Close Drawer
+  function openNewProjectModal() {
+    projectForm.reset();
+    (document.getElementById('projectId') as HTMLInputElement).value = '';
+    modalTitle.textContent = 'Tambah Portofolio Baru';
+    document.getElementById('thumbnailPreviewContainer')!.style.display = 'none';
+    if (multiVideoList) multiVideoList.innerHTML = '';
+    setVideoMode('single');
+    (formTabs[0] as HTMLElement).click();
+    projectModal.style.display = 'flex';
+    requestAnimationFrame(() => {
+      projectModal.classList.add('open');
+    });
+  }
+
+  function openEditProjectModal(p: PortfolioProjectRecord) {
+    projectForm.reset();
+    (document.getElementById('projectId') as HTMLInputElement).value = p.id;
+    (document.getElementById('projectCategory') as HTMLSelectElement).value = p.category;
+    (document.getElementById('projectDuration') as HTMLInputElement).value = p.duration;
+    (document.getElementById('projectSortOrder') as HTMLInputElement).value = String(p.sort_order || 1);
+    (document.getElementById('projectThumbnailUrl') as HTMLInputElement).value = p.thumbnail_url;
+    (document.getElementById('projectPublished') as HTMLInputElement).checked = p.is_published;
+
+    if (multiVideoList) multiVideoList.innerHTML = '';
+    if (p.videos && Array.isArray(p.videos) && p.videos.length > 1) {
+      setVideoMode('multi');
+      p.videos.forEach(v => addMultiVideoRow(v.title || '', v.youtube_id || (v as any).youtubeId || ''));
+    } else {
+      setVideoMode('single');
+      (document.getElementById('projectYoutubeId') as HTMLInputElement).value = p.youtube_id || '';
+    }
+
+    if (p.thumbnail_url) {
+      const preview = document.getElementById('thumbnailPreviewImg') as HTMLImageElement;
+      preview.src = p.thumbnail_url;
+      document.getElementById('thumbnailPreviewContainer')!.style.display = 'block';
+    }
+
+    // Indonesian fields
+    (document.getElementById('titleId') as HTMLInputElement).value = p.title_id || '';
+    (document.getElementById('clientId') as HTMLInputElement).value = p.client_id || '';
+    (document.getElementById('categoryLabelId') as HTMLInputElement).value = p.category_label_id || '';
+    (document.getElementById('roleId') as HTMLInputElement).value = p.role_id || '';
+    (document.getElementById('descId') as HTMLTextAreaElement).value = p.description_id || '';
+    (document.getElementById('fullDescId') as HTMLTextAreaElement).value = p.full_description_id || '';
+
+    // English fields
+    (document.getElementById('titleEn') as HTMLInputElement).value = p.title_en || '';
+    (document.getElementById('clientEn') as HTMLInputElement).value = p.client_en || '';
+    (document.getElementById('categoryLabelEn') as HTMLInputElement).value = p.category_label_en || '';
+    (document.getElementById('roleEn') as HTMLInputElement).value = p.role_en || '';
+    (document.getElementById('descEn') as HTMLTextAreaElement).value = p.description_en || '';
+    (document.getElementById('fullDescEn') as HTMLTextAreaElement).value = p.full_description_en || '';
+
+    // Tools checkboxes
+    const tools = p.tools || [];
+    document.querySelectorAll('input[name="tools"]').forEach(cb => {
+      (cb as HTMLInputElement).checked = tools.includes((cb as HTMLInputElement).value);
+    });
+
+    modalTitle.textContent = 'Edit Portofolio';
+    (formTabs[0] as HTMLElement).click();
+    projectModal.style.display = 'flex';
+    requestAnimationFrame(() => {
+      projectModal.classList.add('open');
+    });
+  }
+
+  function closeProjectModal() {
+    projectModal.classList.remove('open');
+    setTimeout(() => {
+      if (!projectModal.classList.contains('open')) {
+        projectModal.style.display = 'none';
+      }
+    }, 280);
+  }
+
+  addNewProjectBtn?.addEventListener('click', openNewProjectModal);
+  closeModalBtn?.addEventListener('click', closeProjectModal);
+  cancelModalBtn?.addEventListener('click', closeProjectModal);
+  projectModal?.addEventListener('click', (e) => {
+    if (e.target === projectModal) {
+      closeProjectModal();
+    }
+  });
+
+  // Thumbnail File Change & Server Upload
+  const thumbnailFileInput = document.getElementById('thumbnailFileInput') as HTMLInputElement;
+  const projectThumbnailUrl = document.getElementById('projectThumbnailUrl') as HTMLInputElement;
+  const uploadProgress = document.getElementById('uploadProgress')!;
+  const uploadStatusText = document.getElementById('uploadStatusText')!;
+  const thumbnailPreviewContainer = document.getElementById('thumbnailPreviewContainer')!;
+  const thumbnailPreviewImg = document.getElementById('thumbnailPreviewImg') as HTMLImageElement;
+
+  thumbnailFileInput?.addEventListener('change', async (e) => {
+    const file = (e.target as HTMLInputElement).files?.[0];
+    if (!file) return;
+
+    uploadProgress.style.display = 'flex';
+    uploadStatusText.textContent = `Mengupload ${file.name} ke GitHub via server .env...`;
+
+    try {
+      const result = await uploadFileToGitHub(file, 'images');
+      projectThumbnailUrl.value = result.url;
+      thumbnailPreviewImg.src = result.url;
+      thumbnailPreviewContainer.style.display = 'block';
+      showToast(`Gambar berhasil diunggah ke GitHub CDN!`);
+    } catch (err: any) {
+      alert(`Gagal upload: ${err.message}\nPastikan GITHUB_ACCESS_TOKEN sudah diisi di file .env.`);
+    } finally {
+      uploadProgress.style.display = 'none';
+    }
+  });
+
+  projectThumbnailUrl?.addEventListener('input', () => {
+    const val = projectThumbnailUrl.value.trim();
+    if (val) {
+      thumbnailPreviewImg.src = val;
+      thumbnailPreviewContainer.style.display = 'block';
+    } else {
+      thumbnailPreviewContainer.style.display = 'none';
+    }
+  });
+
+  // Add custom tool chip
+  const customToolInput = document.getElementById('customToolInput') as HTMLInputElement;
+  const addCustomToolBtn = document.getElementById('addCustomToolBtn');
+  addCustomToolBtn?.addEventListener('click', () => {
+    const val = customToolInput.value.trim();
+    if (!val) return;
+    const grid = document.querySelector('.tools-checkbox-grid')!;
+    const label = document.createElement('label');
+    label.className = 'tool-chip';
+    label.innerHTML = `
+      <input type="checkbox" name="tools" value="${val}" class="tool-checkbox" checked />
+      <span class="tool-label">${val}</span>
+    `;
+    grid.appendChild(label);
+    customToolInput.value = '';
+  });
+
+  // Save Project (Insert / Update)
+  projectForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btnText = saveProjectBtn.querySelector('.btn-text') as HTMLElement;
+    const spinner = saveProjectBtn.querySelector('.spinner-editorial-light') as HTMLElement;
+
+    btnText.style.display = 'none';
+    spinner.style.display = 'block';
+    saveProjectBtn.disabled = true;
+
+    try {
+      const formData = new FormData(projectForm);
+      const id = (formData.get('id') as string) || `project-${Date.now()}`;
+      const selectedTools: string[] = [];
+      document.querySelectorAll('input[name="tools"]:checked').forEach(cb => {
+        selectedTools.push((cb as HTMLInputElement).value);
+      });
+
+      const mode = videoModeInput ? videoModeInput.value : 'single';
+      let finalYoutubeId = (formData.get('youtube_id') as string) || '';
+      let finalVideos: Array<{ title: string; youtube_id: string }> | null = null;
+
+      if (mode === 'multi') {
+        const rows = multiVideoList ? multiVideoList.querySelectorAll('.video-row-item') : [];
+        const videoList: Array<{ title: string; youtube_id: string }> = [];
+        rows.forEach(r => {
+          const tInput = r.querySelector('.multi-title-input') as HTMLInputElement;
+          const yInput = r.querySelector('.multi-yt-input') as HTMLInputElement;
+          const tVal = tInput ? tInput.value.trim() : '';
+          const yVal = yInput ? extractYouTubeId(yInput.value.trim()) : '';
+          if (yVal) {
+            videoList.push({
+              title: tVal || 'Video',
+              youtube_id: yVal
+            });
+          }
+        });
+
+        if (videoList.length > 0) {
+          finalVideos = videoList;
+          finalYoutubeId = videoList[0].youtube_id;
+        }
+      } else {
+        finalYoutubeId = extractYouTubeId(finalYoutubeId);
+      }
+
+      const payload: Partial<PortfolioProjectRecord> = {
+        id,
+        category: formData.get('category') as any,
+        duration: formData.get('duration') as string,
+        youtube_id: finalYoutubeId,
+        videos: finalVideos as any,
+        thumbnail_url: formData.get('thumbnail_url') as string,
+        sort_order: parseInt((formData.get('sort_order') as string) || '1', 10),
+        is_published: formData.get('is_published') === 'on',
+        tools: selectedTools,
+
+        title_id: formData.get('title_id') as string,
+        client_id: formData.get('client_id') as string,
+        category_label_id: (formData.get('category_label_id') as string) || 'Video Editing',
+        role_id: formData.get('role_id') as string,
+        description_id: formData.get('description_id') as string,
+        full_description_id: formData.get('full_description_id') as string,
+
+        title_en: formData.get('title_en') as string,
+        client_en: formData.get('client_en') as string,
+        category_label_en: (formData.get('category_label_en') as string) || 'Video Editing',
+        role_en: formData.get('role_en') as string,
+        description_en: formData.get('description_en') as string,
+        full_description_en: formData.get('full_description_en') as string,
+        updated_at: new Date().toISOString(),
+      };
+
+      const { error } = await supabase
+        .from(PROJECTS_TABLE)
+        .upsert(payload);
+
+      if (error) throw error;
+
+      showToast('Karya berhasil disimpan ke Supabase!');
+      closeProjectModal();
+      fetchProjects();
+    } catch (err: any) {
+      alert(`Gagal menyimpan portofolio: ${err.message}`);
+    } finally {
+      btnText.style.display = 'inline';
+      spinner.style.display = 'none';
+      saveProjectBtn.disabled = false;
+    }
+  });
+
+  // Delete Project
+  async function deleteProject(id: string) {
+    try {
+      const { error } = await supabase
+        .from(PROJECTS_TABLE)
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+      showToast('Portofolio telah dihapus.');
+      fetchProjects();
+    } catch (err: any) {
+      alert(`Gagal menghapus: ${err.message}`);
+    }
+  }
+
+  // Toggle Publish
+  async function togglePublishProject(id: string, is_published: boolean) {
+    try {
+      const { error } = await supabase
+        .from(PROJECTS_TABLE)
+        .update({ is_published, updated_at: new Date().toISOString() })
+        .eq('id', id);
+
+      if (error) throw error;
+      showToast(is_published ? 'Karya dipublikasikan.' : 'Karya dialihkan ke Draft.');
+      fetchProjects();
+    } catch (err: any) {
+      alert(`Gagal memperbarui status: ${err.message}`);
+      fetchProjects();
+    }
+  }
+
+  // 6. Settings Modal Logic
+  function openSettings() {
+    settingsModal.style.display = 'flex';
+    requestAnimationFrame(() => {
+      settingsModal.classList.add('open');
+    });
+  }
+
+  function closeSettings() {
+    settingsModal.classList.remove('open');
+    setTimeout(() => {
+      if (!settingsModal.classList.contains('open')) {
+        settingsModal.style.display = 'none';
+      }
+    }, 220);
+  }
+
+  openSettingsBtn?.addEventListener('click', openSettings);
+  closeSettingsModalBtn?.addEventListener('click', closeSettings);
+  document.getElementById('closeSettingsBottomBtn')?.addEventListener('click', closeSettings);
+  settingsModal?.addEventListener('click', (e) => {
+    if (e.target === settingsModal) {
+      closeSettings();
+    }
+  });
+
+  // Trigger Deploy Webhook
+  triggerDeployBtn?.addEventListener('click', async () => {
+    const webhookUrl = (document.getElementById('cfgDeployWebhook') as HTMLInputElement)?.value.trim();
+    if (!webhookUrl) {
+      openSettings();
+      alert('Deploy Webhook URL belum diisi. Masukkan URL webhook di panel Status Server.');
+      return;
+    }
+
+    if (!confirm('Picu rebuild situs statis sekarang?')) return;
+
+    try {
+      const res = await triggerDeployWebhook(webhookUrl);
+      showToast(res.message, 5000);
+    } catch (err: any) {
+      alert(err.message);
+    }
+  });
+
+  // Sidebar category navigation
+  document.querySelectorAll('.sidebar-menu .nav-item[data-filter]').forEach(item => {
+    item.addEventListener('click', () => {
+      document.querySelectorAll('.sidebar-menu .nav-item[data-filter]').forEach(i => i.classList.remove('active'));
+      item.classList.add('active');
+      currentFilter = (item as HTMLElement).dataset.filter || 'all';
+      renderProjects();
+    });
+  });
+
+  // Search input
+  const projectSearchInput = document.getElementById('projectSearchInput') as HTMLInputElement;
+  projectSearchInput?.addEventListener('input', () => {
+    searchQuery = projectSearchInput.value.trim();
+    renderProjects();
+  });
+
+  // Escape key handler
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeProjectModal();
+      closeSettings();
+    }
+  });
+
+  // Initialize
+  setViewMode(viewMode);
+  checkSupabaseEnv();
+  checkSession();
+</script>

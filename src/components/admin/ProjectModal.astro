@@ -1,0 +1,801 @@
+---
+// Project Slide-Over Drawer for Admin Panel: Ultra-Clean Editorial Swiss Design
+---
+
+<div id="projectModal" class="drawer-backdrop" style="display: none;" aria-hidden="true">
+  <div class="drawer-panel" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    
+    <!-- Drawer Header -->
+    <div class="drawer-header">
+      <div class="header-titles">
+        <span class="drawer-eyebrow">Studio Editor</span>
+        <h2 id="modalTitle" class="drawer-title">Tambah Portofolio</h2>
+      </div>
+      <button id="closeModalBtn" type="button" class="btn-icon-close" aria-label="Tutup panel (ESC)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Segmented Tab Nav -->
+    <div class="drawer-nav">
+      <div class="form-tabs segmented-tabs">
+        <button type="button" class="tab-btn active" data-tab="media">
+          <span>1. Media & Video</span>
+        </button>
+        <button type="button" class="tab-btn" data-tab="id">
+          <span>2. Bahasa Indonesia</span>
+        </button>
+        <button type="button" class="tab-btn" data-tab="en">
+          <span>3. English</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Drawer Body Form -->
+    <form id="projectForm" class="drawer-form">
+      <input type="hidden" id="projectId" name="id" />
+
+      <!-- TAB 1: MEDIA & VIDEO -->
+      <div class="tab-panel active" id="tab-media">
+        <div class="form-row-grid">
+          <div class="form-field">
+            <label for="projectCategory" class="field-label">Kategori Utama <span class="required">*</span></label>
+            <div class="select-wrapper">
+              <select id="projectCategory" name="category" required class="field-input field-select">
+                <option value="editing">Video Editing</option>
+                <option value="commercial">Commercial Video</option>
+                <option value="motion">Motion Graphics</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label for="projectDuration" class="field-label">Durasi Video <span class="required">*</span></label>
+            <input type="text" id="projectDuration" name="duration" placeholder="03:45" required class="field-input font-mono" />
+          </div>
+        </div>
+
+        <!-- Video Mode Selection: Single vs Multiple -->
+        <div class="form-field">
+          <label class="field-label">Format Video Showcase</label>
+          <div class="video-mode-segmented">
+            <button type="button" class="mode-btn active" id="modeSingleBtn" data-mode="single">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+              </svg>
+              <span>Single Video</span>
+            </button>
+            <button type="button" class="mode-btn" id="modeMultiBtn" data-mode="multi">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                <polyline points="2 17 12 22 22 17"></polyline>
+                <polyline points="2 12 12 17 22 12"></polyline>
+              </svg>
+              <span>Multiple Videos (Playlist)</span>
+            </button>
+          </div>
+          <input type="hidden" id="videoModeInput" name="video_mode" value="single" />
+        </div>
+
+        <!-- Single Video Field -->
+        <div id="singleVideoSection" class="form-field">
+          <label for="projectYoutubeId" class="field-label">YouTube Video ID / URL <span class="required">*</span></label>
+          <input type="text" id="projectYoutubeId" name="youtube_id" placeholder="kJQP7kiw5Fk atau URL YouTube" class="field-input font-mono" />
+          <span class="field-help">11 karakter ID video YouTube atau URL lengkap</span>
+        </div>
+
+        <!-- Multiple Videos Section -->
+        <div id="multiVideoSection" class="form-field" style="display: none;">
+          <div class="multi-video-header">
+            <div>
+              <span class="field-label" style="margin-bottom: 0;">Daftar Video Playlist</span>
+              <span class="field-help" style="margin-top: 0;">Video urutan pertama akan diputar otomatis saat modal dibuka</span>
+            </div>
+            <button type="button" id="addVideoRowBtn" class="btn-inline-add">
+              <span>+ Tambah Video</span>
+            </button>
+          </div>
+          <div id="multiVideoList" class="multi-video-list">
+            <!-- Dynamic video rows inserted here -->
+          </div>
+        </div>
+
+        <div class="form-row-grid">
+          <div class="form-field">
+            <label for="projectSortOrder" class="field-label">Urutan Tampil (Sort)</label>
+            <input type="number" id="projectSortOrder" name="sort_order" value="1" min="1" class="field-input font-mono" />
+          </div>
+        </div>
+
+        <!-- Thumbnail Upload Section -->
+        <div class="thumbnail-dropzone">
+          <div class="dropzone-header">
+            <div>
+              <span class="dropzone-title">Thumbnail Visual</span>
+              <p class="dropzone-desc">Diunggah ke GitHub & di-cache via CDN proxy <code>hello.nandaaddiwijaya.my.id</code></p>
+            </div>
+            <label class="btn-upload-trigger">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+              </svg>
+              <span>Pilih Gambar</span>
+              <input type="file" id="thumbnailFileInput" accept="image/*" style="display: none;" />
+            </label>
+          </div>
+
+          <div class="field-field" style="margin-top: 0.75rem;">
+            <input type="url" id="projectThumbnailUrl" name="thumbnail_url" placeholder="https://hello.nandaaddiwijaya.my.id/images/..." required class="field-input font-mono text-sm" />
+          </div>
+
+          <div id="uploadProgress" class="upload-progress-state" style="display: none;">
+            <div class="spinner-editorial"></div>
+            <span id="uploadStatusText">Memproses upload ke server & commit ke GitHub...</span>
+          </div>
+
+          <!-- Live Preview -->
+          <div id="thumbnailPreviewContainer" class="thumbnail-preview-frame" style="display: none;">
+            <img id="thumbnailPreviewImg" src="" alt="Thumbnail Preview" />
+            <div class="preview-tag font-mono">CDN PROXY PREVIEW</div>
+          </div>
+        </div>
+
+        <!-- Software Tools Chips -->
+        <div class="form-field">
+          <label class="field-label">Tools & Software yang Digunakan</label>
+          <div class="tools-checkbox-grid">
+            {['Premiere', 'After Effects', 'Photoshop', 'Audition', 'DaVinci Resolve', 'CapCut', 'Blender', 'Canva', 'Google Flow', 'Seadance AI'].map((tool) => (
+              <label class="tool-chip">
+                <input type="checkbox" name="tools" value={tool} class="tool-checkbox" />
+                <span class="tool-label">{tool}</span>
+              </label>
+            ))}
+          </div>
+          <div class="custom-tool-row">
+            <input type="text" id="customToolInput" placeholder="Tambah tools kustom..." class="field-input field-input-sm" />
+            <button type="button" id="addCustomToolBtn" class="btn-inline-add">+ Tambah</button>
+          </div>
+        </div>
+
+        <div class="form-field publish-toggle-field">
+          <label class="switch-control">
+            <input type="checkbox" id="projectPublished" name="is_published" checked />
+            <span class="switch-slider"></span>
+            <span class="switch-text">Publikasikan karya ke galeri website</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- TAB 2: BAHASA INDONESIA -->
+      <div class="tab-panel" id="tab-id">
+        <div class="form-row-grid">
+          <div class="form-field">
+            <label for="titleId" class="field-label">Judul Proyek (ID) <span class="required">*</span></label>
+            <input type="text" id="titleId" name="title_id" placeholder="Judul proyek Bahasa Indonesia" required class="field-input" />
+          </div>
+
+          <div class="form-field">
+            <label for="clientId" class="field-label">Klien / Kanal (ID) <span class="required">*</span></label>
+            <input type="text" id="clientId" name="client_id" placeholder="Nama Klien atau Brand" required class="field-input" />
+          </div>
+        </div>
+
+        <div class="form-row-grid">
+          <div class="form-field">
+            <label for="categoryLabelId" class="field-label">Label Kategori (ID)</label>
+            <input type="text" id="categoryLabelId" name="category_label_id" placeholder="Contoh: Video Editing" class="field-input" />
+          </div>
+
+          <div class="form-field">
+            <label for="roleId" class="field-label">Peran Anda (ID) <span class="required">*</span></label>
+            <input type="text" id="roleId" name="role_id" placeholder="Contoh: Lead Video Editor" required class="field-input" />
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label for="descId" class="field-label">Deskripsi Ringkas (ID) <span class="required">*</span></label>
+          <textarea id="descId" name="description_id" rows="2" placeholder="Ringkasan 1-2 kalimat untuk kartu portofolio..." required class="field-input field-textarea"></textarea>
+          <span class="field-help">Ditampilkan pada kartu galeri showcase</span>
+        </div>
+
+        <div class="form-field">
+          <label for="fullDescId" class="field-label">Deskripsi Lengkap (ID) <span class="required">*</span></label>
+          <textarea id="fullDescId" name="full_description_id" rows="4" placeholder="Detail lengkap proses pengerjaan, audio design, pacing, dan hasil..." required class="field-input field-textarea"></textarea>
+          <span class="field-help">Ditampilkan pada modal video dialog</span>
+        </div>
+      </div>
+
+      <!-- TAB 3: ENGLISH -->
+      <div class="tab-panel" id="tab-en">
+        <div class="form-row-grid">
+          <div class="form-field">
+            <label for="titleEn" class="field-label">Project Title (EN) <span class="required">*</span></label>
+            <input type="text" id="titleEn" name="title_en" placeholder="Project title in English" required class="field-input" />
+          </div>
+
+          <div class="form-field">
+            <label for="clientEn" class="field-label">Client / Channel (EN) <span class="required">*</span></label>
+            <input type="text" id="clientEn" name="client_en" placeholder="Client or Brand Name" required class="field-input" />
+          </div>
+        </div>
+
+        <div class="form-row-grid">
+          <div class="form-field">
+            <label for="categoryLabelEn" class="field-label">Category Label (EN)</label>
+            <input type="text" id="categoryLabelEn" name="category_label_en" placeholder="e.g. Video Editing" class="field-input" />
+          </div>
+
+          <div class="form-field">
+            <label for="roleEn" class="field-label">Role (EN) <span class="required">*</span></label>
+            <input type="text" id="roleEn" name="role_en" placeholder="e.g. Lead Video Editor & Sound Designer" required class="field-input" />
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label for="descEn" class="field-label">Short Description (EN) <span class="required">*</span></label>
+          <textarea id="descEn" name="description_en" rows="2" placeholder="1-2 sentences overview for card..." required class="field-input field-textarea"></textarea>
+        </div>
+
+        <div class="form-field">
+          <label for="fullDescEn" class="field-label">Full Case Study (EN) <span class="required">*</span></label>
+          <textarea id="fullDescEn" name="full_description_en" rows="4" placeholder="Comprehensive breakdown for video modal..." required class="field-input field-textarea"></textarea>
+        </div>
+      </div>
+
+      <!-- Drawer Fixed Actions -->
+      <div class="drawer-footer">
+        <button type="button" id="cancelModalBtn" class="btn-ghost">Batal</button>
+        <button type="submit" id="saveProjectBtn" class="btn-solid-dark">
+          <span class="btn-text">Simpan Portofolio</span>
+          <div class="spinner-editorial-light" style="display: none;"></div>
+        </button>
+      </div>
+    </form>
+
+  </div>
+</div>
+
+<style is:global>
+  /* Drawer Backdrop */
+  .drawer-backdrop {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(15, 23, 42, 0.45);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    display: none;
+    justify-content: flex-end;
+  }
+
+  .drawer-backdrop.open {
+    display: flex;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Slide-Over Panel */
+  .drawer-panel {
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(24px) saturate(190%);
+    -webkit-backdrop-filter: blur(24px) saturate(190%);
+    width: 100%;
+    max-width: 620px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: -10px 0 40px rgba(15, 23, 42, 0.12), inset 0 1px 1px rgba(255, 255, 255, 0.95);
+    transform: translateX(100%);
+    transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+    border-left: 1px solid rgba(255, 255, 255, 0.95);
+  }
+
+  .drawer-backdrop.open .drawer-panel {
+    transform: translateX(0);
+  }
+
+  /* Header */
+  .drawer-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 1.75rem 2rem 1rem;
+    border-bottom: 1px solid #f5f5f4;
+  }
+
+  .drawer-eyebrow {
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #a8a29e;
+  }
+
+  .drawer-title {
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: #1c1917;
+    letter-spacing: -0.02em;
+    margin-top: 0.15rem;
+  }
+
+  .btn-icon-close {
+    background: transparent;
+    border: 1px solid #e7e5e4;
+    border-radius: 8px;
+    width: 34px;
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #78716c;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .btn-icon-close:hover {
+    background: #f5f5f4;
+    color: #1c1917;
+  }
+
+  /* Segmented Nav */
+  .drawer-nav {
+    padding: 0.75rem 2rem;
+    background: #fafaf9;
+    border-bottom: 1px solid #e7e5e4;
+  }
+
+  .segmented-tabs {
+    display: flex;
+    background: #f5f5f4;
+    padding: 3px;
+    border-radius: 8px;
+    gap: 2px;
+  }
+
+  .tab-btn {
+    flex: 1;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+    border-radius: 6px;
+    border: none;
+    background: transparent;
+    color: #78716c;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    text-align: center;
+  }
+
+  .tab-btn:hover {
+    color: #1c1917;
+  }
+
+  .tab-btn.active {
+    background: #ffffff;
+    color: #1c1917;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+    font-weight: 600;
+  }
+
+  /* Form */
+  .drawer-form {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.75rem 2rem;
+    gap: 1.5rem;
+  }
+
+  .tab-panel {
+    display: none;
+    flex-direction: column;
+    gap: 1.35rem;
+  }
+
+  .tab-panel.active {
+    display: flex;
+  }
+
+  .form-row-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  @media (max-width: 500px) {
+    .form-row-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .field-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #44403c;
+    letter-spacing: -0.01em;
+  }
+
+  .required {
+    color: #ef4444;
+  }
+
+  .field-input {
+    width: 100%;
+    padding: 0.65rem 0.85rem;
+    font-size: 0.875rem;
+    font-family: inherit;
+    border: 1px solid #d6d3d1;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #1c1917;
+    transition: all 0.15s ease;
+  }
+
+  .field-input:focus {
+    outline: none;
+    border-color: #1c1917;
+    box-shadow: 0 0 0 3px rgba(28, 25, 23, 0.08);
+  }
+
+  .field-textarea {
+    resize: vertical;
+    line-height: 1.5;
+  }
+
+  .font-mono {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.825rem;
+  }
+
+  .field-help {
+    font-size: 0.72rem;
+    color: #a8a29e;
+  }
+
+  /* Thumbnail Dropzone */
+  .thumbnail-dropzone {
+    background: #fafaf9;
+    border: 1px dashed #d6d3d1;
+    border-radius: 10px;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .dropzone-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .dropzone-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #1c1917;
+  }
+
+  .dropzone-desc {
+    font-size: 0.75rem;
+    color: #78716c;
+    margin-top: 0.15rem;
+  }
+
+  .dropzone-desc code {
+    background: #f5f5f4;
+    padding: 0.1rem 0.35rem;
+    border-radius: 4px;
+    font-size: 0.72rem;
+  }
+
+  .btn-upload-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.45rem 0.85rem;
+    font-size: 0.78rem;
+    font-weight: 500;
+    background: #ffffff;
+    border: 1px solid #d6d3d1;
+    border-radius: 6px;
+    color: #292524;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .btn-upload-trigger:hover {
+    background: #f5f5f4;
+    border-color: #a8a29e;
+  }
+
+  .upload-progress-state {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.78rem;
+    color: #1c1917;
+    margin-top: 0.75rem;
+  }
+
+  .thumbnail-preview-frame {
+    margin-top: 0.85rem;
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    background: #1c1917;
+    border: 1px solid #e7e5e4;
+  }
+
+  .thumbnail-preview-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .preview-tag {
+    position: absolute;
+    bottom: 0.5rem;
+    right: 0.5rem;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(4px);
+    color: #ffffff;
+    font-size: 0.65rem;
+    padding: 0.2rem 0.45rem;
+    border-radius: 4px;
+    letter-spacing: 0.05em;
+  }
+
+  /* Tools Chips */
+  .tools-checkbox-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.2rem;
+  }
+
+  .tool-chip {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .tool-chip input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .tool-label {
+    padding: 0.3rem 0.65rem;
+    font-size: 0.75rem;
+    border-radius: 20px;
+    background: #fafaf9;
+    border: 1px solid #e7e5e4;
+    color: #57534e;
+    transition: all 0.15s ease;
+  }
+
+  .tool-chip input:checked + .tool-label {
+    background: #1c1917;
+    color: #ffffff;
+    border-color: #1c1917;
+  }
+
+  .custom-tool-row {
+    display: flex;
+    gap: 0.4rem;
+    margin-top: 0.5rem;
+  }
+
+  .field-input-sm {
+    padding: 0.4rem 0.7rem;
+    font-size: 0.78rem;
+    border-radius: 6px;
+  }
+
+  .btn-inline-add {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    background: #f5f5f4;
+    border: 1px solid #d6d3d1;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+
+  .btn-inline-add:hover {
+    background: #e7e5e4;
+  }
+
+  /* Video Mode Segmented */
+  .video-mode-segmented {
+    display: inline-flex;
+    background: #f5f5f4;
+    border: 1px solid #e7e5e4;
+    border-radius: 8px;
+    padding: 3px;
+    gap: 3px;
+    margin-top: 0.25rem;
+  }
+
+  .mode-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.45rem 0.9rem;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: #78716c;
+    background: transparent;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .mode-btn:hover {
+    color: #1c1917;
+  }
+
+  .mode-btn.active {
+    background: #ffffff;
+    color: #1c1917;
+    font-weight: 600;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  }
+
+  .multi-video-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 0.6rem;
+    gap: 1rem;
+  }
+
+  .multi-video-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  :global(.video-row-item) {
+    display: grid;
+    grid-template-columns: 1fr 180px 36px;
+    gap: 0.5rem;
+    align-items: center;
+    background: #fafaf9;
+    padding: 0.5rem;
+    border-radius: 6px;
+    border: 1px solid #e7e5e4;
+  }
+
+  @media (max-width: 600px) {
+    :global(.video-row-item) {
+      grid-template-columns: 1fr 36px;
+    }
+  }
+
+  :global(.btn-remove-row) {
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #fecdd3;
+    background: #fff1f2;
+    color: #e11d48;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  :global(.btn-remove-row:hover) {
+    background: #ffe4e6;
+  }
+
+  /* Publish Toggle */
+  .publish-toggle-field {
+    padding: 1rem 0 0;
+    border-top: 1px solid #f5f5f4;
+  }
+
+  .switch-control {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #292524;
+  }
+
+  /* Drawer Footer */
+  .drawer-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid #e7e5e4;
+    margin-top: auto;
+  }
+
+  .btn-ghost {
+    background: transparent;
+    border: none;
+    color: #78716c;
+    font-size: 0.875rem;
+    font-weight: 500;
+    padding: 0.65rem 1.25rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: color 0.15s ease;
+  }
+
+  .btn-ghost:hover {
+    color: #1c1917;
+  }
+
+  .btn-solid-dark {
+    background: #1c1917;
+    color: #ffffff;
+    border: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    padding: 0.65rem 1.4rem;
+    border-radius: 8px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.15s ease;
+  }
+
+  .btn-solid-dark:hover {
+    background: #292524;
+    transform: translateY(-1px);
+  }
+
+  .spinner-editorial {
+    width: 14px;
+    height: 14px;
+    border: 2px solid #d6d3d1;
+    border-top-color: #1c1917;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+  }
+
+  .spinner-editorial-light {
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+</style>

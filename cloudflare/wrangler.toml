@@ -1,0 +1,13 @@
+name = "hello-cdn-proxy"
+main = "worker.js"
+compatibility_date = "2024-01-01"
+
+[vars]
+GITHUB_OWNER = "nandaaddiwijaya"
+GITHUB_REPO = "cdn-assets"
+GITHUB_BRANCH = "main"
+
+# Custom Domain Route:
+# routes = [
+#   { pattern = "hello.nandaaddiwijaya.my.id/*", zone_name = "nandaaddiwijaya.my.id" }
+# ]

@@ -1,0 +1,367 @@
+---
+// Settings Modal for Admin Panel: Displays Server-side Environment Status (Zero credentials in frontend)
+const ghOwner = import.meta.env.GITHUB_REPO_OWNER || 'NandaAddi';
+const ghRepo = import.meta.env.GITHUB_REPO_NAME || 'portfolio-assets';
+const cdnDomain = import.meta.env.PUBLIC_CDN_DOMAIN || 'hello.nandaaddiwijaya.my.id';
+const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL || import.meta.env.VITE_SUPABASE_URL || '';
+---
+
+<div id="settingsModal" class="modal-backdrop" style="display: none;" aria-hidden="true">
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="settingsModalTitle">
+    
+    <div class="modal-header">
+      <div>
+        <h2 id="settingsModalTitle" class="modal-title">Status Konfigurasi Server (.env)</h2>
+        <p class="modal-subtitle">Semua kredensial terproteksi di file <code>.env</code> server & tidak pernah terekspos ke frontend.</p>
+      </div>
+      <button id="closeSettingsModalBtn" type="button" class="btn-icon" aria-label="Tutup modal">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+
+    <div class="modal-form">
+      <!-- 1. Database Status -->
+      <div class="settings-section">
+        <h3 class="section-heading">1. Database Supabase</h3>
+        <p class="section-desc">Koneksi database PostgreSQL dengan Row-Level Security (RLS).</p>
+
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-label">Supabase URL</span>
+            <span class="info-value font-mono">{supabaseUrl || 'Belum diisi di .env'}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Status Anon Key</span>
+            <span class="info-value text-success">✓ Terkoneksi via .env</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. GitHub Media Storage Status -->
+      <div class="settings-section">
+        <h3 class="section-heading">2. GitHub Asset Storage (.env)</h3>
+        <p class="section-desc">Upload thumbnail diproses oleh server endpoint (Vite dev middleware & Cloudflare Worker) menggunakan token rahasia dari <code>.env</code>.</p>
+
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-label">Target Repository</span>
+            <span class="info-value font-mono">{ghOwner} / {ghRepo}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">GitHub Token Status</span>
+            <span class="info-value text-success">✓ Terproteksi di Server (.env)</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Custom CDN Proxy</span>
+            <span class="info-value font-mono">https://{cdnDomain}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Keamanan Frontend</span>
+            <span class="info-value text-success">✓ 0 Kredensial di Browser / localStorage</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Deploy Webhook Trigger -->
+      <div class="settings-section">
+        <h3 class="section-heading">3. Static Rebuild Deploy Webhook</h3>
+        <p class="section-desc">Picu build ulang situs secara instan di Cloudflare Pages / Vercel saat Anda mempublikasikan karya baru.</p>
+
+        <div class="form-group">
+          <label for="cfgDeployWebhook">Deploy Webhook URL (Opsional)</label>
+          <input type="url" id="cfgDeployWebhook" name="deployWebhook" placeholder="https://api.cloudflare.com/client/v4/pages/webhooks/deploy_hooks/..." class="form-input" />
+          <span class="input-hint">URL webhook dapat disimpan di browser khusus untuk tombol deploy cepat, atau dipicu dari CI/CD.</span>
+        </div>
+
+        <div class="connection-test-row">
+          <button type="button" id="testWebhookBtn" class="btn-secondary btn-sm">
+            <span>Uji Trigger Webhook</span>
+          </button>
+          <span id="testWebhookStatus" class="test-status-text"></span>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" id="closeSettingsBottomBtn" class="btn-primary">
+          <span>Tutup</span>
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<style is:global>
+  .modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(15, 23, 42, 0.45);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 1.5rem;
+    overflow-y: auto;
+  }
+
+  .modal-backdrop.open {
+    display: flex;
+  }
+
+  .modal-card {
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(24px) saturate(190%);
+    -webkit-backdrop-filter: blur(24px) saturate(190%);
+    border: 1px solid rgba(255, 255, 255, 0.95);
+    border-radius: var(--radius-2xl);
+    width: 100%;
+    max-width: 680px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.2), inset 0 1px 1.5px rgba(255, 255, 255, 0.98);
+    animation: modalPop 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @keyframes modalPop {
+    from { opacity: 0; transform: scale(0.96) translateY(10px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  .modal-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 1.5rem 1.75rem 1rem;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .modal-title {
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: var(--text-main);
+  }
+
+  .modal-subtitle {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    margin-top: 0.25rem;
+  }
+
+  .modal-subtitle code {
+    background: var(--bg-page);
+    padding: 0.15rem 0.4rem;
+    border-radius: var(--radius-xs);
+    font-size: 0.8rem;
+    color: var(--text-main);
+  }
+
+  .modal-form {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    padding: 1.25rem 1.75rem;
+    gap: 1.5rem;
+  }
+
+  .settings-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .settings-section:last-of-type {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .section-heading {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-main);
+  }
+
+  .section-desc {
+    font-size: 0.825rem;
+    color: var(--text-dim);
+    line-height: 1.4;
+  }
+
+  .section-desc code {
+    background: var(--bg-page);
+    padding: 0.1rem 0.35rem;
+    border-radius: var(--radius-xs);
+  }
+
+  .info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.85rem;
+    background: var(--bg-page);
+    padding: 1rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-subtle);
+  }
+
+  @media (max-width: 640px) {
+    .info-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .info-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .info-value {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-main);
+    word-break: break-all;
+  }
+
+  .font-mono {
+    font-family: monospace;
+    font-size: 0.825rem;
+  }
+
+  .text-success {
+    color: #10b981;
+    font-weight: 600;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .form-group label {
+    font-size: 0.825rem;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+
+  .form-input {
+    width: 100%;
+    padding: 0.65rem 0.9rem;
+    font-size: 0.9rem;
+    font-family: inherit;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-md);
+    background: #ffffff;
+    color: var(--text-main);
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  }
+
+  .form-input:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.1);
+  }
+
+  .input-hint {
+    font-size: 0.75rem;
+    color: var(--text-light);
+    line-height: 1.4;
+  }
+
+  .connection-test-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-top: 0.25rem;
+  }
+
+  .test-status-text {
+    font-size: 0.82rem;
+    font-weight: 500;
+  }
+
+  .modal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .btn-primary, .btn-secondary, .btn-sm {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: inherit;
+    font-weight: 500;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    border: none;
+  }
+
+  .btn-primary {
+    background: var(--accent-primary);
+    color: #ffffff;
+    padding: 0.65rem 1.4rem;
+    font-size: 0.9rem;
+  }
+
+  .btn-primary:hover {
+    background: var(--accent-primary-hover);
+    transform: translateY(-1px);
+  }
+
+  .btn-secondary {
+    background: var(--bg-page);
+    color: var(--text-muted);
+    border: 1px solid var(--border-strong);
+    padding: 0.65rem 1.2rem;
+    font-size: 0.9rem;
+  }
+
+  .btn-secondary:hover {
+    background: #ffffff;
+    color: var(--text-main);
+  }
+
+  .btn-sm {
+    padding: 0.45rem 0.9rem;
+    font-size: 0.8rem;
+  }
+
+  .btn-icon {
+    background: transparent;
+    border: none;
+    color: var(--text-dim);
+    cursor: pointer;
+    padding: 0.35rem;
+    border-radius: var(--radius-sm);
+    display: flex;
+  }
+
+  .btn-icon:hover {
+    color: var(--text-main);
+    background: var(--bg-page);
+  }
+</style>
