@@ -1,0 +1,17 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navbar from '../../components/Navbar.astro';
+import Hero from '../../components/Hero.astro';
+import ContactHub from '../../components/ContactHub.astro';
+import { getDictionary } from '../../data/locales';
+
+const dict = getDictionary('id');
+---
+
+<Layout title={dict.aboutMeta.title} description={dict.aboutMeta.description} lang="id">
+  <Navbar currentLocale="id" currentPage="about" nav={dict.nav} />
+  <main>
+    <Hero hero={dict.hero} locale="id" variant="full" />
+    <ContactHub contactContent={dict.contact} locale="id" />
+  </main>
+</Layout>
