@@ -6,6 +6,10 @@ export const enDictionary: LocaleDictionary = {
     title: 'Nanda Addi Wijaya | Videographer & Video Editor Portfolio',
     description: 'Editorial video portfolio of Nanda Addi Wijaya. 4+ years of professional experience in video editing, commercial videography, and motion graphics.',
   },
+  aboutMeta: {
+    title: 'About | Nanda Addi Wijaya - Videographer & Video Editor',
+    description: 'Background, education, experience, creative tools, and contact info of Nanda Addi Wijaya.',
+  },
   nav: {
     about: 'About',
     showcase: 'Selected Work',
@@ -17,6 +21,7 @@ export const enDictionary: LocaleDictionary = {
     greetingTitle: "Hi! I'm Nanda Addi Wijaya",
     roles: ['Videographer', 'Video Editor', 'Motion Designer'],
     bio: 'With 4+ years of experience crafting high-impact visual narratives and digital experiences. I have edited 500+ videos for the BANGSATRIO YouTube channel with multiple videos hitting 100K+ views, produced commercial visual campaigns for regional brands, and created projection mapping with Kultus Visual. Constantly exploring the intersection of cinematic rhythm, pacing, and modern digital storytelling.',
+    moreAboutMe: 'More about me →',
     primaryCta: 'Explore Selected Work',
     secondaryCta: 'Start a Project',
     stats: {

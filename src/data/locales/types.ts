@@ -17,6 +17,7 @@ export interface HeroTranslations {
   greetingTitle: string;
   roles: string[];
   bio: string;
+  moreAboutMe?: string;
   primaryCta: string;
   secondaryCta: string;
   stats: {
@@ -85,6 +86,10 @@ export interface ProjectItemTranslation {
 export interface LocaleDictionary {
   locale: Locale;
   meta: {
+    title: string;
+    description: string;
+  };
+  aboutMeta: {
     title: string;
     description: string;
   };

@@ -6,6 +6,10 @@ export const idDictionary: LocaleDictionary = {
     title: 'Nanda Addi Wijaya | Portofolio Videografer & Video Editor',
     description: 'Portofolio video editorial Nanda Addi Wijaya. Pengalaman 4+ tahun dalam video editing, videografi komersial, dan animasi motion graphics.',
   },
+  aboutMeta: {
+    title: 'Tentang | Nanda Addi Wijaya - Portofolio Videografer & Video Editor',
+    description: 'Latar belakang, pendidikan, pengalaman kerja, perangkat lunak kreatif, dan informasi kontak Nanda Addi Wijaya.',
+  },
   nav: {
     about: 'Tentang',
     showcase: 'Karya Pilihan',
@@ -17,6 +21,7 @@ export const idDictionary: LocaleDictionary = {
     greetingTitle: 'Halo! Saya Nanda Addi Wijaya',
     roles: ['Videografer', 'Video Editor', 'Motion Designer'],
     bio: 'Berpengalaman 4+ tahun menciptakan narasi visual berdaya pikat tinggi dan pengalaman digital interaktif. Saya telah mengedit 500+ video untuk kanal YouTube BANGSATRIO dengan beberapa video melampaui 100K+ penonton, memproduksi kampanye visual komersial untuk brand lokal, dan merancang projection mapping bersama Kultus Visual. Terus mendalami ritme sinematik, pacing visual, dan storytelling modern.',
+    moreAboutMe: 'Selengkapnya tentang saya →',
     primaryCta: 'Lihat Karya Pilihan',
     secondaryCta: 'Mulai Kolaborasi',
     stats: {
