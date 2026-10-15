@@ -23,7 +23,7 @@ const {
     instagramSub: 'Behind-the-scenes, visual experiments, and stories',
     linkedinLabel: 'LinkedIn Profile',
     linkedinSub: 'Professional credentials and work experience history',
-    footerRights: 'All rights reserved. Designed with precision.',
+    footerRights: 'All rights reserved.',
   },
   locale = 'en',
 } = Astro.props;
@@ -286,7 +286,39 @@ const roleTitle = locale === 'id' ? 'Videografer & Video Editor' : defaultTitle;
     }
   }
 
-  @media (max-width: 580px) {
+  @media (max-width: 640px) {
+    .contact-cards-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.85rem;
+      margin-bottom: 3rem;
+    }
+
+    .contact-card {
+      padding: 1.25rem 1rem;
+      border-radius: var(--radius-lg);
+    }
+
+    .contact-card-icon {
+      width: 40px;
+      height: 40px;
+      margin-bottom: 0.85rem;
+    }
+
+    .card-title {
+      font-size: 1rem;
+    }
+
+    .card-value {
+      font-size: 0.8rem;
+    }
+
+    .card-arrow {
+      top: 1.25rem;
+      right: 1rem;
+    }
+  }
+
+  @media (max-width: 360px) {
     .contact-cards-grid {
       grid-template-columns: 1fr;
     }
@@ -554,7 +586,7 @@ const roleTitle = locale === 'id' ? 'Videografer & Video Editor' : defaultTitle;
   }
 
   function copyEmail() {
-    const emailToCopy = 'hello@nandaaddiwijaya.my.id';
+    const emailToCopy = 'hi@nandaaddiwijaya.my.id';
     if (navigator.clipboard && window.isSecureContext) {
       navigator.clipboard.writeText(emailToCopy)
         .then(showToast)

@@ -75,6 +75,7 @@ export const idDictionary: LocaleDictionary = {
       { id: 'editing', label: 'Video Editing' },
       { id: 'commercial', label: 'Commercial Video' },
       { id: 'motion', label: 'Motion Graphics' },
+      { id: 'ai', label: 'AI Video' },
     ],
   },
   contact: {
@@ -90,7 +91,7 @@ export const idDictionary: LocaleDictionary = {
     instagramSub: 'Di balik layar produksi, eksperimen visual, dan cerita',
     linkedinLabel: 'Profil LinkedIn',
     linkedinSub: 'Kredensial profesional dan riwayat pengalaman kerja',
-    footerRights: 'Hak cipta dilindungi. Dirancang dengan presisi.',
+    footerRights: 'Hak cipta dilindungi.',
   },
   modal: {
     closeAria: 'Tutup modal video',
@@ -185,6 +186,20 @@ export const idDictionary: LocaleDictionary = {
       thumbnail: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1200&auto=format&fit=crop',
       role: 'Motion Designer & UI Animator',
       tools: ['After Effects', 'Google Flow', 'Premiere'],
+    },
+    {
+      id: 'project-ai-visual-concept',
+      title: 'Generative AI Sci-Fi Cinematic & Neural Synthesis',
+      client: 'AI Concept Art Studio',
+      category: 'ai',
+      categoryLabel: 'AI Video',
+      duration: '01:25',
+      description: 'Eksplorasi visual sinematik berbasis generative AI video, menggabungkan prompt styling, video-to-video synthesis, dan sound design immersive.',
+      fullDescription: 'Eksperimen sinematik generasi berikutnya memanfaatkan AI video synthesis (Seadance AI) yang dikombinasikan dengan sentuhan finishing warna Premiere dan motion FX After Effects untuk menciptakan narasi visual fiksi ilmiah yang imersif.',
+      youtubeId: 'kJQP7kiw5Fk',
+      thumbnail: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop',
+      role: 'AI Video Artist & Editor',
+      tools: ['Seadance AI', 'Premiere', 'After Effects'],
     },
   ],
 };

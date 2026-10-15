@@ -11,11 +11,17 @@ interface Props {
 const {
   title = "Nanda Addi Wijaya | Videographer & Video Editor",
   description = "Official portfolio of Nanda Addi Wijaya - Videographer & Video Editor.",
-  image = "/images/profile.png",
+  image = "/images/og-image.png",
   lang = "en"
 } = Astro.props;
 
-const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://hi.nandaaddiwijaya.my.id');
+const siteUrl = Astro.site ? Astro.site.origin : 'https://hi.nandaaddiwijaya.my.id';
+const canonicalURL = new URL(Astro.url.pathname, siteUrl);
+const socialImageURL = new URL(image, siteUrl);
+
+const currentPath = Astro.url.pathname.replace(/^\/id/, '') || '/';
+const idUrl = new URL(`/id${currentPath === '/' ? '' : currentPath}`, siteUrl);
+const enUrl = new URL(currentPath, siteUrl);
 ---
 
 <!DOCTYPE html>
@@ -24,27 +30,71 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://hi.nanda
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <link rel="canonical" href={canonicalURL} />
+  <link rel="canonical" href={canonicalURL.href} />
+  <link rel="sitemap" href="/sitemap-index.xml" />
+
+  <!-- Alternate Language Tags for Bilingual SEO -->
+  <link rel="alternate" hreflang="id" href={idUrl.href} />
+  <link rel="alternate" hreflang="en" href={enUrl.href} />
+  <link rel="alternate" hreflang="x-default" href={enUrl.href} />
 
   <!-- Primary Meta Tags -->
   <title>{title}</title>
   <meta name="title" content={title} />
   <meta name="description" content={description} />
   <meta name="author" content="Nanda Addi Wijaya" />
+  <meta name="robots" content="index, follow" />
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website" />
-  <meta property="og:url" content={canonicalURL} />
+  <meta property="og:site_name" content="Nanda Addi Wijaya" />
+  <meta property="og:locale" content={lang === 'id' ? 'id_ID' : 'en_US'} />
+  <meta property="og:url" content={canonicalURL.href} />
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
-  <meta property="og:image" content={image} />
+  <meta property="og:image" content={socialImageURL.href} />
+  <meta property="og:image:secure_url" content={socialImageURL.href} />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content={title} />
 
-  <!-- Twitter -->
-  <meta property="twitter:card" content="summary_large_image" />
-  <meta property="twitter:url" content={canonicalURL} />
-  <meta property="twitter:title" content={title} />
-  <meta property="twitter:description" content={description} />
-  <meta property="twitter:image" content={image} />
+  <!-- Twitter / X -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@nandaaddiwijaya" />
+  <meta name="twitter:creator" content="@nandaaddiwijaya" />
+  <meta name="twitter:url" content={canonicalURL.href} />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={socialImageURL.href} />
+
+  <!-- JSON-LD Structured Data (Schema.org Person & WebSite) -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Person",
+        "@id": "https://hi.nandaaddiwijaya.my.id/#person",
+        "name": "Nanda Addi Wijaya",
+        "url": "https://hi.nandaaddiwijaya.my.id",
+        "image": new URL("/images/profile.png", siteUrl).href,
+        "jobTitle": "Videographer & Video Editor",
+        "email": "hi@nandaaddiwijaya.my.id",
+        "sameAs": [
+          "https://www.instagram.com/nandaaddiwijaya",
+          "https://www.linkedin.com/in/nandaaddiwijaya"
+        ]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://hi.nandaaddiwijaya.my.id/#website",
+        "url": "https://hi.nandaaddiwijaya.my.id",
+        "name": "Nanda Addi Wijaya",
+        "publisher": { "@id": "https://hi.nandaaddiwijaya.my.id/#person" },
+        "inLanguage": lang
+      }
+    ]
+  })} />
 
   <!-- Google Fonts Preconnect & Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />

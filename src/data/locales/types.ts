@@ -79,7 +79,7 @@ export interface ProjectItemTranslation {
   id: string;
   title: string;
   client: string;
-  category: 'editing' | 'commercial' | 'motion';
+  category: 'editing' | 'commercial' | 'motion' | 'ai';
   categoryLabel: string;
   duration: string;
   description: string;

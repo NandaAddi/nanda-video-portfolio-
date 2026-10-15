@@ -17,6 +17,7 @@ const {
       { id: 'editing', label: 'Video Editing' },
       { id: 'commercial', label: 'Commercial Video' },
       { id: 'motion', label: 'Motion Graphics' },
+      { id: 'ai', label: 'AI Video' },
     ],
   },
   projects = portfolioData.projects,
@@ -115,16 +116,80 @@ const categories = showcase.categories;
 
 <style>
   .showcase-section {
-    padding-top: 5rem;
-    padding-bottom: 5rem;
+    padding-top: 1.75rem;
+    padding-bottom: 4.5rem;
     position: relative;
+  }
+
+  .section-header {
+    margin-bottom: 2rem;
   }
 
   /* Filter Tabs */
   .filter-tabs-container {
     display: flex;
     justify-content: center;
-    margin-bottom: 3rem;
+    margin-bottom: 2.25rem;
+  }
+
+  @media (max-width: 768px) {
+    .showcase-section {
+      padding-top: 1.5rem;
+      padding-bottom: 3.5rem;
+    }
+    .section-header {
+      margin-bottom: 1.75rem;
+    }
+    .filter-tabs-container {
+      margin-bottom: 2rem;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .filter-tabs-container {
+      width: 100vw;
+      margin-left: calc(-50vw + 50%);
+      margin-right: calc(-50vw + 50%);
+      overflow-x: auto;
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding: 0.25rem 1rem;
+      justify-content: flex-start;
+      margin-bottom: 1.75rem;
+    }
+
+    .filter-tabs-container::-webkit-scrollbar {
+      display: none;
+    }
+
+    .filter-tabs {
+      flex-wrap: nowrap;
+      flex-shrink: 0;
+      white-space: nowrap;
+      padding: 0.3rem 0.4rem;
+      gap: 0.4rem;
+    }
+
+    .filter-btn {
+      padding: 0.5rem 0.95rem;
+      font-size: 0.825rem;
+      flex-shrink: 0;
+    }
+
+    .projects-grid {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    .project-title {
+      font-size: 1.05rem;
+      line-height: 1.35;
+    }
+
+    .project-meta {
+      font-size: 0.78rem;
+    }
   }
 
   .filter-tabs {
@@ -209,6 +274,11 @@ const categories = showcase.categories;
     background: transparent;
     transform: translateY(-4px);
     box-shadow: none;
+  }
+
+  .project-card:active {
+    transform: scale(0.982) translateY(-1px);
+    transition: transform 0.12s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .project-card.hidden {
@@ -446,6 +516,10 @@ const categories = showcase.categories;
         b.classList.toggle('active', isActive);
         b.setAttribute('aria-selected', isActive ? 'true' : 'false');
       });
+
+      if (window.innerWidth <= 640) {
+        btn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+      }
 
       // Clear pending transition timeout
       if (filterTimeout) {

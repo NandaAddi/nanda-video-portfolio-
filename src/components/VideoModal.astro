@@ -66,10 +66,25 @@ const {
             </div>
           </div>
 
-          <div class="yt-divider"></div>
+          <!-- Mobile Drop-up / Drop-down Accordion Bar -->
+          <button type="button" class="yt-desc-toggle-bar" id="modalDescToggleBtn" aria-expanded="true" aria-controls="modalDescCollapse">
+            <div class="yt-desc-toggle-left">
+              <span class="yt-desc-toggle-label font-mono">Deskripsi Proyek</span>
+              <span class="yt-desc-toggle-pill font-mono" id="modalDescTogglePill">Sembunyikan</span>
+            </div>
+            <div class="yt-desc-chevron-box">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="yt-desc-chevron">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </div>
+          </button>
 
-          <div class="yt-details-body">
-            <p id="modalProjectDesc" class="yt-project-desc">Deskripsi proyek video...</p>
+          <div class="yt-divider" id="modalDescDivider"></div>
+
+          <div class="yt-details-collapse is-expanded" id="modalDescCollapse">
+            <div class="yt-details-body">
+              <p id="modalProjectDesc" class="yt-project-desc">Deskripsi proyek video...</p>
+            </div>
           </div>
         </article>
 
@@ -122,7 +137,7 @@ const {
     flex-direction: column;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1);
     overflow: hidden;
   }
 
@@ -146,6 +161,16 @@ const {
     -webkit-backdrop-filter: blur(20px) saturate(190%);
     border-bottom: 1px solid rgba(226, 232, 240, 0.85);
     flex-shrink: 0;
+    transform: translateY(-16px);
+    opacity: 0;
+    transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+                opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform, opacity;
+  }
+
+  .yt-modal-backdrop.open .yt-topbar {
+    transform: translateY(0);
+    opacity: 1;
   }
 
   @media (max-width: 640px) {
@@ -274,6 +299,16 @@ const {
     max-width: 1460px;
     margin: 0 auto;
     width: 100%;
+    transform: translateY(42px) scale(0.975);
+    opacity: 0;
+    transition: transform 0.48s cubic-bezier(0.16, 1, 0.3, 1),
+                opacity 0.42s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform, opacity;
+  }
+
+  .yt-modal-backdrop.open .yt-stage-container {
+    transform: translateY(0) scale(1);
+    opacity: 1;
   }
 
   /* 4. YouTube-Style 2-Column Grid */
@@ -408,20 +443,31 @@ const {
       grid-template-columns: 1fr;
       grid-template-areas:
         "player"
-        "details"
-        "sidebar";
+        "sidebar"
+        "details";
       gap: 1.75rem;
     }
 
-    .yt-layout-grid.is-vertical-video,
-    .yt-layout-grid.is-vertical-video.is-single-video {
+    .yt-layout-grid.is-single-video {
+      grid-template-areas:
+        "player"
+        "details";
+    }
+
+    .yt-layout-grid.is-vertical-video {
       grid-template-columns: 1fr;
       grid-template-areas:
         "player"
-        "details"
-        "sidebar";
+        "sidebar"
+        "details";
       max-width: 480px;
       gap: 1.5rem;
+    }
+
+    .yt-layout-grid.is-vertical-video.is-single-video {
+      grid-template-areas:
+        "player"
+        "details";
     }
 
     .yt-layout-grid.is-vertical-video .yt-player-frame {
@@ -431,11 +477,155 @@ const {
       max-height: 580px;
       min-height: 400px;
     }
+
+    .yt-sidebar-card {
+      position: static;
+      top: auto;
+    }
+
+    .yt-playlist-list {
+      max-height: 360px;
+    }
   }
 
   @media (max-width: 640px) {
+    .yt-topbar {
+      padding: 0.75rem 1rem;
+    }
+
+    .yt-modal-scroll {
+      padding: 1rem 0.75rem 3.5rem 0.75rem;
+    }
+
+    .yt-sidebar-card {
+      padding: 1rem;
+      border-radius: 16px;
+    }
+
     .yt-details-box {
-      padding: 1.25rem 1.25rem;
+      padding: 1.15rem 1rem;
+      border-radius: 16px;
+      transition: padding 0.3s ease;
+    }
+
+    .yt-details-box.is-desc-collapsed {
+      padding-bottom: 0.85rem;
+    }
+
+    .yt-layout-grid.is-vertical-video .yt-player-frame {
+      max-width: 320px;
+      height: 60vh;
+      max-height: 500px;
+      min-height: 360px;
+      border-radius: 14px;
+    }
+
+    /* Mobile Accordion Toggle Bar */
+    .yt-desc-toggle-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      margin-top: 0.85rem;
+      padding: 0.55rem 0.8rem;
+      background: rgba(15, 23, 42, 0.04);
+      border: 1px solid rgba(203, 213, 225, 0.75);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .yt-desc-toggle-bar:hover,
+    .yt-desc-toggle-bar:active {
+      background: rgba(15, 23, 42, 0.07);
+      border-color: rgba(15, 23, 42, 0.15);
+    }
+
+    .yt-desc-toggle-left {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .yt-desc-toggle-label {
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #334155;
+    }
+
+    .yt-desc-toggle-pill {
+      font-size: 0.68rem;
+      font-weight: 600;
+      color: #0f172a;
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid rgba(203, 213, 225, 0.85);
+      padding: 0.12rem 0.5rem;
+      border-radius: 4px;
+      letter-spacing: 0.02em;
+    }
+
+    .yt-desc-chevron-box {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid rgba(203, 213, 225, 0.75);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #0f172a;
+      transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s ease;
+    }
+
+    .yt-desc-chevron {
+      transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* When expanded (drop-up position): chevron points UP */
+    .yt-desc-toggle-bar[aria-expanded="true"] .yt-desc-chevron {
+      transform: rotate(180deg);
+    }
+
+    /* When collapsed (dropdown folded position): chevron points DOWN */
+    .yt-desc-toggle-bar[aria-expanded="false"] .yt-desc-chevron {
+      transform: rotate(0deg);
+    }
+
+    #modalDescDivider {
+      margin: 0.85rem 0;
+      transition: opacity 0.25s ease, margin 0.25s ease;
+    }
+
+    .yt-details-box.is-desc-collapsed #modalDescDivider {
+      opacity: 0;
+      margin: 0;
+      height: 0;
+    }
+
+    /* Collapsible content container with smooth height & opacity transition */
+    .yt-details-collapse {
+      overflow: hidden;
+      transition: max-height 0.38s cubic-bezier(0.16, 1, 0.3, 1),
+                  opacity 0.28s ease,
+                  transform 0.28s ease;
+      will-change: max-height, opacity, transform;
+    }
+
+    .yt-details-collapse.is-expanded {
+      max-height: 1200px;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .yt-details-collapse.is-collapsed {
+      max-height: 0;
+      opacity: 0;
+      transform: translateY(-8px);
+      pointer-events: none;
     }
   }
 
@@ -483,7 +673,7 @@ const {
     align-items: center;
   }
 
-  :global(.yt-tool-chip) {
+  .yt-tool-chip {
     font-size: 0.74rem;
     font-weight: 500;
     color: #334155;
@@ -497,6 +687,17 @@ const {
     height: 1px;
     background: rgba(226, 232, 240, 0.85);
     margin: 1.25rem 0;
+  }
+
+  /* Mobile Accordion Toggle Bar - Hidden on Desktop */
+  .yt-desc-toggle-bar {
+    display: none;
+  }
+
+  .yt-details-collapse {
+    display: block;
+    max-height: none;
+    opacity: 1;
   }
 
   .yt-details-body {
@@ -608,39 +809,40 @@ const {
   }
 
   /* Individual YouTube-Style Video Card */
-  :global(.yt-video-row) {
+  .yt-video-row {
     display: flex;
-    align-items: flex-start;
-    gap: 0.75rem;
-    padding: 0.6rem;
-    border-radius: 12px;
-    background: transparent;
-    border: 1px solid transparent;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.6rem 0.75rem;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(226, 232, 240, 0.85);
     cursor: pointer;
     text-align: left;
     transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     user-select: none;
     width: 100%;
+    box-sizing: border-box;
   }
 
-  :global(.yt-video-row:hover) {
-    background: rgba(255, 255, 255, 0.95);
-    border-color: rgba(203, 213, 225, 0.8);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+  .yt-video-row:hover {
+    background: #ffffff;
+    border-color: #0f172a;
+    transform: translateY(-1.5px);
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
   }
 
   /* Active Row (Now Playing) */
-  :global(.yt-video-row.active) {
+  .yt-video-row.active {
     background: #ffffff;
     border-color: #0f172a;
-    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.08);
+    box-shadow: 0 4px 18px rgba(15, 23, 42, 0.08);
   }
 
-  /* 16:9 Mini Thumbnail on the Left */
-  :global(.yt-row-thumb-box) {
+  /* 16:9 Mini Thumbnail on the Left (Landscape) */
+  .yt-row-thumb-box {
     position: relative;
-    width: 124px;
+    width: 120px;
     aspect-ratio: 16 / 9;
     border-radius: 8px;
     overflow: hidden;
@@ -650,12 +852,12 @@ const {
   }
 
   @media (max-width: 480px) {
-    :global(.yt-row-thumb-box) {
-      width: 108px;
+    .yt-row-thumb-box {
+      width: 100px;
     }
   }
 
-  :global(.yt-row-thumb-img) {
+  .yt-row-thumb-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -663,12 +865,12 @@ const {
     transition: transform 0.25s ease;
   }
 
-  :global(.yt-video-row:hover .yt-row-thumb-img) {
+  .yt-video-row:hover .yt-row-thumb-img {
     transform: scale(1.05);
   }
 
   /* Mini Index Badge on Thumbnail */
-  :global(.yt-row-index-pill) {
+  .yt-row-index-pill {
     position: absolute;
     bottom: 0.35rem;
     right: 0.35rem;
@@ -679,10 +881,12 @@ const {
     backdrop-filter: blur(4px);
     padding: 0.1rem 0.35rem;
     border-radius: 4px;
+    line-height: 1.2;
+    z-index: 2;
   }
 
   /* Play Hover Overlay */
-  :global(.yt-row-play-overlay) {
+  .yt-row-play-overlay {
     position: absolute;
     inset: 0;
     background: rgba(15, 23, 42, 0.35);
@@ -691,13 +895,14 @@ const {
     justify-content: center;
     opacity: 0;
     transition: opacity 0.2s ease;
+    z-index: 1;
   }
 
-  :global(.yt-video-row:hover .yt-row-play-overlay) {
+  .yt-video-row:hover .yt-row-play-overlay {
     opacity: 1;
   }
 
-  :global(.yt-row-play-icon) {
+  .yt-row-play-icon {
     width: 26px;
     height: 26px;
     border-radius: 50%;
@@ -710,17 +915,17 @@ const {
   }
 
   /* Row Meta on the Right */
-  :global(.yt-row-info) {
+  .yt-row-info {
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
+    gap: 0.3rem;
     min-width: 0;
     flex: 1;
   }
 
-  :global(.yt-row-title) {
-    font-size: 0.82rem;
-    font-weight: 500;
+  .yt-row-title {
+    font-size: 0.85rem;
+    font-weight: 600;
     color: #0f172a;
     line-height: 1.35;
     display: -webkit-box;
@@ -730,26 +935,26 @@ const {
     text-overflow: ellipsis;
   }
 
-  :global(.yt-video-row.active .yt-row-title) {
+  .yt-video-row.active .yt-row-title {
     font-weight: 700;
     color: #0f172a;
   }
 
   /* Status Chip */
-  :global(.yt-row-status-box) {
+  .yt-row-status-box {
     display: flex;
     align-items: center;
     gap: 0.35rem;
-    font-size: 0.7rem;
+    font-size: 0.72rem;
     color: #64748b;
   }
 
-  :global(.yt-video-row.active .yt-row-status-box) {
+  .yt-video-row.active .yt-row-status-box {
     color: #047857;
     font-weight: 600;
   }
 
-  :global(.yt-row-dot) {
+  .yt-row-dot {
     width: 6px;
     height: 6px;
     border-radius: 50%;
@@ -757,9 +962,91 @@ const {
     display: inline-block;
   }
 
-  :global(.yt-video-row.active .yt-row-dot) {
+  .yt-video-row.active .yt-row-dot {
     background: #10b981;
     box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
+  }
+
+  /* ========================================================
+     VERTICAL / SHORTS (9:16) SPECIALIZED PLAYLIST LAYOUT
+     ======================================================== */
+  .yt-layout-grid.is-vertical-video .yt-playlist-sidebar {
+    width: 100%;
+  }
+
+  .yt-layout-grid.is-vertical-video .yt-sidebar-card {
+    position: static;
+    top: auto;
+    padding: 1.25rem 1.35rem;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid rgba(226, 232, 240, 0.85);
+    box-shadow: 0 10px 30px -4px rgba(15, 23, 42, 0.05);
+    gap: 0.75rem;
+  }
+
+  .yt-layout-grid.is-vertical-video .yt-playlist-list {
+    max-height: 380px;
+    gap: 0.55rem;
+    padding-right: 0.35rem;
+  }
+
+  /* Shorts 9:16 Portrait Thumbnail */
+  .yt-layout-grid.is-vertical-video .yt-row-thumb-box,
+  .yt-video-row.is-vertical-item .yt-row-thumb-box {
+    width: 52px;
+    aspect-ratio: 9 / 16;
+    border-radius: 8px;
+    flex-shrink: 0;
+    background: #0f172a;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.12);
+  }
+
+  @media (max-width: 480px) {
+    .yt-layout-grid.is-vertical-video .yt-row-thumb-box,
+    .yt-video-row.is-vertical-item .yt-row-thumb-box {
+      width: 48px;
+    }
+  }
+
+  .yt-layout-grid.is-vertical-video .yt-row-index-pill,
+  .yt-video-row.is-vertical-item .yt-row-index-pill {
+    bottom: 0.25rem;
+    right: 0.25rem;
+    font-size: 0.58rem;
+    padding: 0.06rem 0.25rem;
+    border-radius: 3px;
+  }
+
+  .yt-layout-grid.is-vertical-video .yt-row-play-icon,
+  .yt-video-row.is-vertical-item .yt-row-play-icon {
+    width: 22px;
+    height: 22px;
+  }
+
+  .yt-layout-grid.is-vertical-video .yt-row-play-icon svg,
+  .yt-video-row.is-vertical-item .yt-row-play-icon svg {
+    width: 11px;
+    height: 11px;
+  }
+
+  .yt-layout-grid.is-vertical-video .yt-video-row,
+  .yt-video-row.is-vertical-item {
+    padding: 0.5rem 0.75rem;
+    gap: 0.85rem;
+  }
+
+  .yt-layout-grid.is-vertical-video .yt-row-info,
+  .yt-video-row.is-vertical-item .yt-row-info {
+    gap: 0.35rem;
+  }
+
+  .yt-layout-grid.is-vertical-video .yt-row-title,
+  .yt-video-row.is-vertical-item .yt-row-title {
+    font-size: 0.88rem;
+    font-weight: 600;
+    line-height: 1.35;
+    color: #0f172a;
   }
 </style>
 
@@ -782,6 +1069,35 @@ const {
   const playlistTrack = document.getElementById('modalPlaylistTrack');
   const scrollCanvas = document.getElementById('ytModalScroll');
   const projectCards = document.querySelectorAll<HTMLElement>('.project-card');
+
+  const descToggleBtn = document.getElementById('modalDescToggleBtn');
+  const descTogglePill = document.getElementById('modalDescTogglePill');
+  const descCollapse = document.getElementById('modalDescCollapse');
+  const detailsBox = document.getElementById('modalDetailsBox');
+
+  function setDescState(isExpanded: boolean) {
+    if (!descCollapse || !descToggleBtn) return;
+    const isIdLocale = window.location.pathname.startsWith('/id');
+
+    if (isExpanded) {
+      descCollapse.classList.remove('is-collapsed');
+      descCollapse.classList.add('is-expanded');
+      descToggleBtn.setAttribute('aria-expanded', 'true');
+      if (descTogglePill) descTogglePill.textContent = isIdLocale ? 'Sembunyikan' : 'Hide';
+      if (detailsBox) detailsBox.classList.remove('is-desc-collapsed');
+    } else {
+      descCollapse.classList.remove('is-expanded');
+      descCollapse.classList.add('is-collapsed');
+      descToggleBtn.setAttribute('aria-expanded', 'false');
+      if (descTogglePill) descTogglePill.textContent = isIdLocale ? 'Buka' : 'Show';
+      if (detailsBox) detailsBox.classList.add('is-desc-collapsed');
+    }
+  }
+
+  descToggleBtn?.addEventListener('click', () => {
+    const isCurrentlyExpanded = descToggleBtn.getAttribute('aria-expanded') === 'true';
+    setDescState(!isCurrentlyExpanded);
+  });
 
   function extractYouTubeId(urlOrId: string): string {
     if (!urlOrId) return '';
@@ -811,6 +1127,9 @@ const {
     if (titleEl) titleEl.textContent = title;
     if (clientEl) clientEl.textContent = client;
     if (descEl) descEl.textContent = desc;
+
+    // Reset description to drop-up (expanded) position on mobile when opened
+    setDescState(true);
 
     // Tools Badges
     if (toolsEl) {
@@ -865,15 +1184,23 @@ const {
         const itemIsVertical = (vid as any).isVertical === true || isVertical;
         const itemBtn = document.createElement('button');
         itemBtn.type = 'button';
-        itemBtn.className = `yt-video-row ${index === 0 ? 'active' : ''}`;
+        itemBtn.className = `yt-video-row ${itemIsVertical ? 'is-vertical-item' : ''} ${index === 0 ? 'active' : ''}`;
         itemBtn.setAttribute('data-video-id', cleanVidId);
 
         const indexFormatted = `#${String(index + 1).padStart(2, '0')}`;
-        const thumbUrl = `https://img.youtube.com/vi/${cleanVidId}/mqdefault.jpg`;
+        const defaultThumb = `https://img.youtube.com/vi/${cleanVidId}/mqdefault.jpg`;
+        const portraitThumb = `https://i.ytimg.com/vi/${cleanVidId}/oar2.jpg`;
+        const thumbUrl = itemIsVertical ? portraitThumb : defaultThumb;
 
         itemBtn.innerHTML = `
           <div class="yt-row-thumb-box">
-            <img src="${thumbUrl}" alt="${vid.title || 'Video'}" class="yt-row-thumb-img" loading="lazy" />
+            <img 
+              src="${thumbUrl}" 
+              alt="${vid.title || 'Video'}" 
+              class="yt-row-thumb-img" 
+              loading="lazy" 
+              onerror="if(!this.dataset.fallback){this.dataset.fallback='1';this.src='${defaultThumb}';}"
+            />
             <div class="yt-row-play-overlay">
               <div class="yt-row-play-icon">
                 <svg viewBox="0 0 24 24" fill="currentColor" width="13" height="13">
@@ -931,8 +1258,11 @@ const {
 
     if (modal) {
       modal.style.display = 'flex';
+      // Double rAF ensures the browser paints initial transform & opacity before starting transition
       requestAnimationFrame(() => {
-        modal.classList.add('open');
+        requestAnimationFrame(() => {
+          modal.classList.add('open');
+        });
       });
       modal.setAttribute('aria-hidden', 'false');
       document.body.style.overflow = 'hidden';
@@ -951,15 +1281,14 @@ const {
           if (layoutGrid) {
             layoutGrid.classList.remove('is-vertical-video');
           }
+          if (iframe) {
+            iframe.src = '';
+          }
+          if (playlistTrack) {
+            playlistTrack.innerHTML = '';
+          }
         }
-      }, 300);
-    }
-    if (iframe) {
-      // Empty src immediately halts video playback & audio
-      iframe.src = '';
-    }
-    if (playlistTrack) {
-      playlistTrack.innerHTML = '';
+      }, 480);
     }
   }
 

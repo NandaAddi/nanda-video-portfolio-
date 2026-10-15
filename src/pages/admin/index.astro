@@ -77,6 +77,10 @@ import SettingsModal from '../../components/admin/SettingsModal.astro';
               <span class="nav-label">Motion Graphics</span>
               <span class="nav-count font-mono" id="navCountMotion">0</span>
             </button>
+            <button type="button" class="nav-item" data-filter="ai">
+              <span class="nav-label">AI Video</span>
+              <span class="nav-count font-mono" id="navCountAi">0</span>
+            </button>
           </nav>
         </div>
 
@@ -201,6 +205,10 @@ import SettingsModal from '../../components/admin/SettingsModal.astro';
             <div class="metric-block">
               <span class="metric-caption font-mono">MOTION GRAPHICS</span>
               <span class="metric-value font-mono" id="statMotionProjects">0</span>
+            </div>
+            <div class="metric-block">
+              <span class="metric-caption font-mono">AI VIDEO</span>
+              <span class="metric-value font-mono" id="statAiProjects">0</span>
             </div>
           </div>
 
@@ -729,11 +737,17 @@ import SettingsModal from '../../components/admin/SettingsModal.astro';
   /* Metrics Row */
   .metrics-row {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 1rem;
   }
 
-  @media (max-width: 900px) {
+  @media (max-width: 1100px) {
+    .metrics-row {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (max-width: 680px) {
     .metrics-row {
       grid-template-columns: repeat(2, 1fr);
     }
@@ -845,6 +859,93 @@ import SettingsModal from '../../components/admin/SettingsModal.astro';
     display: flex;
     justify-content: space-between;
     align-items: center;
+    pointer-events: none;
+  }
+
+  .gallery-overlay-badges > * {
+    pointer-events: auto;
+  }
+
+  .gallery-right-badges {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .card-drag-handle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: #ffffff;
+    padding: 0.22rem 0.55rem;
+    border-radius: 6px;
+    cursor: grab;
+    font-size: 0.72rem;
+    font-weight: 700;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    user-select: none;
+  }
+
+  .card-drag-handle:hover {
+    background: #0f172a;
+    transform: scale(1.06);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35);
+  }
+
+  .card-drag-handle:active {
+    cursor: grabbing;
+    transform: scale(0.96);
+  }
+
+  .table-drag-handle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.25rem 0.45rem;
+    border-radius: 6px;
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    color: #475569;
+    cursor: grab;
+    font-size: 0.75rem;
+    font-weight: 700;
+    transition: all 0.15s ease;
+    user-select: none;
+  }
+
+  .table-drag-handle:hover {
+    background: #e2e8f0;
+    color: #0f172a;
+  }
+
+  .table-drag-handle:active {
+    cursor: grabbing;
+  }
+
+  /* Sortable Animation & Feedback */
+  .sortable-ghost {
+    opacity: 0.35 !important;
+    background: rgba(15, 23, 42, 0.04) !important;
+    border: 2px dashed #0f172a !important;
+    border-radius: var(--radius-xl) !important;
+  }
+
+  .sortable-chosen {
+    cursor: grabbing !important;
+  }
+
+  .sortable-drag {
+    opacity: 0.98 !important;
+    transform: scale(1.03) rotate(0.8deg) !important;
+    box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.28), 0 0 0 2px #0f172a !important;
+    border-radius: var(--radius-xl) !important;
+    background: #ffffff !important;
+    z-index: 99999 !important;
   }
 
   .pill-category {
@@ -868,6 +969,11 @@ import SettingsModal from '../../components/admin/SettingsModal.astro';
 
   .pill-motion {
     background: rgba(124, 58, 237, 0.9);
+    color: #ffffff;
+  }
+
+  .pill-ai {
+    background: rgba(14, 165, 233, 0.9);
     color: #ffffff;
   }
 
@@ -1148,6 +1254,7 @@ import SettingsModal from '../../components/admin/SettingsModal.astro';
 <script>
   import { supabase, isSupabaseConfigured, PROJECTS_TABLE, type PortfolioProjectRecord } from '../../lib/supabase';
   import { uploadFileToGitHub, triggerDeployWebhook } from '../../lib/github-uploader';
+  import Sortable from 'sortablejs';
 
   // State
   let projectsList: PortfolioProjectRecord[] = [];
@@ -1321,22 +1428,26 @@ import SettingsModal from '../../components/admin/SettingsModal.astro';
     const editing = projectsList.filter(p => p.category === 'editing').length;
     const commercial = projectsList.filter(p => p.category === 'commercial').length;
     const motion = projectsList.filter(p => p.category === 'motion').length;
+    const ai = projectsList.filter(p => p.category === 'ai').length;
 
     document.getElementById('statTotalProjects')!.textContent = String(total);
     document.getElementById('statEditingProjects')!.textContent = String(editing);
     document.getElementById('statCommercialProjects')!.textContent = String(commercial);
     document.getElementById('statMotionProjects')!.textContent = String(motion);
+    document.getElementById('statAiProjects')!.textContent = String(ai);
 
     document.getElementById('navCountAll')!.textContent = String(total);
     document.getElementById('navCountEditing')!.textContent = String(editing);
     document.getElementById('navCountCommercial')!.textContent = String(commercial);
     document.getElementById('navCountMotion')!.textContent = String(motion);
+    document.getElementById('navCountAi')!.textContent = String(ai);
   }
 
   function getCategoryLabel(cat: string) {
     if (cat === 'editing') return 'Video Editing';
     if (cat === 'commercial') return 'Commercial Video';
     if (cat === 'motion') return 'Motion Graphics';
+    if (cat === 'ai') return 'AI Video';
     return cat;
   }
 
@@ -1376,14 +1487,27 @@ import SettingsModal from '../../components/admin/SettingsModal.astro';
 
     if (viewMode === 'grid') {
       projectsContainer.className = 'projects-wrapper view-mode-grid';
-      projectsContainer.innerHTML = filtered.map(p => `
+      projectsContainer.innerHTML = filtered.map((p, idx) => `
         <div class="gallery-card" data-id="${p.id}">
           <div class="gallery-media">
-            <img src="${p.thumbnail_url}" alt="${p.title_id || p.title_en}" loading="lazy" />
             <div class="gallery-overlay-badges">
-              <span class="pill-category pill-${p.category}">${p.category}</span>
-              <span class="pill-duration font-mono">${p.duration}</span>
+              <div class="card-drag-handle" title="Tahan dan geser untuk ubah urutan posisi (Instagram style)">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="9" cy="5" r="1.5"></circle>
+                  <circle cx="9" cy="12" r="1.5"></circle>
+                  <circle cx="9" cy="19" r="1.5"></circle>
+                  <circle cx="15" cy="5" r="1.5"></circle>
+                  <circle cx="15" cy="12" r="1.5"></circle>
+                  <circle cx="15" cy="19" r="1.5"></circle>
+                </svg>
+                <span class="sort-badge-num font-mono">#${p.sort_order || (idx + 1)}</span>
+              </div>
+              <div class="gallery-right-badges">
+                <span class="pill-category pill-${p.category}">${p.category}</span>
+                <span class="pill-duration font-mono">${p.duration}</span>
+              </div>
             </div>
+            <img src="${p.thumbnail_url}" alt="${p.title_id || p.title_en}" loading="lazy" />
           </div>
           <div class="gallery-body">
             <span class="gallery-client font-mono">${p.client_id || p.client_en}</span>
@@ -1412,6 +1536,7 @@ import SettingsModal from '../../components/admin/SettingsModal.astro';
         <table class="editorial-table">
           <thead>
             <tr>
+              <th style="width: 54px; text-align: center;">URUT</th>
               <th class="table-thumb-col">MEDIA</th>
               <th>JUDUL & KLIEN</th>
               <th>KATEGORI</th>
@@ -1422,8 +1547,21 @@ import SettingsModal from '../../components/admin/SettingsModal.astro';
             </tr>
           </thead>
           <tbody>
-            ${filtered.map(p => `
+            ${filtered.map((p, idx) => `
               <tr data-id="${p.id}">
+                <td style="text-align: center; vertical-align: middle;">
+                  <div class="table-drag-handle" title="Tahan dan geser untuk ubah urutan posisi (Instagram style)">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="9" cy="5" r="1.5"></circle>
+                      <circle cx="9" cy="12" r="1.5"></circle>
+                      <circle cx="9" cy="19" r="1.5"></circle>
+                      <circle cx="15" cy="5" r="1.5"></circle>
+                      <circle cx="15" cy="12" r="1.5"></circle>
+                      <circle cx="15" cy="19" r="1.5"></circle>
+                    </svg>
+                    <span class="sort-badge-num font-mono">#${p.sort_order || (idx + 1)}</span>
+                  </div>
+                </td>
                 <td class="table-thumb-col">
                   <img src="${p.thumbnail_url}" alt="${p.title_id}" class="table-thumb-img" loading="lazy" />
                 </td>
@@ -1487,6 +1625,87 @@ import SettingsModal from '../../components/admin/SettingsModal.astro';
         await togglePublishProject(id!, is_published);
       });
     });
+
+    // Initialize Drag & Drop Sortable (Instagram style)
+    initSortable();
+  }
+
+  // Sortable Drag & Drop Controller
+  let sortableInstance: any = null;
+
+  function initSortable() {
+    if (sortableInstance) {
+      sortableInstance.destroy();
+      sortableInstance = null;
+    }
+
+    const isFiltered = currentFilter !== 'all' || Boolean(searchQuery);
+    const container = viewMode === 'grid' 
+      ? projectsContainer 
+      : projectsContainer.querySelector('tbody');
+
+    if (!container || isFiltered) return;
+
+    sortableInstance = new Sortable(container as HTMLElement, {
+      handle: viewMode === 'grid' ? '.card-drag-handle' : '.table-drag-handle',
+      animation: 220,
+      ghostClass: 'sortable-ghost',
+      chosenClass: 'sortable-chosen',
+      dragClass: 'sortable-drag',
+      onEnd: async (evt: any) => {
+        if (evt.oldIndex === evt.newIndex) return;
+
+        const cardEls = container.querySelectorAll(viewMode === 'grid' ? '.gallery-card' : 'tr[data-id]');
+        const reorderedIds: string[] = [];
+        cardEls.forEach((el) => {
+          const id = el.getAttribute('data-id');
+          if (id) reorderedIds.push(id);
+        });
+
+        if (reorderedIds.length === 0) return;
+
+        // 1. Update sort_order locally in projectsList
+        reorderedIds.forEach((id, idx) => {
+          const p = projectsList.find(item => item.id === id);
+          if (p) p.sort_order = idx + 1;
+        });
+
+        // 2. Sort projectsList by sort_order
+        projectsList.sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0));
+
+        // 3. Update DOM badges immediately
+        cardEls.forEach((el, idx) => {
+          const badge = el.querySelector('.sort-badge-num');
+          if (badge) badge.textContent = `#${idx + 1}`;
+        });
+
+        // 4. Persist to Supabase
+        await saveReorderedProjects(reorderedIds);
+      }
+    });
+  }
+
+  async function saveReorderedProjects(ids: string[]) {
+    showToast('Menyimpan urutan posisi baru...', 2000);
+    try {
+      const updates = ids.map((id, index) => 
+        supabase
+          .from(PROJECTS_TABLE)
+          .update({ sort_order: index + 1 })
+          .eq('id', id)
+      );
+
+      const results = await Promise.all(updates);
+      const hasError = results.some(r => r.error);
+
+      if (hasError) {
+        showToast('Sebagian urutan gagal diperbarui di cloud.', 3500);
+      } else {
+        showToast('Urutan posisi berhasil diperbarui! ✨');
+      }
+    } catch (err: any) {
+      showToast(`Gagal menyimpan urutan: ${err.message}`, 4000);
+    }
   }
 
   // 4. View Switcher Interaction
@@ -1556,11 +1775,52 @@ import SettingsModal from '../../components/admin/SettingsModal.astro';
   modeSingleBtn?.addEventListener('click', () => setVideoMode('single'));
   modeMultiBtn?.addEventListener('click', () => setVideoMode('multi'));
 
+  let multiVideoSortable: any = null;
+
+  function initMultiVideoSortable() {
+    if (multiVideoSortable) {
+      multiVideoSortable.destroy();
+      multiVideoSortable = null;
+    }
+    if (multiVideoList) {
+      multiVideoSortable = new Sortable(multiVideoList, {
+        handle: '.row-drag-handle',
+        animation: 200,
+        ghostClass: 'sortable-ghost',
+        chosenClass: 'sortable-chosen',
+        dragClass: 'sortable-drag',
+        onEnd: () => {
+          updateVideoRowNumbers();
+        }
+      });
+    }
+  }
+
+  function updateVideoRowNumbers() {
+    if (!multiVideoList) return;
+    multiVideoList.querySelectorAll('.video-row-item').forEach((r, idx) => {
+      const numEl = r.querySelector('.row-num');
+      if (numEl) numEl.textContent = `#${idx + 1}`;
+    });
+  }
+
   function addMultiVideoRow(title = '', ytId = '') {
     if (!multiVideoList) return;
+    const count = multiVideoList.querySelectorAll('.video-row-item').length + 1;
     const row = document.createElement('div');
     row.className = 'video-row-item';
     row.innerHTML = `
+      <div class="row-drag-handle" title="Tahan dan geser untuk ubah urutan video (Instagram style)">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="9" cy="5" r="1.5"></circle>
+          <circle cx="9" cy="12" r="1.5"></circle>
+          <circle cx="9" cy="19" r="1.5"></circle>
+          <circle cx="15" cy="5" r="1.5"></circle>
+          <circle cx="15" cy="12" r="1.5"></circle>
+          <circle cx="15" cy="19" r="1.5"></circle>
+        </svg>
+        <span class="row-num font-mono">#${count}</span>
+      </div>
       <input type="text" class="field-input field-input-sm multi-title-input" placeholder="Judul Video (cth: Main Cut / Teaser)" value="${title}" />
       <input type="text" class="field-input field-input-sm font-mono multi-yt-input" placeholder="YouTube ID / URL" value="${ytId}" />
       <button type="button" class="btn-remove-row" title="Hapus video ini">
@@ -1573,9 +1833,12 @@ import SettingsModal from '../../components/admin/SettingsModal.astro';
 
     row.querySelector('.btn-remove-row')?.addEventListener('click', () => {
       row.remove();
+      updateVideoRowNumbers();
     });
 
     multiVideoList.appendChild(row);
+    updateVideoRowNumbers();
+    initMultiVideoSortable();
   }
 
   addVideoRowBtn?.addEventListener('click', () => addMultiVideoRow());
@@ -1585,6 +1848,21 @@ import SettingsModal from '../../components/admin/SettingsModal.astro';
     if (/(?:youtube\.com\/shorts\/|\/shorts\/)/i.test(ytSingleInput.value)) {
       const isVertInput = document.getElementById('projectIsVertical') as HTMLInputElement | null;
       if (isVertInput) isVertInput.checked = true;
+    }
+  });
+
+  const projectCatSelect = document.getElementById('projectCategory') as HTMLSelectElement | null;
+  projectCatSelect?.addEventListener('change', () => {
+    const val = projectCatSelect.value;
+    const catLabelId = document.getElementById('categoryLabelId') as HTMLInputElement | null;
+    const catLabelEn = document.getElementById('categoryLabelEn') as HTMLInputElement | null;
+    const defaultLabels = ['Video Editing', 'Commercial Video', 'Motion Graphics', 'AI Video'];
+    const newLabel = getCategoryLabel(val);
+    if (catLabelId && (!catLabelId.value || defaultLabels.includes(catLabelId.value))) {
+      catLabelId.value = newLabel;
+    }
+    if (catLabelEn && (!catLabelEn.value || defaultLabels.includes(catLabelEn.value))) {
+      catLabelEn.value = newLabel;
     }
   });
 
@@ -1792,9 +2070,12 @@ import SettingsModal from '../../components/admin/SettingsModal.astro';
         }];
       }
 
+      const catVal = (formData.get('category') as string) || 'editing';
+      const fallbackCatLabel = getCategoryLabel(catVal);
+
       const payload: Partial<PortfolioProjectRecord> = {
         id,
-        category: formData.get('category') as any,
+        category: catVal as any,
         duration: formData.get('duration') as string,
         youtube_id: finalYoutubeId,
         videos: finalVideos || [],
@@ -1805,14 +2086,14 @@ import SettingsModal from '../../components/admin/SettingsModal.astro';
 
         title_id: formData.get('title_id') as string,
         client_id: formData.get('client_id') as string,
-        category_label_id: (formData.get('category_label_id') as string) || 'Video Editing',
+        category_label_id: (formData.get('category_label_id') as string) || fallbackCatLabel,
         role_id: formData.get('role_id') as string,
         description_id: formData.get('description_id') as string,
         full_description_id: formData.get('full_description_id') as string,
 
         title_en: formData.get('title_en') as string,
         client_en: formData.get('client_en') as string,
-        category_label_en: (formData.get('category_label_en') as string) || 'Video Editing',
+        category_label_en: (formData.get('category_label_en') as string) || fallbackCatLabel,
         role_en: formData.get('role_en') as string,
         description_en: formData.get('description_en') as string,
         full_description_en: formData.get('full_description_en') as string,

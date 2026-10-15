@@ -41,7 +41,7 @@ The `Navbar` language switcher intelligently toggles between matching localized 
   - `variant="compact"` (Home page):
     - Renders `.hero-top-row`: Polaroid profile card, greeting (`Halo! Saya...` / `Hi! I'm...`), roles, and bio description.
     - Renders an elegant secondary CTA link button:
-      - EN: `More about me →` linking to `/about`
+      - EN: `More about me` linking to `/about`
       - ID: `Selengkapnya tentang saya →` linking to `/id/about`
     - Does **not** render `.hero-bottom-grid` (Education, Experience, Languages, Softwares, Compact Contact).
   - `variant="full"` (About page):
@@ -79,7 +79,7 @@ The `Navbar` language switcher intelligently toggles between matching localized 
 
 ### 2.3. Locales & Translations (`src/data/locales/`)
 - Update `types.ts` to include `hero.moreAboutMe?: string` or provide appropriate localized string fallbacks:
-  - English: `"More about me"` / `"More about me →"`
+  - English: `"More about me"` / `"More about me"`
   - Indonesian: `"Selengkapnya tentang saya"` / `"Selengkapnya tentang saya →"`
 - Metadata definitions for About pages:
   - English About Title: `About | Nanda Addi Wijaya - Videographer & Video Editor`

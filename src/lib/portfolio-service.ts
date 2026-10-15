@@ -52,7 +52,9 @@ function isUrlOrIdShorts(urlOrId?: string): boolean {
         title: locale === 'id' ? (row.title_id || row.title_en) : (row.title_en || row.title_id),
         client: locale === 'id' ? (row.client_id || row.client_en) : (row.client_en || row.client_id),
         category: row.category,
-        categoryLabel: locale === 'id' ? (row.category_label_id || 'Video Editing') : (row.category_label_en || 'Video Editing'),
+        categoryLabel: locale === 'id'
+          ? (row.category_label_id || (row.category === 'ai' ? 'AI Video' : row.category === 'commercial' ? 'Commercial Video' : row.category === 'motion' ? 'Motion Graphics' : 'Video Editing'))
+          : (row.category_label_en || (row.category === 'ai' ? 'AI Video' : row.category === 'commercial' ? 'Commercial Video' : row.category === 'motion' ? 'Motion Graphics' : 'Video Editing')),
         duration: row.duration,
         description: locale === 'id' ? (row.description_id || row.description_en) : (row.description_en || row.description_id),
         fullDescription: locale === 'id' ? (row.full_description_id || row.full_description_en) : (row.full_description_en || row.full_description_id),

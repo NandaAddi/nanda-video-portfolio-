@@ -35,7 +35,7 @@ export interface VideoProject {
   id: string;
   title: string;
   client: string;
-  category: 'editing' | 'commercial' | 'motion';
+  category: 'editing' | 'commercial' | 'motion' | 'ai';
   categoryLabel: string;
   duration: string;
   description: string;
@@ -226,10 +226,24 @@ export const portfolioData: PortfolioData = {
       thumbnail: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1200&auto=format&fit=crop",
       role: "Motion Designer & UI Animator",
       tools: ["After Effects", "Google Flow", "Premiere"]
+    },
+    {
+      id: "project-ai-visual-concept",
+      title: "Generative AI Sci-Fi Cinematic & Neural Synthesis",
+      client: "AI Concept Art Studio",
+      category: "ai",
+      categoryLabel: "AI Video",
+      duration: "01:25",
+      description: "Eksplorasi visual sinematik berbasis generative AI video, menggabungkan prompt styling, video-to-video synthesis, dan sound design immersive.",
+      fullDescription: "Eksperimen sinematik generasi berikutnya memanfaatkan AI video synthesis (Seadance AI) yang dikombinasikan dengan sentuhan finishing warna Premiere dan motion FX After Effects untuk menciptakan narasi visual fiksi ilmiah yang imersif.",
+      youtubeId: "kJQP7kiw5Fk",
+      thumbnail: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop",
+      role: "AI Video Artist & Editor",
+      tools: ["Seadance AI", "Premiere", "After Effects"]
     }
   ],
   contact: {
-    email: "hello@nandaaddiwijaya.my.id",
+    email: "hi@nandaaddiwijaya.my.id",
     phone: "+62 858-7684-5192",
     whatsappUrl: "https://wa.me/6285876845192?text=Halo%20Nanda%2C%20saya%20tertarik%20untuk%20berdiskusi%20mengenai%20proyek%20video.",
     instagram: "@nandaaddiwijaya",

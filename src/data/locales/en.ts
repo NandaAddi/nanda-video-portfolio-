@@ -21,7 +21,7 @@ export const enDictionary: LocaleDictionary = {
     greetingTitle: "Hi! I'm Nanda Addi Wijaya",
     roles: ['Videographer', 'Video Editor', 'Motion Designer'],
     bio: 'With 4+ years of experience crafting high-impact visual narratives and digital experiences. I have edited 500+ videos for the BANGSATRIO YouTube channel with multiple videos hitting 100K+ views, produced commercial visual campaigns for regional brands, and created projection mapping with Kultus Visual. Constantly exploring the intersection of cinematic rhythm, pacing, and modern digital storytelling.',
-    moreAboutMe: 'More about me →',
+    moreAboutMe: 'More about me',
     primaryCta: 'Explore Selected Work',
     secondaryCta: 'Start a Project',
     stats: {
@@ -75,6 +75,7 @@ export const enDictionary: LocaleDictionary = {
       { id: 'editing', label: 'Video Editing' },
       { id: 'commercial', label: 'Commercial Video' },
       { id: 'motion', label: 'Motion Graphics' },
+      { id: 'ai', label: 'AI Video' },
     ],
   },
   contact: {
@@ -90,7 +91,7 @@ export const enDictionary: LocaleDictionary = {
     instagramSub: 'Behind-the-scenes, visual experiments, and stories',
     linkedinLabel: 'LinkedIn Profile',
     linkedinSub: 'Professional credentials and work experience history',
-    footerRights: 'All rights reserved. Designed with precision.',
+    footerRights: 'All rights reserved.',
   },
   modal: {
     closeAria: 'Close video modal',
@@ -185,6 +186,20 @@ export const enDictionary: LocaleDictionary = {
       thumbnail: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1200&auto=format&fit=crop',
       role: 'Motion Designer & UI Animator',
       tools: ['After Effects', 'Google Flow', 'Premiere'],
+    },
+    {
+      id: 'project-ai-visual-concept',
+      title: 'Generative AI Sci-Fi Cinematic & Neural Synthesis',
+      client: 'AI Concept Art Studio',
+      category: 'ai',
+      categoryLabel: 'AI Video',
+      duration: '01:25',
+      description: 'Cinematic visual exploration driven by generative AI video, integrating prompt styling, video synthesis, and immersive sound design.',
+      fullDescription: 'Next-generation sci-fi visual experiment combining AI video synthesis (Seadance AI) with Premiere color precision and After Effects motion dynamics to deliver an immersive cinematic story.',
+      youtubeId: 'kJQP7kiw5Fk',
+      thumbnail: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop',
+      role: 'AI Video Artist & Editor',
+      tools: ['Seadance AI', 'Premiere', 'After Effects'],
     },
   ],
 };

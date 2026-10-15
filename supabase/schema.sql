@@ -23,10 +23,19 @@ BEGIN
     END IF;
 END $$;
 
+-- 0b. Migration: Update Category Check Constraint to allow 'ai' (AI Video)
+DO $$ 
+BEGIN 
+    ALTER TABLE public.hello_portfolio_projects DROP CONSTRAINT IF EXISTS hello_portfolio_projects_category_check;
+    ALTER TABLE public.hello_portfolio_projects ADD CONSTRAINT hello_portfolio_projects_category_check CHECK (category IN ('editing', 'commercial', 'motion', 'ai'));
+EXCEPTION
+    WHEN OTHERS THEN NULL;
+END $$;
+
 -- 1. Create Projects Table
 CREATE TABLE IF NOT EXISTS public.hello_portfolio_projects (
     id TEXT PRIMARY KEY,
-    category TEXT NOT NULL CHECK (category IN ('editing', 'commercial', 'motion')),
+    category TEXT NOT NULL CHECK (category IN ('editing', 'commercial', 'motion', 'ai')),
     duration TEXT NOT NULL,
     youtube_id TEXT NOT NULL,
     videos JSONB DEFAULT '[]'::jsonb,

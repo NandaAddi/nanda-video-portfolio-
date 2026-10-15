@@ -23,7 +23,7 @@ if (typeof globalThis !== 'undefined' && typeof (globalThis as any).WebSocket ==
 
 export interface PortfolioProjectRecord {
   id: string;
-  category: 'editing' | 'commercial' | 'motion';
+  category: 'editing' | 'commercial' | 'motion' | 'ai';
   duration: string;
   youtube_id: string;
   videos?: Array<{ title: string; youtube_id: string; is_vertical?: boolean }>;

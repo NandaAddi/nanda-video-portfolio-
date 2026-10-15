@@ -463,8 +463,8 @@ Verify all 5 routes build without errors or warnings.
 - [ ] **Step 2: Verify live local server behavior**
 Run: `npm run preview` or test pages in browser.
 Check:
-- `http://localhost:4321/`: Compact hero (only photo & bio + 'More about me →') followed immediately by Showcase gallery and ContactHub.
-- Click 'More about me →' or 'About' in navbar → Lands on `/about`.
+- `http://localhost:4321/`: Compact hero (only photo & bio + 'More about me') followed immediately by Showcase gallery and ContactHub.
+- Click 'More about me' or 'About' in navbar → Lands on `/about`.
 - `http://localhost:4321/about`: Full hero (photo, bio, and 3-column grid of Education, Languages, Experience, Softwares, Compact Contact) + ContactHub.
 - On `/about`, click 'ID' in navbar → Switches to `/id/about`.
 - On `/id/about`, click 'Karya Pilihan' → Navigates to `/id#showcase`.
