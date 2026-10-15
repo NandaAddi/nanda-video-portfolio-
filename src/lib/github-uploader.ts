@@ -5,7 +5,7 @@
  * All tokens (GITHUB_ACCESS_TOKEN, GITHUB_REPO_OWNER, GITHUB_REPO_NAME) reside exclusively in .env.
  */
 
-export const CDN_DOMAIN = (import.meta.env.PUBLIC_CDN_DOMAIN || 'hello.nandaaddiwijaya.my.id').replace(/\/+$/, '');
+export const CDN_DOMAIN = (import.meta.env.PUBLIC_CDN_DOMAIN || 'hi.nandaaddiwijaya.my.id').replace(/\/+$/, '');
 
 /**
  * Convert a browser File object to a Base64 string (without data URL prefix)

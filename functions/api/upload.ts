@@ -66,8 +66,10 @@ export const onRequestPost = async (context: { request: Request; env: Env }) => 
       );
     }
 
-    // Direct jsDelivr CDN URL - instant globally distributed CDN for public GitHub repos
-    const cdnUrl = `https://cdn.jsdelivr.net/gh/${owner}/${repo}@${branch}/${filePath}`;
+    // Use custom domain URL (hi.nandaaddiwijaya.my.id)
+    const requestUrl = new URL(request.url);
+    const host = env.PUBLIC_CDN_DOMAIN || requestUrl.host || 'hi.nandaaddiwijaya.my.id';
+    const cdnUrl = `https://${host}/${filePath}`;
 
     return new Response(
       JSON.stringify({ success: true, url: cdnUrl, path: filePath }),

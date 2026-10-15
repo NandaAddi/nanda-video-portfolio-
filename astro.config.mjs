@@ -21,6 +21,26 @@ export default defineConfig({
       {
         name: 'dev-api-upload-handler',
         configureServer(server) {
+          // Dev middleware for /images proxy
+          server.middlewares.use('/images', async (req, res, next) => {
+            const env = loadEnv('development', process.cwd(), '');
+            const owner = env.GITHUB_REPO_OWNER || 'NandaAddi';
+            const repo = env.GITHUB_REPO_NAME || 'portfolio-assets';
+            const branch = env.GITHUB_BRANCH || 'main';
+            const upstream = `https://cdn.jsdelivr.net/gh/${owner}/${repo}@${branch}/images${req.url}`;
+            try {
+              const fetchRes = await fetch(upstream);
+              if (fetchRes.ok) {
+                const contentType = fetchRes.headers.get('content-type') || 'image/jpeg';
+                res.setHeader('Content-Type', contentType);
+                const arrayBuffer = await fetchRes.arrayBuffer();
+                res.end(Buffer.from(arrayBuffer));
+                return;
+              }
+            } catch (e) {}
+            next();
+          });
+
           server.middlewares.use('/api/upload', async (req, res) => {
             if (req.method !== 'POST') {
               res.statusCode = 405;
@@ -33,7 +53,7 @@ export default defineConfig({
             const owner = env.GITHUB_REPO_OWNER || 'NandaAddi';
             const repo = env.GITHUB_REPO_NAME || 'portfolio-assets';
             const branch = env.GITHUB_BRANCH || 'main';
-            const domain = env.PUBLIC_CDN_DOMAIN || 'hello.nandaaddiwijaya.my.id';
+            const domain = env.PUBLIC_CDN_DOMAIN || 'hi.nandaaddiwijaya.my.id';
 
             if (!token) {
               res.statusCode = 500;
@@ -74,9 +94,7 @@ export default defineConfig({
                   return;
                 }
 
-                const proxiedUrl = (domain && domain !== 'hello.nandaaddiwijaya.my.id' && domain !== 'hi.nandaaddiwijaya.my.id')
-                  ? `https://${domain}/${filePath}`
-                  : `https://cdn.jsdelivr.net/gh/${owner}/${repo}@${branch}/${filePath}`;
+                const proxiedUrl = `https://${domain}/${filePath}`;
                 res.statusCode = 200;
                 res.setHeader('Content-Type', 'application/json');
                 res.end(JSON.stringify({ success: true, url: proxiedUrl, path: filePath }));
